@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>每日喝水排程與飲品追蹤</title>
+<style>
+:root{--bg:#B3CFE5;--card:#F6FAFD;--ink:#0A1931;--muted:#1A3D63;--aqua:#4A7FA7;--aqua-deep:#1A3D63;--aqua-soft:#B3CFE5;--line:#B3CFE5;--warn-bg:#E4EEF7;--navy:#0A1931}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingFang HK","Noto Sans HK","Noto Sans TC","Microsoft JhengHei",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6;font-size:16px}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 48px}
+header{margin-bottom:18px}
+h1{font-size:1.5rem;margin:0 0 4px;font-weight:700}
+.sub{color:var(--muted);font-size:.9rem;margin:0}
+.layout{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.side{position:sticky;top:16px}
+h2{font-size:1.05rem;margin:0 0 12px;font-weight:700}
+.field{margin-bottom:16px}
+.field>label,.field>.lbl{display:block;font-weight:600;font-size:.9rem;margin-bottom:6px}
+input[type=time]{display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;height:46px;margin:0;padding:0 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink);-webkit-appearance:none;appearance:none;text-align:center}
+.side,.side *{min-width:0}
+input:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #4A7FA7;outline-offset:2px}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+.switch input{width:22px;height:22px;accent-color:var(--aqua);flex:none}
+.hint{font-size:.78rem;color:var(--muted);margin:4px 2px 0}
+.opt{display:flex;align-items:center;gap:10px;padding:8px 2px;cursor:pointer;font-size:.95rem}
+.opt input{width:20px;height:20px;accent-color:var(--aqua);flex:none}
+.opt small{color:var(--muted)}
+.group{border-top:1px solid var(--line);padding-top:10px;margin-top:6px}
+.group .gt{font-weight:600;font-size:.85rem;color:var(--aqua-deep);margin-top:6px}
+.radios{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 8px}
+.radios label{display:flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;cursor:pointer;font-size:.9rem}
+.radios input{accent-color:var(--aqua)}
+.selrow{display:flex;align-items:center;gap:8px;margin:0 0 6px 30px;font-size:.85rem;color:var(--muted)}
+.sel{flex:1;min-width:0;padding:6px 8px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+.sel:disabled{opacity:.45}
+.btn{width:100%;border:0;background:var(--aqua);color:#fff;font:inherit;font-weight:700;padding:13px 16px;border-radius:12px;cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--aqua-deep)}
+.btn.ghost{background:transparent;color:var(--aqua-deep);border:1px solid var(--line);margin-top:8px;font-weight:600}
+.btn.ghost:hover{background:var(--aqua-soft)}
+.main{display:flex;flex-direction:column;gap:18px;min-width:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--bg);border-radius:12px;padding:12px}
+.stat b{display:block;font-size:1.45rem;line-height:1.2}
+.stat span{font-size:.8rem;color:var(--muted)}
+.stat.pure{background:var(--aqua-deep)}
+.stat.pure b,.stat.pure span{color:#F6FAFD}
+.progress-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:8px;flex-wrap:wrap}
+.pct{font-size:1.9rem;font-weight:800;color:var(--aqua-deep);line-height:1}
+.bar{height:18px;background:var(--aqua-soft);border-radius:999px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,#B3CFE5,#4A7FA7);border-radius:999px;transition:width .45s ease}
+.cheer{margin:8px 0 0;font-size:.9rem;color:var(--muted)}
+.notes{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+.notes li{background:var(--warn-bg);color:var(--navy);border-radius:10px;padding:9px 12px;font-size:.88rem}
+.notes li.ok{background:var(--aqua-soft);color:var(--aqua-deep)}
+.timeline{list-style:none;margin:0;padding:0 0 0 22px;position:relative}
+.timeline::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,#B3CFE5 0%,#4A7FA7 45%,#1A3D63 80%,#0A1931 100%)}
+.slot{position:relative;margin-bottom:12px}
+.slot::before{content:"";position:absolute;left:-22px;top:20px;width:16px;height:16px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#fff;border:2px solid var(--slot-color,var(--aqua));transition:all .2s}
+.slot.done::before{background:var(--slot-color,var(--aqua))!important}
+.slot .card{padding:14px 16px;background:var(--slot-bg,#fff);border:1px solid var(--slot-border,var(--line));border-left:5px solid var(--slot-color,var(--aqua));transition:background .2s,opacity .2s}
+.slot.done .card{opacity:.55;background:var(--card)!important;border-color:var(--line)!important;border-left-color:var(--muted)!important}
+.slot.done .title{text-decoration:line-through;color:var(--muted)}
+.shead{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.time{font-weight:800;font-size:1.15rem;color:var(--slot-color,var(--aqua-deep));font-variant-numeric:tabular-nums}
+.title{font-weight:600}
+.item{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px dashed var(--line);cursor:pointer}
+.item input{width:24px;height:24px;accent-color:var(--slot-color,var(--aqua));flex:none}
+.item .name{flex:1;min-width:0}
+.item .name small{display:block;color:var(--muted);font-size:.8rem}
+.ml{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tip{margin:6px 0 0;font-size:.85rem;color:var(--muted)}
+.pcard{padding:14px 18px}
+.pcard .progress-head{margin-bottom:6px}
+.notesbox summary{cursor:pointer;font-weight:600;font-size:.9rem;color:var(--aqua-deep);padding:4px 0}
+.notesbox .notes{margin-top:8px}
+.disclaimer{font-size:.8rem;color:var(--muted);margin-top:6px}
+@media (max-width:820px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .side{position:static}
+  .stat b{font-size:1.15rem}
+  .sticky-p{position:sticky;top:0;z-index:5;margin:0 -16px;border-radius:0 0 14px 14px;padding:10px 16px;box-shadow:0 2px 8px rgba(23,50,61,.08)}
+  .pcard .pct{font-size:1.35rem}
+  .pcard .bar{height:12px}
+  .pcard .cheer{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>每日喝水排程與飲品追蹤</h1>
+    <p class="sub">女性 · 175 cm · 60 kg｜基準目標：休息日 2,200 ml、運動日 2,800 ml（可選依清醒時數微調）</p>
+  </header>
+
+  <div class="layout">
+    <aside class="side card" aria-label="今日設定">
+      <h2>今日設定</h2>
+      <div class="field">
+        <label for="wake">起床時間</label>
+        <input type="time" id="wake" value="07:30">
+      </div>
+      <div class="field">
+        <label for="bed">就寢時間（支援跨日）</label>
+        <input type="time" id="bed" value="23:30">
+      </div>
+      <div class="field">
+        <label class="switch"><span>依清醒時數微調水量</span><input type="checkbox" id="adjust"></label>
+        <p class="hint">預設關閉，使用固定目標。開啟後，清醒少於 16 小時會按比例減少基礎水量，運動的 +600 ml 不會縮減。</p>
+      </div>
+      <div class="field">
+        <label class="switch"><span>今日有運動（+600 ml）</span><input type="checkbox" id="ex"></label>
+        <div class="selrow" style="margin-top:8px;margin-left:0">
+          <label for="ex_time" style="font-weight:600">運動時段</label>
+          <select id="ex_time" class="sel" disabled>
+            <option value="morning">晨間 (約 08:30–10:00)</option>
+            <option value="afternoon">午後 (約 14:30–16:00)</option>
+            <option value="evening" selected>傍晚 (約 17:30–19:00)</option>
+            <option value="night">晚餐後 (約 20:00–21:30)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="lbl">今日預計攝取飲品（淡茶直接併入純水）</span>
+
+        <label class="opt"><input type="checkbox" id="d_coffee"><span>黑咖啡 <small>200 ml → 有效 0 ml，補水 200 ml</small></span></label>
+        <div class="selrow"><label for="coffee_at">飲用時段</label>
+          <select id="coffee_at" class="sel">
+            <option value="slot_0709">晨間 (約 08:30)</option>
+            <option value="slot_1011" selected>上午 (約 10:30)</option>
+            <option value="slot_1213">午間 (約 12:30)</option>
+          </select></div>
+
+        <label class="opt"><input type="checkbox" id="d_latte"><span>牛奶咖啡 <small>300 ml → 有效 200 ml</small></span></label>
+        <div class="selrow"><label for="latte_at">飲用時段</label>
+          <select id="latte_at" class="sel">
+            <option value="slot_0709" selected>晨間 (約 08:30)</option>
+            <option value="slot_1011">上午 (約 10:30)</option>
+            <option value="slot_1213">午間 (約 12:30)</option>
+          </select></div>
+
+        <label class="opt"><input type="checkbox" id="d_milk"><span>鮮牛奶 <small>240 ml → 有效 240 ml</small></span></label>
+        <div class="selrow"><label for="milk_at">飲用時段</label>
+          <select id="milk_at" class="sel">
+            <option value="auto_first" selected>起床後第一個時段</option>
+            <option value="slot_0709">晨間 (約 08:30)</option>
+            <option value="slot_1011">上午 (約 10:30)</option>
+            <option value="slot_1416">午後 (約 15:00)</option>
+            <option value="slot_2122">夜間 (約 21:30)</option>
+          </select></div>
+
+        <label class="opt"><input type="checkbox" id="d_strong_tea"><span>濃茶 <small>300 ml → 有效 210 ml</small></span></label>
+        <div class="selrow"><label for="strong_tea_at">飲用時段</label>
+          <select id="strong_tea_at" class="sel">
+            <option value="slot_1011">上午 (約 10:30)</option>
+            <option value="slot_1345" selected>午餐後 1 小時 (約 13:45)</option>
+          </select></div>
+
+        <label class="opt"><input type="checkbox" id="d_tea"><span>微糖奶茶 / 水果茶 <small>400 ml → 有效 200 ml（排在午後）</small></span></label>
+
+        <label class="opt"><input type="checkbox" id="d_juice"><span>100% 果汁 / 水果奶昔 <small>200 ml → 有效 160 ml</small></span></label>
+        <div class="selrow"><label for="juice_at">飲用時段</label>
+          <select id="juice_at" class="sel">
+            <option value="slot_1011" selected>上午 (約 10:30)</option>
+            <option value="slot_1416">午後 (約 15:00)</option>
+            <option value="follow_ex">跟隨運動後飲用</option>
+          </select></div>
+
+        <label class="opt"><input type="checkbox" id="d_protein"><span>運動蛋白飲料 <small>350 ml → 有效 300 ml</small></span></label>
+        <div class="selrow"><label for="protein_at">飲用時段</label>
+          <select id="protein_at" class="sel">
+            <option value="follow_ex" selected>自動（運動後；無運動排午後）</option>
+            <option value="slot_1011">上午 (約 10:30)</option>
+            <option value="slot_1416">午後 (約 15:00)</option>
+            <option value="slot_1718">傍晚 (約 17:30)</option>
+            <option value="slot_2122">晚間 (約 21:30)</option>
+          </select></div>
+
+        <div class="group">
+          <div class="gt">午間湯品 (約 12:30)</div>
+          <div class="radios">
+            <label><input type="radio" name="lunch" value="none" checked>不喝</label>
+            <label><input type="radio" name="lunch" value="clear">清湯</label>
+            <label><input type="radio" name="lunch" value="thick">濃湯</label>
+          </div>
+          <div class="gt">晚間湯品 (約 19:30)</div>
+          <div class="radios">
+            <label><input type="radio" name="dinner" value="none" checked>不喝</label>
+            <label><input type="radio" name="dinner" value="clear">清湯</label>
+            <label><input type="radio" name="dinner" value="thick">濃湯</label>
+          </div>
+          <small class="disclaimer">清湯一碗 250 ml → 折抵 250 ml；濃湯一碗 300 ml → 折抵 210 ml，並於飯後排入 100 ml 純水。</small>
+        </div>
+      </div>
+
+      <button class="btn" id="gen" type="button">生成今日最佳喝水日程</button>
+      <button class="btn ghost" id="reset" type="button">清除今日打勾紀錄</button>
+    </aside>
+
+    <main class="main">
+      <section class="card pcard sticky-p" aria-label="補水進度">
+        <div class="progress-head">
+          <span><b id="p_done">0</b> / <span id="p_total">0</span> ml</span>
+          <span class="pct" id="p_pct">0%</span>
+        </div>
+        <div class="bar" role="progressbar" id="bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="今日補水進度"><div class="fill" id="fill"></div></div>
+        <p class="cheer" id="cheer"></p>
+      </section>
+
+      <section class="card" aria-label="今日摘要">
+        <h2>今日摘要</h2>
+        <div class="stats">
+          <div class="stat"><b id="s_target">–</b><span>今日目標 (ml)</span></div>
+          <div class="stat"><b id="s_drink">–</b><span>飲品折算水分 (ml)</span></div>
+          <div class="stat pure"><b id="s_pure">–</b><span>需喝純水 (ml)</span></div>
+        </div>
+        <details class="notesbox" id="notesBox">
+          <summary id="notesSum">提醒事項</summary>
+          <ul class="notes" id="notes"></ul>
+        </details>
+      </section>
+
+      <section aria-label="今日時間表">
+        <h2 style="margin-left:2px">今日補水時間表</h2>
+        <ol class="timeline" id="timeline"></ol>
+        <p class="disclaimer">晚起時，早於起床的時段會自動略過，原定的飲品會改排到最接近的時段。每個時段的純水控制在約 300 ml 內，因為短時間大量飲水可能稀釋血鈉。以上為一般健康生活指引，各飲品的折算率為估算值；如有腎臟、心臟疾病或醫生指示限水，請以醫生建議為準。</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY = "waterPlanV7";
+  var DRINKS = {
+    milk:       {name:"鮮牛奶", vol:240, eff:240, tip:"【保水佳】牛奶含乳糖、蛋白質與電解質，保水效果理想，全天可飲。"},
+    coffee:     {name:"黑咖啡", vol:200, eff:0,   tip:"【咖啡因】本工具保守地不計入水分，並排入喝完後 200 ml 純水；請於 14:00 前喝完。"},
+    latte:      {name:"牛奶咖啡", vol:300, eff:200, tip:"【咖啡因】只折算奶量部分的水分，請於 14:00 前喝完。"},
+    strong_tea: {name:"濃茶", vol:300, eff:210, tip:"【單寧酸】單寧酸較高，宜在正餐結束 1 小時後喝，避免影響鐵質吸收。"},
+    tea:        {name:"微糖奶茶 / 水果茶", vol:400, eff:200, tip:"【糖分】含精製糖約 15–20 g，建議放在白天，避免影響睡眠。"},
+    juice:      {name:"100% 果汁 / 水果奶昔", vol:200, eff:160, tip:"【果糖】即使是 100% 果汁，游離糖仍約 18 g／200 ml，單次以 200 ml 為限、慢飲。"},
+    protein:    {name:"運動蛋白飲料", vol:350, eff:300, tip:"【蛋白質】已折算 300 ml 計入總量；一杯（約 20–30 g 蛋白質）對健康成年人不需額外多喝純水，總量達標即可。"}
+  };
+  var SOUP = {clear:{label:"清湯", vol:250, eff:250}, thick:{label:"濃湯", vol:300, eff:210}};
+  var EX = {
+    morning:   {pre:8*60,       post:9*60+30,   label:"晨間運動"},
+    afternoon: {pre:14*60+30,   post:16*60,     label:"午後運動"},
+    evening:   {pre:17*60+30,   post:19*60,     label:"傍晚運動"},
+    night:     {pre:20*60,      post:21*60+30,  label:"晚間運動"}
+  };
+
+  var $ = function(id){ return document.getElementById(id); };
+  var state = {checks:{}, date:today()};
+  var plan = null;
+
+  function today(){ var d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+  function pad(n){ return (n<10?"0":"")+n; }
+  function toMin(t){ var p=(t||"07:30").split(":"); return (+p[0])*60+(+p[1]); }
+  function fmt(m){ m=((Math.round(m)%1440)+1440)%1440; return pad(Math.floor(m/60))+":"+pad(m%60); }
+  function nf(n){ return Number(n).toLocaleString("en-US"); }
+
+  function themeFor(mins){
+    var m=((mins%1440)+1440)%1440;
+    if(m<540)   return {color:"#4A7FA7",bg:"#F6FAFD",border:"#B3CFE5"};
+    if(m<720)   return {color:"#4A7FA7",bg:"#F6FAFD",border:"#B3CFE5"};
+    if(m<1020)  return {color:"#1A3D63",bg:"#F6FAFD",border:"#B3CFE5"};
+    if(m<1200)  return {color:"#1A3D63",bg:"#F6FAFD",border:"#B3CFE5"};
+    return {color:"#0A1931",bg:"#F6FAFD",border:"#B3CFE5"};
+  }
+
+  function readSettings(){
+    return {
+      wake:$("wake").value||"07:30", bed:$("bed").value||"23:30",
+      adjust:$("adjust").checked, ex:$("ex").checked, exTime:$("ex_time").value,
+      milkAt:$("milk_at").value, coffeeAt:$("coffee_at").value, latteAt:$("latte_at").value,
+      strongTeaAt:$("strong_tea_at").value, juiceAt:$("juice_at").value, proteinAt:$("protein_at").value,
+      milk:$("d_milk").checked, coffee:$("d_coffee").checked, latte:$("d_latte").checked,
+      strongTea:$("d_strong_tea").checked, tea:$("d_tea").checked, juice:$("d_juice").checked, protein:$("d_protein").checked,
+      lunch:document.querySelector('input[name="lunch"]:checked').value,
+      dinner:document.querySelector('input[name="dinner"]:checked').value
+    };
+  }
+  function applySettings(s){
+    $("wake").value=s.wake||"07:30"; $("bed").value=s.bed||"23:30";
+    $("adjust").checked=!!s.adjust; $("ex").checked=!!s.ex; $("ex_time").value=s.exTime||"evening";
+    $("milk_at").value=s.milkAt||"auto_first"; $("coffee_at").value=s.coffeeAt||"slot_1011"; $("latte_at").value=s.latteAt||"slot_0709";
+    $("strong_tea_at").value=s.strongTeaAt||"slot_1345"; $("juice_at").value=s.juiceAt||"slot_1011"; $("protein_at").value=s.proteinAt||"follow_ex";
+    $("d_milk").checked=!!s.milk; $("d_coffee").checked=!!s.coffee; $("d_latte").checked=!!s.latte;
+    $("d_strong_tea").checked=!!s.strongTea; $("d_tea").checked=!!s.tea; $("d_juice").checked=!!s.juice; $("d_protein").checked=!!s.protein;
+    var l=document.querySelector('input[name="lunch"][value="'+(s.lunch||"none")+'"]'); if(l) l.checked=true;
+    var d=document.querySelector('input[name="dinner"][value="'+(s.dinner||"none")+'"]'); if(d) d.checked=true;
+    syncUI();
+  }
+  function syncUI(){
+    $("ex_time").disabled=!$("ex").checked;
+    [["d_milk","milk_at"],["d_coffee","coffee_at"],["d_latte","latte_at"],["d_strong_tea","strong_tea_at"],["d_juice","juice_at"],["d_protein","protein_at"]]
+      .forEach(function(p){ $(p[1]).disabled=!$(p[0]).checked; });
+  }
+
+  function item(id,label,ml,note,vol){ return {id:id,label:label,ml:ml,note:note||"",vol:vol||ml}; }
+
+  // 把 R ml 按權重分到各時段，每個時段有上限；以 10 ml 為單位
+  function allocate(R,ks,W,cap){
+    var amt={}, left=R;
+    ks.forEach(function(k){ amt[k]=0; });
+    while(left>=10){
+      var open=ks.filter(function(k){ return cap[k]-amt[k]>=10; });
+      if(!open.length) break;
+      var sw=0; open.forEach(function(k){ sw+=W[k]; });
+      var spent=0;
+      open.forEach(function(k){
+        var g=Math.min(Math.floor(left*W[k]/sw/10)*10, cap[k]-amt[k]);
+        amt[k]+=g; spent+=g;
+      });
+      if(spent===0){
+        for(var i=0;i<open.length&&left>=10;i++){ amt[open[i]]+=10; left-=10; }
+      } else { left-=spent; }
+    }
+    return {amt:amt,left:left};
+  }
+
+  // 按「每個時段所負責的時間長度」分配全日水量：
+  // 每時段目標水量 = λ × 權重，純水 = 目標 − 該時段已有的飲品折算水分（不小於 0，且不超過上限）
+  function fillByTime(R,ks,W,E,cap){
+    function amtAt(l,k){ return Math.min(cap[k],Math.max(0,l*W[k]-E[k])); }
+    function total(l){ var t=0; ks.forEach(function(k){ t+=amtAt(l,k); }); return t; }
+    var hi=1e5, lo=0, amt={}, raw={};
+    if(total(hi)<=R){
+      ks.forEach(function(k){ amt[k]=cap[k]; });
+      var t=0; ks.forEach(function(k){ t+=amt[k]; });
+      return {amt:amt,left:R-t};
+    }
+    for(var i=0;i<80;i++){ var mid=(lo+hi)/2; if(total(mid)<R) lo=mid; else hi=mid; }
+    var sum=0;
+    ks.forEach(function(k){ raw[k]=amtAt(hi,k); amt[k]=Math.floor(raw[k]/10)*10; sum+=amt[k]; });
+    var left=R-sum;
+    var order=ks.slice().sort(function(a,b2){ return (raw[b2]-amt[b2])-(raw[a]-amt[a]); });
+    var guard=0;
+    while(left>=10 && guard++<50){
+      var gave=false;
+      for(var j=0;j<order.length&&left>=10;j++){
+        if(cap[order[j]]-amt[order[j]]>=10){ amt[order[j]]+=10; left-=10; gave=true; }
+      }
+      if(!gave) break;
+    }
+    return {amt:amt,left:left};
+  }
+
+  function build(s){
+    var w=toMin(s.wake), b=toMin(s.bed);
+    if(b<=w) b+=1440;
+    var awake=(b-w)/60;
+    var warns=[];
+
+    // ---- 目標水量：基礎 2,200 ml 可按清醒時數縮減，運動 +600 ml 不縮減 ----
+    var base=2200, exExtra=s.ex?600:0;
+    var target=base+exExtra;
+    if(s.adjust && awake<16){
+      var f=Math.max(0.5, awake/16);
+      target=Math.round(base*f/50)*50+exExtra;
+      warns.push("今日清醒約 "+awake.toFixed(1)+" 小時，基礎水量按比例由 2,200 ml 微調至 "+nf(target-exExtra)+" ml"+(s.ex?"，運動 +600 ml 維持不變":"")+"。");
+    } else if(!s.adjust && awake<13){
+      warns.push("今日清醒只有約 "+awake.toFixed(1)+" 小時，仍按固定目標計算；若覺得每次份量偏大，可開啟「依清醒時數微調水量」。");
+    }
+
+    var eff=0;
+    [["milk","milk"],["coffee","coffee"],["latte","latte"],["strongTea","strong_tea"],["tea","tea"],["juice","juice"],["protein","protein"]]
+      .forEach(function(p){ if(s[p[0]]) eff+=DRINKS[p[1]].eff; });
+    if(s.lunch!=="none") eff+=SOUP[s.lunch].eff;
+    if(s.dinner!=="none") eff+=SOUP[s.dinner].eff;
+    var pure=Math.max(0,target-eff);
+    var thick=(s.lunch==="thick"?1:0)+(s.dinner==="thick"?1:0);
+    var restPure=Math.max(0,pure-(s.coffee?200:0)-thick*100);
+
+    // ---- 時段候選（早於起床、遲於就寢前的會自動略過；太接近的只保留優先級較高者）----
+    var ANCH={
+      slot_0709:{t:8*60+30, title:"晨間時段",   tip:"晨間水合，小口慢飲。"},
+      slot_1011:{t:10*60+30,title:"上午時段",   tip:"專注工作或學習時補水，小口慢飲避免頻尿。"},
+      slot_1213:{t:12*60+30,title:"午間時段",   tip:s.lunch==="thick"?"濃湯含較高鈉與勾芡，飯後補水助身體平衡。":"午餐前後補水，進食時小口慢飲。"},
+      slot_1345:{t:13*60+45,title:"午餐後 1 小時", tip:"與正餐隔開約 1 小時。"},
+      slot_1416:{t:15*60,   title:"午後時段",   tip:"午後容易疲倦，小口補水。"},
+      slot_1718:{t:17*60+30,title:"傍晚時段",   tip:"傍晚常規補水。"},
+      slot_1920:{t:19*60+30,title:"晚間時段",   tip:s.dinner==="thick"?"濃湯偏鹹，飯後已排入 100 ml 純水，不要一次喝太多。":"晚餐前後補水，小口慢飲。"},
+      slot_2122:{t:21*60+30,title:"夜間時段",   tip:"夜間少量補水，避免大口牛飲。"}
+    };
+    var cands=[{k:"wake",t:w+10,title:"起床即刻",tip:"起床後先喝溫開水，分 2–3 口慢飲。",p:0}];
+    if(s.ex){
+      var E=EX[s.exTime]||EX.evening;
+      if(E.pre>w+20 && E.pre<b-120) cands.push({k:"ex_pre",t:E.pre,title:E.label+"前補水",tip:"運動前約 30 分鐘喝水，分次飲用。",p:2});
+      if(E.post>w+20 && E.post<b-60) cands.push({k:"ex_post",t:E.post,title:E.label+"後補水",tip:"運動後 30 分鐘內補水，並可配合蛋白質補充。",p:2});
+    }
+    Object.keys(ANCH).forEach(function(k){
+      var a=ANCH[k];
+      if(k==="slot_1345" && !(s.strongTea&&s.strongTeaAt==="slot_1345")) return;
+      if(a.t>w+20 && a.t<b-90){
+        var meal=(k==="slot_1213"&&s.lunch!=="none")||(k==="slot_1920"&&s.dinner!=="none")||k==="slot_1345";
+        cands.push({k:k,t:a.t,title:a.title,tip:a.tip,p:meal?1:4});
+      }
+    });
+    cands.push({k:"bed",t:b-90,title:"睡前放鬆",tip:"預計 "+fmt(b)+" 就寢；睡前 1.5 小時只喝少量溫水，避免夜尿影響睡眠。",p:3});
+    cands.sort(function(x,y){ return x.p-y.p || x.t-y.t; });
+
+    var map={};
+    cands.forEach(function(c){
+      var ok=true;
+      Object.keys(map).forEach(function(k){ if(Math.abs(map[k].time-c.t)<40) ok=false; });
+      if(ok) map[c.k]={time:c.t,title:c.title,tip:c.tip,items:[]};
+    });
+
+    // 若全日水量平均分到每個時段超過約 260 ml，就在最大的空檔中間補上時段，讓補水更平均
+    var extraN=0;
+    while(extraN<6){
+      var ks=Object.keys(map).sort(function(a,b2){ return map[a].time-map[b2].time; });
+      if(target/ks.length<=260) break;
+      var bg=0,bi=-1;
+      for(var i=0;i<ks.length-1;i++){
+        var gap=map[ks[i+1]].time-map[ks[i]].time;
+        if(gap>bg){ bg=gap; bi=i; }
+      }
+      if(bg<100) break;
+      var tm=Math.round((map[ks[bi]].time+map[ks[bi+1]].time)/2/5)*5;
+      map["x"+(extraN++)]={time:tm,title:"補水時段",tip:"平均分配在前後時段之間，小口慢飲。",items:[]};
+    }
+
+    function nearest(t,allowEx){
+      var best=null,bd=1e9;
+      Object.keys(map).forEach(function(k){
+        if(!allowEx&&k.indexOf("ex_")===0) return;
+        var d=Math.abs(map[k].time-t); if(d<bd){bd=d;best=k;}
+      });
+      return best||"wake";
+    }
+    // 把項目放進偏好時段；時段不存在就改排到最接近的時段
+    function put(pref,its,tipAdd,allowEx,prefTime){
+      var key=map[pref]?pref:null;
+      if(!key){
+        var pt=prefTime!==undefined?prefTime:(ANCH[pref]?ANCH[pref].t:w+60);
+        key=nearest(pt,allowEx);
+        moved.push(its[0].label+"→"+fmt(map[key].time));
+      }
+      map[key].items=its.concat(map[key].items);
+      if(tipAdd) map[key].tip+=" "+tipAdd;
+      return key;
+    }
+    var moved=[];
+    var firstAnchor="wake";
+    Object.keys(map).filter(function(k){ return k!=="wake"&&k!=="bed"&&k.indexOf("ex_")!==0; })
+      .sort(function(a,b2){ return map[a].time-map[b2].time; })
+      .some(function(k){ firstAnchor=k; return true; });
+    var exPostTime=s.ex?(EX[s.exTime]||EX.evening).post:undefined;
+
+    // 湯品
+    [["lunch","slot_1213","午餐"],["dinner","slot_1920","晚餐"]].forEach(function(m){
+      var v=s[m[0]]; if(v==="none") return;
+      var S=SOUP[v], its=[item(m[0]+"-soup",m[2]+S.label,S.eff,S.vol+" ml｜有效水分 "+S.eff+" ml",S.vol)];
+      if(v==="thick") its.push(item(m[0]+"-sip","純水（"+m[2]+"濃湯飯後平衡）",100,"純水｜補償高鈉與芡粉"));
+      put(m[1],its);
+    });
+    if(s.coffee){
+      var ck=put(s.coffeeAt,[item("coffee-drink","黑咖啡",0,"200 ml｜有效水分 0 ml｜含咖啡因",200),
+        item("coffee-water","純水（黑咖啡專用補償）",200,"純水｜喝完後隨即飲用")],DRINKS.coffee.tip);
+      if(map[ck].time>=840) warns.push("黑咖啡排在 "+fmt(map[ck].time)+"，已過 14:00，建議提早喝或改喝純水。");
+    }
+    if(s.latte){
+      var lk=put(s.latteAt,[item("latte-drink","牛奶咖啡",200,"300 ml｜有效水分 200 ml",300)],DRINKS.latte.tip);
+      if(map[lk].time>=840) warns.push("牛奶咖啡排在 "+fmt(map[lk].time)+"，已過 14:00，建議提早喝或改喝純水。");
+    }
+    if(s.milk) put(s.milkAt==="auto_first"?firstAnchor:s.milkAt,[item("milk-drink","鮮牛奶",240,"240 ml｜有效水分 240 ml")],DRINKS.milk.tip);
+    if(s.strongTea) put(s.strongTeaAt,[item("strongtea-drink","濃茶",210,"300 ml｜有效水分 210 ml",300)],DRINKS.strong_tea.tip);
+    if(s.tea) put("slot_1416",[item("tea-drink","微糖奶茶 / 水果茶",200,"400 ml｜有效水分 200 ml",400)],DRINKS.tea.tip);
+    if(s.juice){
+      var jf=s.juiceAt==="follow_ex";
+      put(jf?(s.ex?"ex_post":"slot_1416"):s.juiceAt,[item("juice-drink","100% 果汁 / 水果奶昔",160,"200 ml｜有效水分 160 ml",200)],DRINKS.juice.tip,jf,jf&&s.ex?exPostTime:undefined);
+    }
+    if(s.protein){
+      var pf=s.proteinAt==="follow_ex";
+      put(pf?(s.ex?"ex_post":"slot_1416"):s.proteinAt,[item("protein-drink","運動蛋白飲料",300,"350 ml｜有效水分 300 ml",350)],DRINKS.protein.tip,pf,pf&&s.ex?exPostTime:undefined);
+    }
+
+    if(moved.length) warns.push("因起床／就寢時間或時段太接近，已改排："+moved.join("、")+"。");
+
+    // 純水分配：每個時段純水上限約 300 ml（起床 350、睡前 150），整個時段總液量不超過 500 ml
+    var keys=Object.keys(map).sort(function(a,b2){ return map[a].time-map[b2].time; });
+    var W={}, E={}, cap={};
+    keys.forEach(function(k,i){
+      var used=0, eff2=0;
+      map[k].items.forEach(function(it){ used+=it.vol; eff2+=it.ml; });
+      var c=k==="bed"?150:(k==="wake"?300:300);
+      cap[k]=Math.max(0,Math.floor(Math.min(c,500-used)/10)*10);
+      E[k]=eff2;
+      // 權重＝該時段負責的時間長度（至下一時段），最少 80 分鐘；最後一個時段（睡前）較小
+      W[k]=(i<keys.length-1)?Math.max(80,map[keys[i+1]].time-map[k].time):(k==="bed"?70:90);
+    });
+    var res=fillByTime(restPure,keys,W,E,cap), amt=res.amt;
+    if(res.left>=10){
+      var ks2=keys.filter(function(k){ return k!=="bed"; }), huge={};
+      ks2.forEach(function(k){ huge[k]=1e9; });
+      var r2=allocate(res.left,ks2,W,huge);
+      ks2.forEach(function(k){ amt[k]+=r2.amt[k]; });
+      warns.push("可用時段偏少，部分時段純水超過 300 ml，請小口分次飲用，或開啟「依清醒時數微調水量」。");
+    }
+    keys.forEach(function(k){
+      if(amt[k]>0) map[k].items.push(item(k+"-pure",k==="wake"?"溫開水":(k==="bed"?"少量溫水":"純水 / 淡茶"),amt[k],"純水"));
+    });
+
+    var slots=[], total=0;
+    keys.forEach(function(k){
+      var sl=map[k];
+      sl.items=sl.items.filter(function(it){ return it.ml>0||it.id==="coffee-drink"; });
+      if(sl.items.length){ slots.push(sl); sl.items.forEach(function(it){ total+=it.ml; }); }
+    });
+    slots.sort(function(a,b2){ return a.time-b2.time; });
+    return {target:target,eff:eff,pure:pure,total:total,slots:slots,s:s,warns:warns};
+  }
+
+  function notesFor(p){
+    var s=p.s, n=[];
+    if(s.tea) n.push({t:"糖分：微糖奶茶／水果茶含精製糖約 15–20 g，已排在午後。"});
+    if(s.juice) n.push({t:"糖分：果汁或奶昔游離糖約 18 g／200 ml，請以一杯為限。"});
+    var th=(s.lunch==="thick"?1:0)+(s.dinner==="thick"?1:0);
+    if(th) n.push({t:"鈉：今日有 "+th+" 碗濃湯，鈉與勾芡偏高，已在飯後各排入 100 ml 純水。"});
+    if(s.coffee) n.push({t:"咖啡：黑咖啡不計水分，已排入喝完後 200 ml 純水"+(s.latte?"；兩款咖啡請都在 14:00 前喝完。":"。")});
+    p.warns.forEach(function(t){ n.push({t:t}); });
+    if(!n.length) n.push({t:"今日未選含糖飲品或濃湯，糖分與鈉風險低。",ok:true});
+    return n;
+  }
+
+  function render(){
+    var p=plan;
+    $("s_target").textContent=nf(p.target); $("s_drink").textContent=nf(p.eff); $("s_pure").textContent=nf(p.pure);
+    $("p_total").textContent=nf(p.total);
+    var ul=$("notes"); ul.innerHTML="";
+    var nl=notesFor(p);
+    nl.forEach(function(x){ var li=document.createElement("li"); li.textContent=x.t; if(x.ok) li.className="ok"; ul.appendChild(li); });
+    $("notesSum").textContent="提醒事項（"+nl.length+" 項）";
+    if(!state.notesInit){ $("notesBox").open=!window.matchMedia("(max-width:820px)").matches; state.notesInit=true; }
+
+    var tl=$("timeline"); tl.innerHTML="";
+    p.slots.forEach(function(sl,si){
+      var th=themeFor(sl.time);
+      var li=document.createElement("li"); li.className="slot"; li.id="slot"+si;
+      li.style.setProperty("--slot-color",th.color); li.style.setProperty("--slot-bg",th.bg); li.style.setProperty("--slot-border",th.border);
+      var card=document.createElement("div"); card.className="card";
+      var head=document.createElement("div"); head.className="shead";
+      head.innerHTML='<span class="time"></span><span class="title"></span>';
+      head.children[0].textContent=fmt(sl.time); head.children[1].textContent=sl.title;
+      card.appendChild(head);
+      sl.items.forEach(function(it){
+        var lab=document.createElement("label"); lab.className="item";
+        var cb=document.createElement("input"); cb.type="checkbox"; cb.dataset.id=it.id; cb.dataset.ml=it.ml;
+        cb.checked=!!state.checks[it.id];
+        cb.addEventListener("change",function(){ if(cb.checked) state.checks[it.id]=true; else delete state.checks[it.id]; save(); update(); });
+        var nm=document.createElement("span"); nm.className="name"; nm.textContent=it.label;
+        if(it.note){ var sm=document.createElement("small"); sm.textContent=it.note; nm.appendChild(sm); }
+        var ml=document.createElement("span"); ml.className="ml"; ml.textContent=it.ml+" ml";
+        lab.appendChild(cb); lab.appendChild(nm); lab.appendChild(ml); card.appendChild(lab);
+      });
+      var tip=document.createElement("p"); tip.className="tip"; tip.textContent="小貼士："+sl.tip;
+      card.appendChild(tip); li.appendChild(card); tl.appendChild(li);
+    });
+    update();
+  }
+
+  function update(){
+    var done=0;
+    document.querySelectorAll("#timeline input[type=checkbox]").forEach(function(b){ if(b.checked) done+=(+b.dataset.ml); });
+    var pct=plan.total?Math.min(100,Math.round(done/plan.total*100)):0;
+    $("p_done").textContent=nf(done); $("p_pct").textContent=pct+"%"; $("fill").style.width=pct+"%";
+    $("bar").setAttribute("aria-valuenow",pct);
+    $("cheer").textContent=pct===0?"從起床後的第一杯溫水開始。":pct<50?"進度不錯，繼續按時間點補水。":pct<100?"已過半，保持節奏。":"今日水分目標已達成。";
+    document.querySelectorAll(".slot").forEach(function(li){
+      var cs=li.querySelectorAll("input[type=checkbox]"), all=true;
+      cs.forEach(function(c){ if(!c.checked) all=false; });
+      li.classList.toggle("done",all&&cs.length>0);
+    });
+  }
+
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify({settings:readSettings(),checks:state.checks,date:state.date})); }catch(e){} }
+
+  function generate(){
+    plan=build(readSettings());
+    var ids={};
+    plan.slots.forEach(function(sl){ sl.items.forEach(function(it){ ids[it.id]=1; }); });
+    Object.keys(state.checks).forEach(function(id){ if(!ids[id]) delete state.checks[id]; });
+    render(); save();
+  }
+
+  $("ex").addEventListener("change",syncUI);
+  ["d_milk","d_coffee","d_latte","d_strong_tea","d_juice","d_protein"].forEach(function(id){ $(id).addEventListener("change",syncUI); });
+  $("gen").addEventListener("click",function(){
+    generate();
+    if(window.matchMedia("(max-width:820px)").matches) $("timeline").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+  var resetTimer=null;
+  $("reset").addEventListener("click",function(){
+    var btn=$("reset");
+    if(!btn.dataset.armed){
+      btn.dataset.armed="1"; btn.textContent="再按一次確認清除";
+      resetTimer=setTimeout(function(){ delete btn.dataset.armed; btn.textContent="清除今日打勾紀錄"; },4000);
+      return;
+    }
+    clearTimeout(resetTimer); delete btn.dataset.armed; btn.textContent="清除今日打勾紀錄";
+    state.checks={}; save(); render();
+  });
+
+  var saved=null;
+  try{ saved=JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+  if(saved&&saved.settings){ applySettings(saved.settings); if(saved.date===state.date) state.checks=saved.checks||{}; }
+  syncUI(); generate();
+})();
+</script>
+</body>
+</html>

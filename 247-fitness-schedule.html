@@ -1,0 +1,2475 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>24/7 Fitness 專屬訓練排程</title>
+  <style>
+    :root {
+      /* Serene, Gentle Blue & Clean Light Palette */
+      --bg: #f5f3f1;
+      --card-bg: #FFFFFF;
+      --card-border: #ead7b2;
+      --text-main: #0c324a;
+      --text-sub: #2c5873;
+      --accent-primary: #0c324a; /* 寧靜霧霾藍 / 沉穩柔和藍 */
+      --accent-primary-light: #f5f3f1;
+      --accent-primary-glow: rgba(12, 50, 74, 0.22);
+      --accent-soft-blue: #679cbc;
+      --accent-ice: #f5f3f1;
+      --accent-success: #679cbc; /* 清新寧靜鼠尾草薄荷綠 (完成打勾) */
+      --accent-success-light: #f5f3f1;
+      --pill-bg: #f5f3f1;
+      --drawer-bg: #FFFFFF;
+      --timeline-line: #ead7b2;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft JhengHei", Roboto, sans-serif;
+      --shadow-sm: 0 2px 8px rgba(12, 50, 74, 0.07);
+      --shadow-md: 0 8px 24px rgba(12, 50, 74, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding-bottom: 90px;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Top Sticky Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(245, 243, 241, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 18px 12px;
+    }
+
+    .brand-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .brand-title span.badge {
+      background: linear-gradient(135deg, #679cbc, var(--accent-primary));
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 6px rgba(12, 50, 74, 0.25);
+    }
+
+    .rules-btn {
+      font-size: 0.75rem;
+      color: var(--accent-primary);
+      background: var(--accent-primary-light);
+      padding: 5px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(12, 50, 74, 0.25);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .rules-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Day Switcher */
+    .day-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .day-btn {
+      background: var(--pill-bg);
+      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: 9px 4px;
+      color: var(--text-sub);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .day-btn .day-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #0c324a;
+    }
+
+    .day-btn .day-sub {
+      font-size: 0.65rem;
+      opacity: 0.85;
+    }
+
+    .day-btn.active {
+      background: #FFFFFF;
+      border-color: rgba(12, 50, 74, 0.3);
+      color: var(--accent-primary);
+      box-shadow: 0 4px 14px rgba(12, 50, 74, 0.16);
+    }
+
+    .day-btn.active .day-label {
+      color: var(--accent-primary);
+    }
+
+    /* Main Container */
+    main {
+      padding: 16px 18px;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    /* Overview Banner */
+    .overview-card {
+      background: linear-gradient(135deg, #FFFFFF, #f5f3f1);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 16px 18px;
+      margin-bottom: 22px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .overview-card::after {
+      content: "";
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 110px;
+      height: 110px;
+      background: rgba(232, 211, 174, 0.16);
+      border-radius: 50%;
+      filter: blur(25px);
+      pointer-events: none;
+    }
+
+    .overview-card h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .overview-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      font-size: 0.72rem;
+      color: var(--text-sub);
+    }
+
+    .meta-tag {
+      background: #f5f3f1;
+      color: #0c324a;
+      padding: 4px 10px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid rgba(12, 50, 74, 0.14);
+    }
+
+    .meta-tag span {
+      color: var(--accent-primary);
+      font-size: 0.6rem;
+    }
+
+    /* Section Timeline */
+    .section-title {
+      font-size: 0.8rem;
+      letter-spacing: 0.8px;
+      color: var(--accent-primary);
+      font-weight: 700;
+      margin: 22px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--card-border);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 14px;
+      bottom: 24px;
+      width: 2px;
+      background: var(--timeline-line);
+      border-radius: 2px;
+    }
+
+    /* Timeline Items */
+    .t-item {
+      position: relative;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .t-dot {
+      position: absolute;
+      left: -24px;
+      top: 18px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 3.5px solid var(--accent-primary);
+      transition: all 0.25s ease;
+      z-index: 2;
+      box-shadow: 0 2px 6px rgba(12, 50, 74, 0.2);
+    }
+
+    .t-item.completed .t-dot {
+      background: var(--accent-success);
+      border-color: var(--accent-success);
+      box-shadow: 0 2px 6px rgba(103, 156, 188, 0.35);
+    }
+
+    .t-content {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 13px 15px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .t-item:active .t-content {
+      transform: scale(0.985);
+      border-color: rgba(12, 50, 74, 0.4);
+    }
+
+    .t-item.completed .t-content {
+      opacity: 0.58;
+      background: #f5f3f1;
+      box-shadow: none;
+      border-color: #e0c99c;
+    }
+
+    .t-item.completed .t-main-title {
+      text-decoration: line-through;
+      color: var(--text-sub);
+    }
+
+    .t-info {
+      flex: 1;
+      padding-right: 10px;
+    }
+
+    .t-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .badge-idx {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      background: var(--accent-primary-light);
+      padding: 1px 7px;
+      border-radius: 6px;
+      border: 1px solid rgba(12, 50, 74, 0.18);
+    }
+
+    .badge-sub {
+      font-size: 0.68rem;
+      color: var(--text-sub);
+    }
+
+    .t-main-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .t-preview-spec {
+      font-size: 0.74rem;
+      color: #2c5873;
+      margin-top: 3px;
+    }
+
+    .t-arrow {
+      color: #d9bd8c;
+      font-size: 1.1rem;
+      font-weight: 300;
+      transition: transform 0.2s ease;
+    }
+
+    .t-item:active .t-arrow {
+      transform: translateX(3px);
+      color: var(--accent-primary);
+    }
+
+    /* Reset Section (end of page) */
+    .reset-section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--timeline-line);
+      text-align: center;
+    }
+
+    .reset-hint {
+      font-size: 0.74rem;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .reset-btn {
+      width: 100%;
+      background: #FFFFFF;
+      border: 1px solid #e0c99c;
+      color: #0c324a;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 14px 16px;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.15s ease, opacity 0.2s ease;
+      font-family: inherit;
+    }
+
+    .reset-btn + .reset-btn {
+      margin-top: 10px;
+    }
+
+    .reset-btn:active {
+      transform: scale(0.98);
+    }
+
+    .reset-btn:disabled {
+      opacity: 0.45;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .reset-btn:disabled:active {
+      transform: none;
+    }
+
+    /* Equipment / beginner extras */
+    .t-en {
+      font-size: 0.72rem;
+      color: #2c5873;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .badge-new {
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--accent-success);
+      background: var(--accent-success-light);
+      padding: 1px 7px;
+      border-radius: 6px;
+      border: 1px solid rgba(103, 156, 188, 0.3);
+      white-space: nowrap;
+    }
+
+    .d-en-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .d-en {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
+    .equip-card {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: #f5f3f1;
+      border: 1px solid #ead7b2;
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+
+    .equip-art {
+      flex: 0 0 104px;
+      background: #FFFFFF;
+      border: 1px solid #ead7b2;
+      border-radius: 10px;
+      padding: 4px;
+    }
+
+    .eq-svg { width: 100%; height: auto; display: block; }
+    .eq-svg .s { fill: none; stroke: #0c324a; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .eq-svg .t { fill: none; stroke: #0c324a; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+    .eq-svg .f { fill: #f5f3f1; stroke: #0c324a; stroke-width: 2.5; stroke-linejoin: round; }
+    .eq-svg .a { fill: #679cbc; stroke: #679cbc; stroke-width: 2; }
+    .eq-svg .ta { fill: none; stroke: #679cbc; stroke-width: 6; stroke-linecap: round; }
+    .eq-svg .g { fill: none; stroke: #e6d0a6; stroke-width: 2; stroke-linecap: round; }
+    .eq-svg .w { fill: none; stroke: #679cbc; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+    .equip-info { flex: 1; min-width: 0; }
+    .equip-name { font-size: 0.88rem; font-weight: 800; color: var(--text-main); }
+    .equip-en { font-size: 0.74rem; font-weight: 700; color: var(--accent-primary); margin-top: 1px; }
+    .equip-zone { font-size: 0.7rem; color: var(--text-sub); margin-top: 3px; }
+    .equip-look { font-size: 0.76rem; color: #0c324a; line-height: 1.45; margin-top: 4px; }
+
+    .equip-link {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(12, 50, 74, 0.5);
+    }
+
+    .novice-box {
+      background: var(--accent-success-light);
+      border-left: 3.5px solid var(--accent-success);
+      border-radius: 0 12px 12px 0;
+      padding: 12px 15px;
+      margin-bottom: 14px;
+    }
+
+    .novice-title { font-size: 0.72rem; font-weight: 700; color: var(--accent-success); margin-bottom: 4px; }
+    .novice-text { font-size: 0.83rem; color: #0c324a; line-height: 1.5; }
+
+    .link-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .link-btn {
+      text-align: center;
+      padding: 11px 8px;
+      border-radius: 13px;
+      border: 1px solid #ead7b2;
+      background: #FFFFFF;
+      color: #0c324a;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-decoration: none;
+    }
+
+    .link-btn:active { transform: scale(0.97); }
+
+    /* Line icons (replace emoji, same stroke style everywhere) */
+    .ico {
+      width: 1em;
+      height: 1em;
+      flex-shrink: 0;
+      vertical-align: -0.14em;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .i-brand { color: var(--accent-primary); font-size: 1.15em; }
+    .i-sec { color: var(--accent-primary); font-size: 1.05em; }
+    .i-chev { color: #d9bd8c; font-size: 1.15em; transition: transform 0.2s ease; }
+    .t-item:active .i-chev { color: var(--accent-primary); transform: translateX(3px); }
+    .rules-btn .ico, .timer-btn .ico, .finish-btn .ico,
+    .reset-btn .ico, .link-btn .ico, .equip-link .ico,
+    .equip-zone .ico, .tips-title .ico, .novice-title .ico { font-size: 0.95em; margin-right: 3px; }
+    .badge-new .ico { font-size: 0.85em; margin-right: 2px; }
+    .section-title .ico, .brand-title .ico { margin-right: 2px; }
+    .t-arrow { display: flex; align-items: center; }
+
+    /* Bottom Sheet Drawer */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 50, 74, 0.45);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .drawer-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .bottom-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 560px;
+      margin: 0 auto;
+      background: var(--drawer-bg);
+      border-top-left-radius: 28px;
+      border-top-right-radius: 28px;
+      border: 1px solid #e0c99c;
+      border-bottom: none;
+      z-index: 101;
+      transform: translateY(105%);
+      transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 86vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -12px 40px rgba(12, 50, 74, 0.16);
+    }
+
+    .bottom-sheet.active {
+      transform: translateY(0);
+    }
+
+    .drawer-handle-bar {
+      padding: 14px 0 6px;
+      display: flex;
+      justify-content: center;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .drawer-handle {
+      width: 44px;
+      height: 5px;
+      background: #e0c99c;
+      border-radius: 3px;
+    }
+
+    .drawer-body {
+      padding: 10px 22px 30px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .drawer-header {
+      margin-bottom: 14px;
+    }
+
+    .d-badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .d-category {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      letter-spacing: 0.6px;
+    }
+
+    .d-target {
+      font-size: 0.72rem;
+      background: #f5f3f1;
+      padding: 3px 9px;
+      border-radius: 8px;
+      color: #0c324a;
+      font-weight: 500;
+    }
+
+    .d-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    /* Option Segment Controls */
+    .option-segmented {
+      display: flex;
+      background: #f5f3f1;
+      padding: 4px;
+      border-radius: 14px;
+      gap: 4px;
+      margin: 14px 0 16px;
+    }
+
+    .opt-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #1e4d6e;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 9px 4px;
+      border-radius: 11px;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      text-align: center;
+    }
+
+    .opt-btn.active {
+      background: #FFFFFF;
+      color: var(--accent-primary);
+      box-shadow: 0 3px 10px rgba(12, 50, 74, 0.18);
+    }
+
+    /* Spec Cards */
+    .spec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .spec-card {
+      background: #f5f3f1;
+      border: 1px solid #ead7b2;
+      border-radius: 14px;
+      padding: 11px 13px;
+    }
+
+    .spec-label {
+      font-size: 0.68rem;
+      color: var(--text-sub);
+      margin-bottom: 3px;
+    }
+
+    .spec-val {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.4;
+    }
+
+    .tips-box {
+      background: #f5f3f1;
+      border-left: 3.5px solid var(--accent-primary);
+      border-radius: 0 12px 12px 0;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+    }
+
+    .tips-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin-bottom: 4px;
+    }
+
+    .tips-text {
+      font-size: 0.83rem;
+      color: #0c324a;
+      line-height: 1.5;
+    }
+
+    /* Action Buttons in Drawer */
+    .drawer-actions {
+      display: grid;
+      grid-template-columns: 1.1fr 2fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .timer-btn {
+      background: #f5f3f1;
+      border: 1px solid #ead7b2;
+      color: #0c324a;
+      border-radius: 15px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 14px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .timer-btn.running {
+      background: #f5f3f1;
+      border-color: var(--accent-success);
+      color: var(--accent-success);
+    }
+
+    .finish-btn {
+      background: linear-gradient(135deg, #679cbc, var(--accent-primary));
+      border: none;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 800;
+      border-radius: 15px;
+      padding: 14px 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(12, 50, 74, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.15s ease;
+    }
+
+    .finish-btn:active {
+      transform: scale(0.97);
+    }
+
+    .finish-btn.is-done {
+      background: #ead7b2;
+      color: #2c5873;
+      box-shadow: none;
+    }
+
+    /* Rules / Confirm Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 50, 74, 0.45);
+      backdrop-filter: blur(5px);
+      z-index: 120;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #FFFFFF;
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 22px 24px;
+      max-width: 440px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-md);
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-close {
+      cursor: pointer;
+      font-size: 1.4rem;
+      color: #2c5873;
+    }
+
+    .modal-text {
+      font-size: 0.85rem;
+      color: #0c324a;
+      line-height: 1.6;
+    }
+
+    .confirm-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .confirm-cancel,
+    .confirm-ok {
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 800;
+      border-radius: 14px;
+      padding: 13px 10px;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .confirm-cancel:active,
+    .confirm-ok:active {
+      transform: scale(0.97);
+    }
+
+    .confirm-cancel {
+      background: #f5f3f1;
+      border: 1px solid #ead7b2;
+      color: #0c324a;
+    }
+
+    .confirm-ok {
+      background: #c11720;
+      border: none;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(193, 23, 32, 0.3);
+    }
+
+    .rules-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.83rem;
+      color: #0c324a;
+    }
+
+    .rules-list li strong {
+      color: var(--accent-primary);
+    }
+
+    /* ===== Theme v3: airy light surfaces + deep navy anchors + red completion ===== */
+    body {
+      background:
+        radial-gradient(circle at 92% -4%, rgba(232, 211, 174, 0.55), transparent 42%),
+        radial-gradient(circle at -6% 38%, rgba(232, 211, 174, 0.30), transparent 36%),
+        #f5f3f1;
+    }
+    header { background: rgba(245, 243, 241, 0.94); border-bottom: 1px solid #ead7b2; }
+
+    /* Brand & rules button */
+    .brand-title { color: #0c324a; }
+    .brand-title span.badge { background: #0c324a; box-shadow: 0 2px 8px rgba(12, 50, 74, 0.3); }
+    .rules-btn { background: #FFFFFF; color: #0c324a; border: 1px solid #e8d3ae; box-shadow: 0 2px 8px rgba(12, 50, 74, 0.06); }
+
+    /* Day switcher: inactive soft teal, active solid navy */
+    .day-btn { background: #f5f3f1; color: #2c5873; }
+    .day-btn .day-label { color: #0c324a; }
+    .day-btn.active { background: #0c324a; border-color: #0c324a; color: #FFFFFF; box-shadow: 0 8px 20px rgba(12, 50, 74, 0.28); }
+    .day-btn.active .day-label, .day-btn.active .day-sub { color: #FFFFFF; }
+    .day-btn.active .day-sub { opacity: 0.85; }
+
+    /* Overview: deep navy block for contrast */
+    .overview-card {
+      background: linear-gradient(135deg, #0c324a 0%, #1e4d6e 55%, #679cbc 100%);
+      border: none;
+      box-shadow: 0 12px 30px rgba(12, 50, 74, 0.28);
+    }
+    .overview-card::after { background: rgba(232, 211, 174, 0.35); }
+    .overview-card h2 { color: #FFFFFF; }
+    .overview-card > div:not(.overview-meta) { color: #e8d3ae !important; }
+    .overview-meta .meta-tag {
+      background: rgba(245, 243, 241, 0.14);
+      color: #fef1d5;
+      border: 1px solid rgba(232, 211, 174, 0.45);
+    }
+    .overview-meta .meta-tag span { color: #e8d3ae; }
+
+    /* Section titles */
+    .section-title { color: #0c324a; font-weight: 800; }
+    .section-title::after { background: #e8d3ae; }
+
+    /* Timeline: teal rail, teal dots with navy ring */
+    .timeline::before { background: #e8d3ae; }
+    .t-dot {
+      background: #e8d3ae;
+      border: 3px solid #0c324a;
+      box-shadow: 0 2px 6px rgba(12, 50, 74, 0.2);
+    }
+    
+    /* Cards: white, crisp teal border, soft navy shadow */
+    .t-content {
+      background: #FFFFFF;
+      border: 1px solid #ead7b2;
+      box-shadow: 0 6px 18px rgba(12, 50, 74, 0.08);
+    }
+    .badge-idx { background: #0c324a; color: #FFFFFF; border: none; }
+    .badge-sub { color: #2c5873; }
+    .t-main-title { color: #0c324a; }
+    .t-preview-spec { color: #2c5873; }
+    .i-chev { color: #679cbc; }
+
+    /* Completed: red check, no fading */
+    .t-item.completed .t-dot {
+      background: #c11720;
+      border-color: #c11720;
+      box-shadow: 0 2px 8px rgba(193, 23, 32, 0.35);
+    }
+    .t-item.completed     .t-item.completed .t-content {
+      opacity: 1;
+      background: #FFFFFF;
+      border: 1px solid #ead7b2;
+      border-left: 4px solid #c11720;
+      box-shadow: 0 6px 18px rgba(193, 23, 32, 0.08);
+    }
+    .t-item.completed .t-main-title { color: #679cbc; }
+
+    /* Reset section */
+    .reset-section { border-top: 1px dashed #e8d3ae; }
+    .reset-hint { color: #2c5873; }
+    .reset-btn {
+      background: #0c324a;
+      color: #FFFFFF;
+      border: none;
+      box-shadow: 0 6px 18px rgba(12, 50, 74, 0.25);
+    }
+    .reset-btn:disabled { background: #e8d3ae; color: #0c324a; box-shadow: none; opacity: 1; }
+
+    /* Drawer */
+    .bottom-sheet { background: #FFFFFF; border-color: #ead7b2; }
+    .drawer-handle { background: #e8d3ae; }
+    .d-category { color: #679cbc; }
+    .d-target { background: #0c324a; color: #FFFFFF; }
+    .d-title { color: #0c324a; }
+    .option-segmented { background: #f5f3f1; }
+    .opt-btn { color: #2c5873; }
+    .opt-btn.active { background: #0c324a; color: #FFFFFF; box-shadow: 0 4px 12px rgba(12, 50, 74, 0.25); }
+    .spec-card { background: #FFFFFF; border: 1px solid #ead7b2; box-shadow: 0 4px 12px rgba(12, 50, 74, 0.05); }
+    .spec-label { color: #2c5873; }
+    .spec-val { color: #0c324a; }
+    .tips-box { background: #f5f3f1; border-left: 4px solid #0c324a; }
+    .tips-title { color: #0c324a; }
+    .tips-text { color: #0c324a; }
+    .novice-box { background: #f5f3f1; border-left: 4px solid #679cbc; }
+    .novice-title { color: #679cbc; }
+    .novice-text { color: #0c324a; }
+    .badge-new { background: #f5f3f1; color: #0c324a; border: 1px solid #e8d3ae; }
+    .equip-card { background: #FFFFFF; border: 1px solid #ead7b2; }
+    .equip-art { background: #f5f3f1; border: 1px solid #ead7b2; }
+    .equip-name { color: #0c324a; }
+    .equip-en { color: #679cbc; }
+    .equip-zone { color: #2c5873; }
+    .equip-look { color: #0c324a; }
+    .equip-link { color: #0c324a; border-bottom-color: #679cbc; }
+    .link-btn { background: #FFFFFF; color: #0c324a; border: 1px solid #e8d3ae; }
+
+    /* Drawer action buttons */
+    .timer-btn { background: #f5f3f1; color: #0c324a; border: 1px solid #e8d3ae; }
+    .timer-btn.running { background: #0c324a; color: #FFFFFF; border-color: #0c324a; }
+    .finish-btn { background: #0c324a; color: #FFFFFF; box-shadow: 0 6px 18px rgba(12, 50, 74, 0.3); }
+    .finish-btn.is-done { background: #c11720; color: #FFFFFF; box-shadow: 0 6px 18px rgba(193, 23, 32, 0.3); }
+
+    /* Modals */
+    .modal-card { background: #FFFFFF; border: 1px solid #ead7b2; }
+    .modal-title { color: #0c324a; }
+    .modal-close { color: #679cbc; }
+    .modal-text, .rules-list { color: #0c324a; }
+    .rules-list li strong { color: #0c324a; }
+    .confirm-cancel { background: #f5f3f1; border: 1px solid #e8d3ae; color: #0c324a; }
+    .confirm-ok { background: #c11720; color: #FFFFFF; box-shadow: 0 4px 14px rgba(193, 23, 32, 0.3); }
+
+    /* ===== Theme v4: palette from reference (#0C324A / #C11720 / #679CBC / #FEF1D5) ===== */
+    body { background: #f5f3f1; }
+    header { background: rgba(245, 243, 241, 0.94); border-bottom: 1px solid #E8D3AE; }
+    .overview-card { background: linear-gradient(135deg, #0C324A 0%, #1E4D6E 60%, #679CBC 100%); }
+    .overview-card::after { background: rgba(245, 243, 241, 0.22); }
+    .timeline::before, .section-title::after { background: #679CBC; }
+    .t-dot { background: #f5f3f1; border: 3px solid #0C324A; box-shadow: 0 2px 6px rgba(12, 50, 74, 0.2); }
+    .t-item.completed .t-dot { background: #C11720; border-color: #C11720; box-shadow: 0 2px 8px rgba(193, 23, 32, 0.35); }
+    .t-item.completed .t-content { border-left: 4px solid #C11720; box-shadow: 0 6px 18px rgba(193, 23, 32, 0.08); }
+    .t-content, .spec-card, .equip-card, .bottom-sheet, .modal-card { background: #FFFFFF; }
+    .day-btn { background: #f5f3f1; }
+    .day-btn.active, .badge-idx, .d-target, .opt-btn.active, .reset-btn, .timer-btn.running, .finish-btn { background: #0C324A; }
+    .finish-btn { color: #FFFFFF; }
+    .finish-btn.is-done { background: #C11720; color: #FFFFFF; box-shadow: 0 6px 18px rgba(193, 23, 32, 0.3); }
+    .reset-btn:disabled { background: #E8D3AE; color: #0C324A; }
+    .confirm-ok { background: #C11720; }
+    .tips-box, .option-segmented, .timer-btn, .confirm-cancel { background: #f5f3f1; }
+    .novice-box { background: #f5f3f1; border-left: 4px solid #679CBC; }
+    .i-sec, .i-brand { color: #C11720; }
+    .i-chev { color: #679CBC; }
+    .novice-title { color: #2C5873; }
+
+    /* ===== Theme v5: more red accents (energy), completion stays solid red ===== */
+    .brand-title span.badge { background: #C11720; box-shadow: 0 2px 8px rgba(193, 23, 32, 0.3); }
+    .badge-idx { background: #C11720; color: #FFFFFF; }
+    .meta-tag span { color: #C11720; }
+    .overview-meta .meta-tag span { color: #FEF1D5; }
+    .rules-btn { color: #C11720; border: 1px solid #C11720; background: #FFFFFF; }
+    .section-title { color: #C11720; }
+    .section-title .ico { color: #C11720; }
+    .d-category { color: #C11720; }
+    .badge-new { background: #C11720; color: #FFFFFF; border: none; }
+    .badge-new .ico { color: #FFFFFF; }
+    .novice-box { background: #FDEBEB; border-left: 4px solid #C11720; }
+    .novice-title { color: #C11720; }
+    .novice-title .ico { color: #C11720; }
+    .novice-text { color: #0C324A; }
+    .link-btn { color: #C11720; border: 1px solid #C11720; }
+    .equip-link { color: #C11720; border-bottom-color: #C11720; }
+    .equip-link .ico { color: #C11720; }
+    .timer-btn.running { background: #C11720; border-color: #C11720; color: #FFFFFF; }
+    .tips-box { border-left: 4px solid #C11720; }
+    .tips-title { color: #C11720; }
+    .tips-title .ico { color: #C11720; }
+    .t-item:active .i-chev { color: #C11720; }
+
+    /* ===== Theme v6: stronger card borders, blue execution tips, blue completed cards ===== */
+    .t-content, .spec-card, .equip-card {
+      border: 1.5px solid #4F85A6;
+      box-shadow: 0 6px 18px rgba(12, 50, 74, 0.10);
+    }
+    .t-item.completed .t-content {
+      background: #E4EFF6;
+      border: 1.5px solid #4F85A6;
+      border-left: 5px solid #4F85A6;
+      box-shadow: 0 4px 14px rgba(12, 50, 74, 0.08);
+    }
+    .t-item.completed .t-main-title { color: #1E4D6E; text-decoration-color: #1E4D6E; }
+    .t-item.completed .t-preview-spec, .t-item.completed .badge-sub { color: #2C5873; }
+    .t-item.completed .badge-idx { background: #679CBC; }
+
+    /* 執行要點與姿勢細節：藍色系 */
+    .tips-box {
+      background: #E4EFF6;
+      border: 1.5px solid #4F85A6;
+      border-left: 5px solid #0C324A;
+    }
+    .tips-title { color: #0C324A; }
+    .tips-title .ico { color: #0C324A; }
+    .tips-text { color: #0C324A; }
+
+    /* ===== Theme v7: unselected day and variant buttons use light blue (no bare colour) ===== */
+    .day-btn {
+      background: #E4EFF6;
+      border: 1.5px solid #4F85A6;
+      color: #2C5873;
+    }
+    .day-btn .day-label { color: #0C324A; }
+    .day-btn .day-sub { color: #2C5873; }
+    .day-btn.active { border-color: #0C324A; }
+
+    .option-segmented { background: #CFE3EF; border: 1px solid #4F85A6; }
+    .opt-btn {
+      background: #E4EFF6;
+      border: 1px solid #679CBC;
+      color: #2C5873;
+    }
+    .opt-btn.active {
+      background: #0C324A;
+      border-color: #0C324A;
+      color: #FFFFFF;
+    }
+
+    /* ===== Theme v8: incomplete timeline dots use light blue (no bare colour) ===== */
+    .t-dot {
+      background: #E4EFF6;
+      border: 3px solid #0C324A;
+      box-shadow: 0 2px 6px rgba(12, 50, 74, 0.2);
+    }
+    .t-item.completed .t-dot {
+      background: #C11720;
+      border-color: #C11720;
+    }
+    /* ===== Theme v9: 居家模式開關與 4 個方案按鈕 ===== */
+    .home-mode {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      background: #FFFFFF; border: 1.5px solid #4F85A6; border-radius: 16px;
+      padding: 12px 14px; margin: 0 0 14px;
+      box-shadow: 0 6px 18px rgba(12, 50, 74, 0.10);
+    }
+    .home-mode.on { background: #E4EFF6; }
+    .home-mode-title { display: flex; align-items: center; gap: 6px; font-size: 0.92rem; font-weight: 800; color: #0C324A; }
+    .home-mode-title .ico { color: #0C324A; }
+    .home-mode-sub { font-size: 0.75rem; color: #2C5873; margin-top: 3px; line-height: 1.4; }
+    .home-switch {
+      flex: 0 0 auto; position: relative; width: 52px; height: 30px; border-radius: 15px;
+      background: #E4EFF6; border: 1.5px solid #4F85A6; cursor: pointer; padding: 0;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .home-knob {
+      position: absolute; top: 3px; left: 3px; width: 21px; height: 21px; border-radius: 50%;
+      background: #FFFFFF; border: 1.5px solid #4F85A6; transition: transform 0.2s ease;
+    }
+    .home-switch.on { background: #0C324A; border-color: #0C324A; }
+    .home-switch.on .home-knob { transform: translateX(22px); border-color: #FFFFFF; }
+    .home-switch:focus-visible { outline: 3px solid #679CBC; outline-offset: 2px; }
+    #dOptionSegmented .opt-btn { padding: 9px 2px; white-space: nowrap; }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Header -->
+  <header>
+    <div class="brand-bar">
+      <div class="brand-title">
+        <span><svg class="ico i-brand" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h3M19 12h3M5 8.5v7M19 8.5v7M7 6v12M17 6v12M7 12h10"/></svg> 24/7 FITNESS</span>
+        <span class="badge">全身排程</span>
+      </div>
+      <button class="rules-btn" onclick="toggleRules(true)"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.5M9.5 3h5M12 3v2.5M18 7l1.5-1.5"/></svg> 休息與原則</button>
+    </div>
+
+    <!-- Day Selector Tabs -->
+    <div class="day-selector">
+      <button class="day-btn active" onclick="switchDay(1)">
+        <span class="day-label">Day 1</span>
+        <span class="day-sub">推與臀腿主導</span>
+      </button>
+      <button class="day-btn" onclick="switchDay(2)">
+        <span class="day-label">Day 2</span>
+        <span class="day-sub">拉與背臀主導</span>
+      </button>
+      <button class="day-btn" onclick="switchDay(3)">
+        <span class="day-label">Day 3</span>
+        <span class="day-sub">綜合與核心</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Timeline Content -->
+  <main>
+    <div class="overview-card" id="overviewCard">
+      <!-- Dynamic populated -->
+    </div>
+
+    <!-- Warmup Timeline -->
+    <div class="section-title"><svg class="ico i-sec" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c2.5-3 5-3 7.5 0s5 3 7.5 0 3-2.2 5-1.2"/></svg> 訓練前動態熱身 (約 5 分鐘)</div>
+    <div class="timeline" id="warmupList"></div>
+
+    <!-- Main Workout Timeline -->
+    <div class="section-title"><svg class="ico i-brand" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h3M19 12h3M5 8.5v7M19 8.5v7M7 6v12M17 6v12M7 12h10"/></svg> 主訓練 (力量 ＋ 有氧)</div>
+    <div class="home-mode" id="homeMode">
+      <div class="home-mode-text">
+        <div class="home-mode-title"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></svg> 居家模式</div>
+        <div class="home-mode-sub" id="homeModeSub">今日 6 項主訓練一鍵改用居家版</div>
+      </div>
+      <button class="home-switch" id="homeSwitch" role="switch" aria-checked="false" aria-label="居家模式" onclick="toggleHomeMode()"><span class="home-knob"></span></button>
+    </div>
+    <div class="timeline" id="mainWorkoutList"></div>
+
+    <!-- Cooldown Timeline -->
+    <div class="section-title"><svg class="ico i-sec" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l7-7"/></svg> 訓練後放鬆伸展 (約 5 分鐘)</div>
+    <div class="timeline" id="cooldownList"></div>
+
+    <!-- Reset all checkmarks -->
+    <div class="reset-section">
+      <div class="reset-hint" id="resetHint"></div>
+      <button class="reset-btn" id="resetBtn" onclick="openResetConfirm('checks')"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v4.5h4.5"/></svg> 取消所有勾選</button>
+      <button class="reset-btn" id="resetVariantsBtn" onclick="openResetConfirm('variants')"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg> 重設所有替代方案為原定</button>
+    </div>
+  </main>
+
+  <!-- Bottom Sheet Drawer -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="bottom-sheet" id="bottomSheet">
+    <div class="drawer-handle-bar">
+      <div class="drawer-handle"></div>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-header">
+        <div class="d-badge-row">
+          <span class="d-category" id="dCategory">力量主訓</span>
+          <span class="d-target" id="dTarget">目標肌群</span>
+        </div>
+        <h3 class="d-title" id="dTitle">動作名稱</h3>
+        <div class="d-en-row"><span class="d-en" id="dEn"></span><span class="badge-new" id="dBeginner" style="display:none"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-9"/><path d="M12 12c0-4 2.5-6.5 7-6.5 0 4-2.5 6.5-7 6.5z"/><path d="M12 14c0-3-2-5-6-5 0 3 2 5 6 5z"/></svg> 新手版</span></div>
+      </div>
+
+      <!-- Segmented Control for Alternatives (Only for Main Exercises) -->
+      <div class="option-segmented" id="dOptionSegmented">
+        <button class="opt-btn active" onclick="selectVariant(0)">原定方案</button>
+        <button class="opt-btn" onclick="selectVariant(1)">替代 A</button>
+        <button class="opt-btn" onclick="selectVariant(2)">替代 B</button>
+        <button class="opt-btn" onclick="selectVariant(3)">居家</button>
+      </div>
+
+      <!-- Equipment cards -->
+      <div id="dEquip"></div>
+
+      <!-- Spec Display Grid -->
+      <div class="spec-grid">
+        <div class="spec-card">
+          <div class="spec-label">訓練強度 / 重量組數</div>
+          <div class="spec-val" id="dSpecWeight">-</div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-label">建議組間休息</div>
+          <div class="spec-val" id="dSpecRest">-</div>
+        </div>
+      </div>
+
+      <!-- Key Execution Tips -->
+      <div class="tips-box">
+        <div class="tips-title"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg> 執行要點與姿勢細節</div>
+        <div class="tips-text" id="dTipsText">-</div>
+      </div>
+
+      <!-- Beginner tip -->
+      <div class="novice-box" id="dNoviceBox">
+        <div class="novice-title"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-9"/><path d="M12 12c0-4 2.5-6.5 7-6.5 0 4-2.5 6.5-7 6.5z"/><path d="M12 14c0-3-2-5-6-5 0 3 2 5 6 5z"/></svg> 新手提點</div>
+        <div class="novice-text" id="dNoviceText">-</div>
+      </div>
+
+      <!-- Search links -->
+      <div class="link-row">
+        <a class="link-btn" id="dLinkImg" href="#" target="_blank" rel="noopener"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg> 動作圖片</a>
+        <a class="link-btn" id="dLinkVideo" href="#" target="_blank" rel="noopener"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l5.5-3.5z"/></svg> 示範影片</a>
+      </div>
+
+      <!-- Bottom Interactive Actions -->
+      <div class="drawer-actions">
+        <button class="timer-btn" id="timerBtn" onclick="toggleRestTimer()">
+          <span id="timerIcon"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.5M9.5 3h5M12 3v2.5M18 7l1.5-1.5"/></svg></span>
+          <span id="timerText">組間計時</span>
+        </button>
+        <button class="finish-btn" id="dFinishBtn" onclick="toggleCurrentCompleted()">
+          <span id="finishBtnText">標記完成</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- General Rules Modal -->
+  <div class="modal-overlay" id="rulesModal" onclick="toggleRules(false)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-title">
+        <span>訓練原則與組間休息指南</span>
+        <span class="modal-close" onclick="toggleRules(false)">&times;</span>
+      </div>
+      <ul class="rules-list">
+        <li><strong>擇一完成：</strong> 每項動作的「原定方案」與「替代方案」擇一即可，不用全部執行。</li>
+        <li><strong>居家版：</strong> 沒時間去健身室時，可改做「居家」方案，只需瑜伽墊、長條彈力帶和椅子；開啟「居家模式」可一次過切換當日全部主訓練，關閉後會還原之前的選擇。</li>
+        <li><strong>重量標準：</strong> 提供的重量為起始參考，請以「動作穩定、全程無痛」為準再逐步增加。</li>
+        <li><strong>主要動作休息：</strong> 腿、胸、背等大肌群動作休息 <strong>60–90 秒</strong>。</li>
+        <li><strong>輔助與核心休息：</strong> 輔助動作 <strong>45–60 秒</strong>；核心動作 <strong>30–45 秒</strong>。</li>
+        <li><strong>換器材／轉有氧：</strong> 更換動作休息 <strong>1.5–2 分鐘</strong>；重訓轉有氧前休息 <strong>2–3 分鐘</strong>。</li>
+        <li><strong>Zone 2 有氧心肺：</strong> 保持在「可交談但微喘」的強度；若感不適請主動降低坡度、阻力或速度。</li>
+        <li><strong><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-9"/><path d="M12 12c0-4 2.5-6.5 7-6.5 0 4-2.5 6.5-7 6.5z"/><path d="M12 14c0-3-2-5-6-5 0 3 2 5 6 5z"/></svg> 新手第一次：</strong> 每個動作先用最輕重量做 1–2 組熟悉姿勢，覺得穩定才加重；每組完成時仍留有 2–3 下餘力。</li>
+        <li><strong><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-9"/><path d="M12 12c0-4 2.5-6.5 7-6.5 0 4-2.5 6.5-7 6.5z"/><path d="M12 14c0-3-2-5-6-5 0 3 2 5 6 5z"/></svg> 新手版：</strong> 標有此標籤的方案是較易上手的版本，不確定時優先選它。</li>
+        <li><strong>找不到器材：</strong> 動作內的器材圖示只是簡化示意，實物外觀會因品牌而異；請點「看器材相片」對照，仍找不到就換同一項的其他方案。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Reset Confirm Modal -->
+  <div class="modal-overlay" id="resetModal" onclick="closeResetConfirm()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-title">
+        <span id="resetModalTitle">取消所有勾選？</span>
+      </div>
+      <p class="modal-text" id="resetModalText"></p>
+      <div class="confirm-actions">
+        <button class="confirm-cancel" onclick="closeResetConfirm()">返回</button>
+        <button class="confirm-ok" onclick="confirmReset()">確定取消</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Equipment library (schematic icons + how to recognise them) ----------
+    const GROUND = '<line class="g" x1="10" y1="92" x2="150" y2="92"/>';
+    const mkSvg = (label, inner) =>
+      `<svg class="eq-svg" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label}">${GROUND}${inner}</svg>`;
+
+    const ZONE_MACHINE = "器械區 (Machine Area)";
+    const ZONE_FREE = "自由重量區 (Free Weights)";
+    const ZONE_CARDIO = "有氧區 (Cardio Area)";
+    const ZONE_MAT = "地墊／伸展區 (Mat Area)";
+    const ZONE_CABLE = "滑輪／多功能架 (Cable Station)";
+    const ZONE_HOME = "家中 (Home)";
+
+    const EQUIP = {
+      flat_band: {
+        zh: "長條彈力帶（扁平）", en: "Flat Resistance Band (Therapy Band)", zone: ZONE_HOME, q: "flat resistance band therapy band",
+        look: "一條扁平、無手柄的長橡膠帶（約 1.4 m，中阻力）。可在掌心繞圈調整鬆緊，或兩端打結成環；使用前檢查有沒有裂痕。",
+        svg: mkSvg("Flat Resistance Band",
+          '<path class="ta" d="M22 70 C46 40 70 40 84 58 S122 78 140 44"/>' +
+          '<path class="s" d="M22 76 C46 46 70 46 84 64 S122 84 140 50"/>' +
+          '<line class="s" x1="18" y1="66" x2="24" y2="80"/><line class="s" x1="136" y1="40" x2="144" y2="54"/>')
+      },
+      chair: {
+        zh: "穩固椅子／梳化", en: "Sturdy Chair / Sofa", zone: ZONE_HOME, q: "sturdy dining chair",
+        look: "選四腳穩固、不會轉動或有轆的椅子；椅背靠牆可防止滑動。梳化邊亦可代替。",
+        svg: mkSvg("Sturdy Chair",
+          '<rect class="f" x="52" y="56" width="58" height="9" rx="2"/>' +
+          '<line class="t" x1="106" y1="56" x2="106" y2="18"/>' +
+          '<line class="s" x1="106" y1="26" x2="94" y2="26"/><line class="s" x1="106" y1="40" x2="94" y2="40"/>' +
+          '<line class="t" x1="58" y1="65" x2="58" y2="92"/><line class="t" x1="104" y1="65" x2="104" y2="92"/>' +
+          '<line class="w" x1="58" y1="80" x2="104" y2="80"/>')
+      },
+      step: {
+        zh: "樓梯／矮踏台", en: "Stairs / Low Step", zone: ZONE_HOME, q: "low aerobic step platform home",
+        look: "樓梯第一級或 15–20 cm 高、表面防滑的踏台；旁邊最好有扶手或牆。",
+        svg: mkSvg("Low Step",
+          '<path class="f" d="M30 92 L30 72 L70 72 L70 52 L110 52 L110 32 L140 32 L140 92 Z"/>' +
+          '<line class="w" x1="34" y1="72" x2="66" y2="72"/>' +
+          '<line class="s" x1="20" y1="40" x2="20" y2="92"/><line class="s" x1="20" y1="40" x2="60" y2="40"/>')
+      },
+      home_space: {
+        zh: "客廳空位（徒手）", en: "Open Floor Space (No Equipment)", zone: ZONE_HOME, q: "living room home workout space",
+        look: "約 2 × 2 米的空位，移開枱凳和易碎物件；穿運動鞋或赤腳在防滑地面上進行。",
+        svg: mkSvg("Open Floor Space",
+          '<path class="s" d="M36 50 L80 18 L124 50"/>' +
+          '<path class="s" d="M44 44 L44 92 M116 44 L116 92"/>' +
+          '<polygon class="f" points="54,92 106,92 98,76 62,76"/>' +
+          '<path class="w" d="M72 72 L72 64 M88 72 L88 64"/>' +
+          '<circle class="a" cx="80" cy="46" r="5"/>')
+      },
+      leg_press: {
+        zh: "腿部推舉機", en: "Leg Press Machine", zone: ZONE_MACHINE,
+        look: "斜躺的座椅，前方斜上方有一塊大腳踏板，沿斜軌推出去；旁邊插片配重。",
+        svg: mkSvg("Leg Press Machine",
+          '<line class="t" x1="36" y1="84" x2="128" y2="36"/>' +
+          '<polyline class="t" points="18,48 36,74 66,78"/>' +
+          '<line class="ta" x1="116" y1="24" x2="134" y2="52"/>' +
+          '<line class="s" x1="128" y1="40" x2="138" y2="92"/>' +
+          '<line class="s" x1="36" y1="84" x2="30" y2="92"/>' +
+          '<rect class="f" x="84" y="56" width="14" height="22" rx="3"/>')
+      },
+      smith: {
+        zh: "史密斯機", en: "Smith Machine", zone: ZONE_FREE,
+        look: "兩條垂直軌道固定住一支槓鈴，槓只能上下滑動；轉動手腕可把槓扣在掛鉤上固定。",
+        svg: mkSvg("Smith Machine",
+          '<rect class="f" x="36" y="14" width="6" height="78"/>' +
+          '<rect class="f" x="118" y="14" width="6" height="78"/>' +
+          '<line class="ta" x1="24" y1="50" x2="136" y2="50"/>' +
+          '<rect class="f" x="19" y="38" width="7" height="24" rx="2"/>' +
+          '<rect class="f" x="134" y="38" width="7" height="24" rx="2"/>' +
+          '<line class="s" x1="42" y1="30" x2="48" y2="30"/><line class="s" x1="112" y1="30" x2="118" y2="30"/>')
+      },
+      dumbbell: {
+        zh: "啞鈴", en: "Dumbbell", zone: ZONE_FREE,
+        look: "放在啞鈴架 (Dumbbell Rack) 上，短槓兩端有重塊，側面標有 kg；由輕到重排列。",
+        svg: mkSvg("Dumbbell",
+          '<line class="t" x1="58" y1="54" x2="102" y2="54"/>' +
+          '<rect class="f" x="40" y="38" width="18" height="32" rx="4"/>' +
+          '<rect class="f" x="102" y="38" width="18" height="32" rx="4"/>' +
+          '<rect class="f" x="32" y="45" width="8" height="18" rx="3"/>' +
+          '<rect class="f" x="120" y="45" width="8" height="18" rx="3"/>')
+      },
+      bench: {
+        zh: "訓練凳", en: "Flat / Adjustable Bench", zone: ZONE_FREE,
+        look: "長形軟墊凳，有些可以調整靠背角度（Adjustable Bench）；放在自由重量區。",
+        svg: mkSvg("Bench",
+          '<rect class="f" x="22" y="46" width="116" height="16" rx="6"/>' +
+          '<line class="t" x1="44" y1="62" x2="44" y2="92"/>' +
+          '<line class="t" x1="116" y1="62" x2="116" y2="92"/>' +
+          '<line class="s" x1="98" y1="46" x2="98" y2="62"/>')
+      },
+      chest_press: {
+        zh: "坐姿胸推機", en: "Chest Press Machine", zone: ZONE_MACHINE,
+        look: "坐著把兩個把手向前推；椅背貼著背，側面有插片配重和座椅調整桿。",
+        svg: mkSvg("Chest Press Machine",
+          '<line class="t" x1="40" y1="64" x2="34" y2="26"/>' +
+          '<line class="t" x1="40" y1="64" x2="78" y2="64"/>' +
+          '<line class="s" x1="58" y1="64" x2="58" y2="92"/>' +
+          '<line class="ta" x1="52" y1="42" x2="92" y2="42"/>' +
+          '<line class="s" x1="92" y1="42" x2="112" y2="56"/>' +
+          '<rect class="f" x="112" y="18" width="30" height="70" rx="3"/>' +
+          '<line class="g" x1="112" y1="34" x2="142" y2="34"/><line class="g" x1="112" y1="50" x2="142" y2="50"/><line class="g" x1="112" y1="66" x2="142" y2="66"/>')
+      },
+      cable: {
+        zh: "滑輪機／雙滑輪架", en: "Cable Machine (Cable Crossover)", zone: ZONE_CABLE,
+        look: "高大的雙柱架，兩邊有可上下調高的滑輪，可換不同把手（繩、單把手、V 型把手）。",
+        svg: mkSvg("Cable Machine",
+          '<rect class="f" x="24" y="10" width="8" height="82"/>' +
+          '<rect class="f" x="128" y="10" width="8" height="82"/>' +
+          '<line class="t" x1="28" y1="12" x2="132" y2="12"/>' +
+          '<circle class="f" cx="28" cy="32" r="6"/><circle class="f" cx="132" cy="32" r="6"/>' +
+          '<polyline class="w" points="28,38 52,68"/>' +
+          '<polyline class="w" points="132,38 108,68"/>' +
+          '<circle class="a" cx="52" cy="68" r="5"/><circle class="a" cx="108" cy="68" r="5"/>')
+      },
+      leg_curl_seated: {
+        zh: "坐姿腿後勾機", en: "Seated Leg Curl Machine", zone: ZONE_MACHINE,
+        look: "坐著，大腿上面有壓墊，小腿後方有滾輪墊，向下勾腳。",
+        svg: mkSvg("Seated Leg Curl Machine",
+          '<line class="t" x1="34" y1="22" x2="40" y2="58"/>' +
+          '<line class="t" x1="40" y1="58" x2="84" y2="58"/>' +
+          '<line class="s" x1="62" y1="58" x2="62" y2="92"/>' +
+          '<line class="ta" x1="62" y1="46" x2="88" y2="46"/>' +
+          '<line class="t" x1="90" y1="62" x2="84" y2="90"/>' +
+          '<line class="ta" x1="78" y1="80" x2="96" y2="80"/>' +
+          '<circle class="f" cx="90" cy="62" r="4"/>' +
+          '<line class="s" x1="90" y1="62" x2="116" y2="62"/>' +
+          '<rect class="f" x="116" y="18" width="28" height="70" rx="3"/>')
+      },
+      leg_curl_lying: {
+        zh: "俯臥腿後勾機", en: "Lying Leg Curl Machine", zone: ZONE_MACHINE,
+        look: "俯臥在墊凳上，腳跟後方有一個滾輪墊，向臀部方向勾起。",
+        svg: mkSvg("Lying Leg Curl Machine",
+          '<rect class="f" x="18" y="54" width="80" height="12" rx="5"/>' +
+          '<line class="t" x1="30" y1="66" x2="30" y2="92"/><line class="t" x1="84" y1="66" x2="84" y2="92"/>' +
+          '<line class="t" x1="98" y1="58" x2="122" y2="34"/>' +
+          '<circle class="a" cx="122" cy="34" r="6"/>' +
+          '<line class="s" x1="98" y1="58" x2="124" y2="70"/>' +
+          '<rect class="f" x="124" y="52" width="22" height="40" rx="3"/>')
+      },
+      ab_machine: {
+        zh: "坐姿腹肌機", en: "Ab Crunch Machine", zone: ZONE_MACHINE,
+        look: "坐著，胸前有軟墊或把手，向前捲腹；側面有插片配重。",
+        svg: mkSvg("Ab Crunch Machine",
+          '<line class="t" x1="44" y1="72" x2="80" y2="72"/>' +
+          '<line class="t" x1="44" y1="72" x2="38" y2="32"/>' +
+          '<line class="s" x1="62" y1="72" x2="62" y2="92"/>' +
+          '<line class="ta" x1="58" y1="38" x2="58" y2="60"/>' +
+          '<polyline class="s" points="58,50 90,50 112,66"/>' +
+          '<rect class="f" x="112" y="22" width="30" height="66" rx="3"/>')
+      },
+      mat: {
+        zh: "瑜伽墊", en: "Exercise Mat (Yoga Mat)", zone: ZONE_MAT,
+        look: "地板上的軟墊，通常在伸展／功能訓練區，也可能掛在牆上或放在櫃內。",
+        svg: mkSvg("Exercise Mat",
+          '<rect class="f" x="40" y="68" width="106" height="12" rx="4"/>' +
+          '<circle class="f" cx="32" cy="66" r="14"/>' +
+          '<circle class="s" cx="32" cy="66" r="6"/>')
+      },
+      treadmill: {
+        zh: "跑步機", en: "Treadmill", zone: ZONE_CARDIO,
+        look: "有轉動的皮帶和扶手，螢幕可調速度 (Speed) 和坡度 (Incline)。",
+        svg: mkSvg("Treadmill",
+          '<path class="f" d="M20 74 L112 74 L112 84 L20 84 Z"/>' +
+          '<circle class="f" cx="24" cy="79" r="5"/><circle class="f" cx="108" cy="79" r="5"/>' +
+          '<line class="s" x1="26" y1="84" x2="22" y2="92"/>' +
+          '<line class="t" x1="112" y1="76" x2="124" y2="26"/>' +
+          '<rect class="a" x="110" y="12" width="36" height="16" rx="4"/>' +
+          '<polyline class="s" points="122,36 66,48"/>')
+      },
+      elliptical: {
+        zh: "滑步機", en: "Elliptical Trainer (Cross Trainer)", zone: ZONE_CARDIO,
+        look: "兩個腳踏板加可前後擺動的手把，雙腳畫橢圓形；膝蓋壓力比跑步細。",
+        svg: mkSvg("Elliptical Trainer",
+          '<path class="f" d="M24 84 L132 84 L132 90 L24 90 Z"/>' +
+          '<ellipse class="f" cx="46" cy="80" rx="22" ry="7"/>' +
+          '<rect class="a" x="34" y="66" width="32" height="7" rx="3"/>' +
+          '<line class="t" x1="116" y1="84" x2="116" y2="30"/>' +
+          '<rect class="a" x="102" y="12" width="28" height="14" rx="4"/>' +
+          '<line class="t" x1="106" y1="32" x2="60" y2="62"/>')
+      },
+      bike: {
+        zh: "直立健身車", en: "Upright Exercise Bike", zone: ZONE_CARDIO,
+        look: "像單車但不會移動，有座椅、腳踏和螢幕；直立式 (Upright) 與躺椅式 (Recumbent) 都可以用。",
+        svg: mkSvg("Upright Exercise Bike",
+          '<rect class="a" x="32" y="34" width="24" height="6" rx="3"/>' +
+          '<line class="t" x1="45" y1="40" x2="58" y2="74"/>' +
+          '<circle class="f" cx="82" cy="72" r="14"/>' +
+          '<line class="t" x1="58" y1="74" x2="98" y2="72"/>' +
+          '<line class="t" x1="98" y1="72" x2="108" y2="32"/>' +
+          '<line class="t" x1="102" y1="30" x2="126" y2="30"/>' +
+          '<rect class="a" x="106" y="14" width="24" height="10" rx="3"/>' +
+          '<line class="s" x1="82" y1="72" x2="72" y2="88"/>' +
+          '<line class="t" x1="34" y1="90" x2="118" y2="90"/>')
+      },
+      lat_pulldown: {
+        zh: "高位下拉機", en: "Lat Pulldown Machine", zone: ZONE_MACHINE,
+        look: "上方有一支長橫槓，坐下後把大腿壓在軟墊下，將槓向下拉到胸口。",
+        svg: mkSvg("Lat Pulldown Machine",
+          '<line class="t" x1="40" y1="12" x2="130" y2="12"/>' +
+          '<circle class="f" cx="66" cy="12" r="5"/>' +
+          '<line class="w" x1="66" y1="17" x2="66" y2="38"/>' +
+          '<line class="ta" x1="42" y1="38" x2="90" y2="38"/>' +
+          '<line class="s" x1="42" y1="38" x2="40" y2="46"/><line class="s" x1="90" y1="38" x2="92" y2="46"/>' +
+          '<rect class="a" x="52" y="58" width="30" height="7" rx="3"/>' +
+          '<rect class="f" x="48" y="72" width="34" height="8" rx="3"/>' +
+          '<line class="s" x1="65" y1="80" x2="65" y2="92"/>' +
+          '<polyline class="w" points="66,12 130,12 130,26"/>' +
+          '<rect class="f" x="116" y="26" width="28" height="64" rx="3"/>')
+      },
+      pec_fly: {
+        zh: "蝴蝶機（夾胸機）", en: "Pec Fly Machine (Pec Deck)", zone: ZONE_MACHINE,
+        look: "坐著，兩側各有一個可向中間合攏的手臂或軟墊；有時與反向蝴蝶機 (Rear Delt) 是同一台。",
+        svg: mkSvg("Pec Fly Machine",
+          '<rect class="f" x="66" y="20" width="28" height="48" rx="6"/>' +
+          '<rect class="f" x="62" y="68" width="36" height="10" rx="4"/>' +
+          '<line class="s" x1="80" y1="78" x2="80" y2="92"/>' +
+          '<path class="s" d="M66 34 Q44 34 38 56"/><path class="s" d="M94 34 Q116 34 122 56"/>' +
+          '<rect class="a" x="32" y="40" width="9" height="26" rx="4"/>' +
+          '<rect class="a" x="119" y="40" width="9" height="26" rx="4"/>')
+      },
+      shoulder_press: {
+        zh: "坐姿肩推機", en: "Shoulder Press Machine", zone: ZONE_MACHINE,
+        look: "坐著，把手在頭部兩側，向上推過頭頂；座椅高度可調。",
+        svg: mkSvg("Shoulder Press Machine",
+          '<line class="t" x1="40" y1="66" x2="34" y2="24"/>' +
+          '<line class="t" x1="40" y1="66" x2="78" y2="66"/>' +
+          '<line class="s" x1="58" y1="66" x2="58" y2="92"/>' +
+          '<line class="ta" x1="48" y1="18" x2="88" y2="18"/>' +
+          '<polyline class="s" points="88,18 112,32"/>' +
+          '<rect class="f" x="112" y="26" width="30" height="64" rx="3"/>')
+      },
+      seated_row: {
+        zh: "坐姿划船機（低位滑輪）", en: "Seated Cable Row", zone: ZONE_MACHINE,
+        look: "坐著雙腳踩在踏板上，向身體拉 V 型把手；前方有插片配重。",
+        svg: mkSvg("Seated Cable Row",
+          '<line class="t" x1="18" y1="86" x2="118" y2="86"/>' +
+          '<line class="ta" x1="112" y1="62" x2="118" y2="82"/>' +
+          '<rect class="f" x="40" y="68" width="26" height="8" rx="3"/>' +
+          '<line class="s" x1="53" y1="76" x2="53" y2="86"/>' +
+          '<line class="w" x1="126" y1="52" x2="84" y2="52"/>' +
+          '<path class="s" d="M84 52 L76 58 M84 52 L76 46"/>' +
+          '<rect class="f" x="126" y="28" width="22" height="58" rx="3"/>')
+      },
+      chest_row: {
+        zh: "胸部支撐划船機", en: "Chest-Supported Row Machine", zone: ZONE_MACHINE,
+        look: "胸口靠在軟墊上，雙手握前方把手向後拉；背部有支撐，較易控制姿勢。",
+        svg: mkSvg("Chest-Supported Row Machine",
+          '<rect class="a" x="62" y="26" width="10" height="34" rx="4"/>' +
+          '<rect class="f" x="30" y="66" width="30" height="8" rx="3"/>' +
+          '<line class="s" x1="45" y1="74" x2="45" y2="92"/>' +
+          '<line class="t" x1="66" y1="60" x2="72" y2="92"/>' +
+          '<line class="s" x1="68" y1="44" x2="100" y2="44"/>' +
+          '<circle class="f" cx="100" cy="44" r="5"/>' +
+          '<line class="s" x1="100" y1="44" x2="118" y2="58"/>' +
+          '<rect class="f" x="118" y="24" width="26" height="66" rx="3"/>')
+      },
+      hip_abductor: {
+        zh: "坐姿髖外展機", en: "Seated Hip Abduction Machine", zone: ZONE_MACHINE,
+        look: "坐著，膝蓋外側有兩塊墊，向兩側打開；常與內收機 (Adductor) 共用同一台。",
+        svg: mkSvg("Seated Hip Abduction Machine",
+          '<rect class="f" x="64" y="16" width="32" height="46" rx="6"/>' +
+          '<rect class="f" x="60" y="62" width="40" height="10" rx="4"/>' +
+          '<line class="s" x1="80" y1="72" x2="80" y2="92"/>' +
+          '<rect class="a" x="38" y="48" width="10" height="28" rx="4"/>' +
+          '<rect class="a" x="112" y="48" width="10" height="28" rx="4"/>' +
+          '<line class="s" x1="48" y1="64" x2="60" y2="66"/><line class="s" x1="112" y1="64" x2="100" y2="66"/>')
+      },
+      band: {
+        zh: "環狀彈力帶", en: "Resistance Loop Band", zone: ZONE_MAT,
+        look: "一個封閉的橡膠或布料環，有輕、中、重不同顏色；通常放在地墊區或前台詢問。",
+        svg: mkSvg("Resistance Loop Band",
+          '<ellipse class="w" cx="80" cy="52" rx="46" ry="16" style="stroke-width:6"/>' +
+          '<ellipse class="w" cx="80" cy="52" rx="38" ry="10" style="stroke-width:2;opacity:.55"/>')
+      },
+      hyperext: {
+        zh: "羅馬椅（背伸展架）", en: "Back Extension Bench (45° Hyperextension)", zone: ZONE_MACHINE,
+        look: "約 45° 向下斜的架，髖部墊在前面，腳跟扣在後方滾輪下，身體向下彎再抬起。",
+        svg: mkSvg("Back Extension Bench",
+          '<line class="t" x1="28" y1="80" x2="100" y2="44"/>' +
+          '<polygon class="f" points="64,58 88,44 95,55 71,69"/>' +
+          '<circle class="a" cx="34" cy="70" r="5"/><circle class="a" cx="46" cy="64" r="5"/>' +
+          '<line class="t" x1="100" y1="44" x2="110" y2="92"/>' +
+          '<line class="t" x1="28" y1="80" x2="22" y2="92"/>')
+      },
+      captain: {
+        zh: "隊長椅（抬腿架）", en: "Captain's Chair (Vertical Knee Raise)", zone: ZONE_MACHINE,
+        look: "背靠直立軟墊，兩側有前臂墊和把手，雙腿懸空抬起；有時與引體向上架共用。",
+        svg: mkSvg("Captain's Chair",
+          '<rect class="f" x="62" y="14" width="16" height="52" rx="5"/>' +
+          '<rect class="a" x="36" y="40" width="26" height="8" rx="3"/>' +
+          '<circle class="f" cx="38" cy="34" r="4"/>' +
+          '<line class="t" x1="70" y1="66" x2="46" y2="92"/>' +
+          '<line class="t" x1="70" y1="66" x2="96" y2="92"/>')
+      },
+      stairmaster: {
+        zh: "階梯機", en: "StairMaster (Stair Climber)", zone: ZONE_CARDIO,
+        look: "像不斷向下轉動的電動樓梯，要不停踩階而上；機身有扶手和螢幕。",
+        svg: mkSvg("StairMaster",
+          '<polyline class="t" points="24,86 44,86 44,72 64,72 64,58 84,58 84,44 104,44"/>' +
+          '<line class="t" x1="128" y1="90" x2="128" y2="28"/>' +
+          '<rect class="a" x="114" y="12" width="30" height="14" rx="4"/>' +
+          '<line class="s" x1="126" y1="40" x2="90" y2="34"/>')
+      },
+      lateral_raise: {
+        zh: "坐姿側平舉機", en: "Lateral Raise Machine", zone: ZONE_MACHINE,
+        look: "坐著，手臂外側各有一塊墊，向兩側抬起；專練肩膀側面。",
+        svg: mkSvg("Lateral Raise Machine",
+          '<rect class="f" x="66" y="24" width="28" height="46" rx="6"/>' +
+          '<rect class="f" x="62" y="70" width="36" height="8" rx="4"/>' +
+          '<line class="s" x1="80" y1="78" x2="80" y2="92"/>' +
+          '<rect class="a" x="32" y="34" width="14" height="9" rx="3"/>' +
+          '<rect class="a" x="114" y="34" width="14" height="9" rx="3"/>' +
+          '<path class="s" d="M46 40 L66 52"/><path class="s" d="M114 40 L94 52"/>')
+      },
+      rower: {
+        zh: "室內划船機", en: "Rowing Machine (Indoor Rower)", zone: ZONE_CARDIO,
+        look: "一條長長的滑軌，座位會前後滑動，前方有大型風扇或水箱飛輪，雙腳固定在踏板上，拉手把。",
+        svg: mkSvg("Rowing Machine",
+          '<line class="t" x1="18" y1="82" x2="122" y2="76"/>' +
+          '<rect class="f" x="58" y="66" width="20" height="8" rx="3"/>' +
+          '<line class="ta" x1="108" y1="58" x2="116" y2="74"/>' +
+          '<circle class="f" cx="132" cy="64" r="14"/>' +
+          '<line class="w" x1="126" y1="58" x2="88" y2="52"/>' +
+          '<line class="s" x1="88" y1="48" x2="88" y2="56"/>' +
+          '<rect class="a" x="118" y="30" width="24" height="10" rx="3"/>' +
+          '<line class="s" x1="128" y1="40" x2="130" y2="50"/>' +
+          '<line class="t" x1="24" y1="82" x2="24" y2="92"/><line class="t" x1="118" y1="78" x2="118" y2="92"/>')
+      },
+      assist_pullup: {
+        zh: "輔助引體向上機", en: "Assisted Pull-Up / Chin-Up Machine", zone: ZONE_MACHINE,
+        look: "高架上方有引體向上握把，下方有可調節的跪墊或踏板；插銷選的重量越大，輔助越多。",
+        svg: mkSvg("Assisted Pull-Up Machine",
+          '<rect class="f" x="96" y="10" width="10" height="82" rx="2"/>' +
+          '<line class="t" x1="100" y1="14" x2="40" y2="14"/>' +
+          '<line class="ta" x1="40" y1="14" x2="40" y2="34"/><line class="ta" x1="62" y1="14" x2="62" y2="34"/>' +
+          '<rect class="a" x="36" y="66" width="36" height="7" rx="3"/>' +
+          '<line class="s" x1="72" y1="69" x2="96" y2="69"/>' +
+          '<rect class="f" x="114" y="28" width="30" height="62" rx="3"/>' +
+          '<line class="s" x1="106" y1="58" x2="114" y2="58"/>')
+      },
+      air_bike: {
+        zh: "風扇車", en: "Air Bike (Assault Bike)", zone: ZONE_CARDIO,
+        look: "前輪是大風扇，手把會前後擺動，雙手雙腳一起發力；踩得越大力阻力越大。",
+        svg: mkSvg("Air Bike",
+          '<circle class="f" cx="36" cy="62" r="22"/>' +
+          '<line class="g" x1="36" y1="40" x2="36" y2="84"/><line class="g" x1="14" y1="62" x2="58" y2="62"/>' +
+          '<line class="g" x1="20" y1="46" x2="52" y2="78"/><line class="g" x1="52" y1="46" x2="20" y2="78"/>' +
+          '<line class="t" x1="36" y1="62" x2="50" y2="22"/>' +
+          '<line class="ta" x1="42" y1="20" x2="62" y2="20"/>' +
+          '<line class="t" x1="36" y1="62" x2="98" y2="66"/>' +
+          '<rect class="a" x="84" y="32" width="28" height="6" rx="3"/>' +
+          '<line class="t" x1="98" y1="38" x2="94" y2="74"/>' +
+          '<line class="s" x1="80" y1="76" x2="72" y2="88"/>' +
+          '<line class="t" x1="26" y1="90" x2="116" y2="90"/>')
+      }
+    };
+
+    // Complete structured workout data with precise intensity specifications
+    // 每個動作：en = 英文名稱、eq = 器材 key（可多個）、novice = 新手提點、beginner = 新手友善替代方案
+    const workoutData = {
+      1: {
+        title: "Day 1：全身推與臀腿主導",
+        subtitle: "建議安排：週一 或 週二",
+        meta: ["3 項動態熱身", "6 項力量＋Zone 2", "3 項放鬆伸展"],
+        warmup: [
+          {
+            title: "開髖深蹲", en: "Squat to Stand",
+            target: "髖、腿後側與踝關節活動",
+            weight: "自體體重 · 10 次",
+            rest: "動作流暢不間斷",
+            tips: "屈髖摸腳趾、下蹲打開膝蓋，再站起伸展腿後側，保持動作流暢節奏。",
+            novice: "摸不到腳趾沒問題，手摸到小腿就可以；動作慢一點。"
+          },
+          {
+            title: "世界最好伸展", en: "World's Greatest Stretch",
+            target: "髖屈肌、臀部與胸椎",
+            weight: "自體體重 · 每側 6 次",
+            rest: "左右交替",
+            tips: "弓箭步下沉後，同側手臂向上伸展並轉體，順應關節活動度，不要勉強硬扭腰。",
+            novice: "動作步驟較多，先放慢；失去平衡時用手按地面，轉體幅度不用大。"
+          },
+          {
+            title: "肩臂環繞與擴胸", en: "Arm Circles & Chest Hugs",
+            target: "肩關節與胸部活動度",
+            weight: "自體體重 · 順逆時針各 15 圈 ＋ 擴胸 15 次",
+            rest: "自主調整",
+            tips: "幅度由小至大自然伸展，肩膀全程保持下沉放鬆，不聳肩。",
+            novice: "由小圈開始，覺得肩膀緊就不要再加大。"
+          }
+        ],
+        main: [
+          {
+            category: "01. 下肢推 (腿部/臀部)",
+            target: "股四頭肌、臀大肌",
+            variants: [
+              { name: "器械腿部推舉", en: "Leg Press Machine", eq: ["leg_press"], weight: "40–50 kg，4 組 × 10–12 下", rest: "60–90 秒", tips: "膝蓋全程跟隨腳尖方向，下降至舒適深度，推到底不鎖死膝關節。", novice: "先調椅背，使膝蓋彎到約 90° 時背仍貼著椅；腳放在踏板中間；第一組用最輕重量。完成後記得先把安全卡榫 (Safety Stop) 扣好才起身。" },
+              { name: "史密斯深蹲 / 斜蹲機", en: "Smith Machine Squat / Hack Squat Machine", q: "Smith Machine Squat", eq: ["smith"], weight: "空槓或加片 10–20 kg，4 組 × 10–12 下", rest: "60–90 秒", tips: "背部貼實椅背或軌道，核心收緊，骨盆維持中立下蹲。", novice: "先用空槓；腳稍微站在槓的前方一點；要放槓時轉動手腕，把槓扣到掛鉤 (Hook) 上才算安全。" },
+              { name: "啞鈴分腿蹲", en: "Dumbbell Split Squat", beginner: true, eq: ["dumbbell"], weight: "每手 4–6 kg，3 組 × 每側 8–10 下", rest: "60–90 秒", tips: "前後腳站成弓步，後腳放在地面不用抬高；上下垂直蹲起，前腳掌均勻受力，避免借力彈起。", novice: "新手版：後腳不用墊高。可以一手扶著架或牆穩定，先徒手或用 2–4 kg 開始。" },
+              { name: "保加利亞分腿蹲", en: "Bulgarian Split Squat (Rear Foot on Chair)", q: "Bodyweight Bulgarian Split Squat", eq: ["chair"], weight: "自體體重（可雙手抱背包加重），3 組 × 每側 10–12 下", rest: "60–90 秒", tips: "後腳腳背放在椅面，前腳向前踏約一大步；身體垂直下降至前大腿接近水平，前膝跟隨腳尖方向，用前腳腳跟發力站起。", novice: "椅子要靠牆防滑；前腳太近會令膝蓋過度前推，太遠會拉扯後腳髖前側，先試幾下找出舒適距離。" }
+            ]
+          },
+          {
+            category: "02. 上肢推 (胸/三頭)",
+            target: "胸大肌、三頭肌",
+            variants: [
+              { name: "坐姿器械胸推", en: "Chest Press Machine", eq: ["chest_press"], weight: "15–20 kg，3 組 × 10–12 下", rest: "60–90 秒", tips: "核心輕收、肩胛骨後收下沉穩定；手肘不要過度外展外擴，推起時不鎖死手肘。", novice: "先調座椅，使把手與胸口同高；肩膀貼椅背；不用急於加重量。" },
+              { name: "滑輪胸推", en: "Cable Chest Press", eq: ["cable"], weight: "每側滑輪 7.5–10 kg，3 組 × 10–12 下", rest: "60–90 秒", tips: "前後腳站姿保持抗扭轉穩定，將滑輪沿著胸前弧線往前推。", novice: "較難穩定，腳站穩再推；難控制就先用上面的胸推機。" },
+              { name: "平躺啞鈴臥推", en: "Dumbbell Bench Press", eq: ["dumbbell", "bench"], weight: "每手 7–9 kg，3 組 × 10–12 下", rest: "60–90 秒", tips: "啞鈴下降至胸口兩側，手肘與身體夾角約 45–60 度，穩推起。", novice: "先坐在凳上把啞鈴放大腿上，躺下時用膝蓋頂一下送上胸口；新手建議從 5 kg 起，不熟可先用胸推機。" },
+              { name: "慢速掌上壓", en: "Tempo Push-Up", q: "Tempo Push-Up", eq: ["mat"], weight: "自體體重，3 秒下降，3 組 × 8–12 下", rest: "60–90 秒", tips: "雙手略寬於肩，身體由頭至腳跟成一直線；用 3 秒下降至胸口接近地面，手肘與身體約 45°，吐氣推起。", novice: "未能完成指定下數可改為雙手撐梳化或枱邊的上斜版本；腰部下沉或聳肩代表要減少下數。" }
+            ]
+          },
+          {
+            category: "03. 下肢拉 (腿後肌群)",
+            target: "腿後側肌群",
+            variants: [
+              { name: "坐姿腿後勾", en: "Seated Leg Curl Machine", eq: ["leg_curl_seated"], weight: "20–25 kg，3 組 × 12–15 下", rest: "45–60 秒", tips: "膝蓋對準轉軸，下壓到底時稍作停頓，緩慢控制離心回程。", novice: "調整椅背，使膝蓋對準機器的轉軸；滾輪墊放在小腿下方近腳踝；重量輕、速度慢。" },
+              { name: "俯臥腿後勾", en: "Lying Leg Curl Machine", eq: ["leg_curl_lying"], weight: "15–20 kg，3 組 × 12–15 下", rest: "45–60 秒", tips: "骨盆緊貼墊子避免腰部代償拱起，專注腿後側收縮。", novice: "膝蓋剛好在凳邊外；若感到腰拱起就減輕重量。" },
+              { name: "啞鈴羅馬尼亞硬舉", en: "Dumbbell Romanian Deadlift (RDL)", q: "Dumbbell Romanian Deadlift", eq: ["dumbbell"], weight: "每手 8–10 kg，3 組 × 10–12 下", rest: "60–90 秒", tips: "以髖向後折（髖鉸鏈）為主，背部保持中立挺直，感受腿後側與臀部充分拉伸。", novice: "先徒手練「屁股向後推、背保持平」；再手持最輕啞鈴，啞鈴貼著大腿下滑，只到小腿中段。" },
+              { name: "椅上單腳臀橋", en: "Elevated Single-Leg Glute Bridge (Heel on Chair)", q: "Single Leg Elevated Glute Bridge", eq: ["chair", "mat"], weight: "自體體重，3 組 × 每側 10–12 下", rest: "45–60 秒", tips: "仰臥，一腳腳跟放在椅邊，另一腳抬起；腳跟向下踩並微微向臀部方向拉，推起臀部至肩、髖、膝成一直線，頂部停 1 秒再慢慢放下。", novice: "大腿後側抽筋就先改雙腳版本；腰部不要過度拱起，發力感應在臀部和大腿後側。" }
+            ]
+          },
+          {
+            category: "04. 核心 (腹直肌)",
+            target: "腹直肌、前側核心",
+            variants: [
+              { name: "地面捲腹", en: "Floor Crunch", beginner: true, eq: ["mat"], weight: "自體體重，3 組 × 15 下", rest: "30–45 秒", tips: "仰臥屈膝，用腹部把肩胛骨捲離地面，吐氣向上、吸氣放下，下背保持貼地。", novice: "新手版：雙手輕放耳旁或胸前，不要拉頭；肩胛骨離地即可，不用坐起。" },
+              { name: "坐姿腹肌機", en: "Ab Crunch Machine", eq: ["ab_machine"], weight: "20–25 kg，3 組 × 12–15 下", rest: "30–45 秒", tips: "胸椎主動屈曲捲腹，吐氣收緊腹肌，避免靠雙腿借力。", novice: "重量用輕一點，用肚子向下捲，不要用手臂拉。" },
+              { name: "反向捲腹", en: "Reverse Crunch", eq: ["mat"], weight: "徒手或夾 2–3 kg 啞鈴，3 組 × 15 下", rest: "30–45 秒", tips: "利用下腹主動將骨盆向胸口捲起，控制骨盆慢慢落回地面。", novice: "膝蓋保持彎曲，慢慢做，不要甩腿；做不到時可把雙手壓在臀部下方輔助。" },
+              { name: "收腹 V 字捲腹", en: "Tuck-Up (V-Sit Crunch)", q: "Tuck Up exercise", eq: ["mat"], weight: "自體體重，3 組 × 12–15 下", rest: "30–45 秒", tips: "仰臥，雙手伸過頭；吐氣時同時捲起上身並收膝，雙手觸碰小腿，再慢慢伸直回到起點，腳跟不完全放地。", novice: "頸部不要用力向前拉；未能做到全幅度可先把雙手放在身旁撐地輔助。" }
+            ]
+          },
+          {
+            category: "05. 深層核心 (腹橫肌)",
+            target: "腹橫肌與深層腹壓控制",
+            variants: [
+              { name: "真空收腹", en: "Stomach Vacuum", eq: ["mat"], weight: "自體體重，3 組 × 吐氣後收緊 20 秒", rest: "30–45 秒", tips: "緩慢將所有空氣吐盡，像肚臍貼向脊椎一樣輕柔深層收緊腹壁。", novice: "先躺著做（仰臥屈膝）較易感覺；一開始 10–15 秒就可以，不用太用力。" },
+              { name: "四足跪姿真空收腹", en: "Quadruped Stomach Vacuum", eq: ["mat"], weight: "自體體重，3 組 × 20 秒", rest: "30–45 秒", tips: "背部保持平整中立，抗地心引力向上吸緊腹橫肌。", novice: "手在肩正下方、膝在髖正下方；背不要塌也不要拱。" },
+              { name: "前臂平板支撐", en: "Forearm Plank", beginner: true, eq: ["mat"], weight: "前臂支撐，3 組 × 20–30 秒", rest: "30–45 秒", tips: "前臂撐地，身體成一直線，不憋氣、不塌腰、臀部不翹高。", novice: "新手版：做不到 20 秒就膝蓋著地 (Knee Plank)；手肘在肩膀正下方。" },
+              { name: "熊爬支撐", en: "Bear Plank Hold", q: "Bear Plank Hold", eq: ["mat"], weight: "自體體重，3 組 × 30–40 秒", rest: "30–45 秒", tips: "四足跪姿，手在肩下、膝在髖下，腳趾撐地將膝蓋提離地面 2–3 cm；背部保持平坦，肚臍輕收向脊椎，維持穩定呼吸。", novice: "臀部翹高或背部下沉就把膝蓋放回地面休息；不要憋氣。" }
+            ]
+          },
+          {
+            category: "06. 有氧心肺 (Zone 2)",
+            target: "心肺耐力與下肢協同",
+            variants: [
+              { name: "坡度跑步機", en: "Incline Treadmill Walk", eq: ["treadmill"], weight: "坡度 8–10%、速度 4.5–5.0 km/h · 20 分鐘", rest: "訓練結束", tips: "保持均勻呼吸與可交談的 Zone 2 強度，腳跟至腳尖自然滾動。", novice: "新手可由坡度 3–5%、速度 4.0–4.5 km/h 起步，再慢慢加；有安全夾 (Safety Clip) 的話夾在衣服上；手不要大力撐著扶手。" },
+              { name: "滑步機", en: "Elliptical Trainer (Cross Trainer)", q: "Elliptical Trainer", eq: ["elliptical"], weight: "阻力 6–8 級、踏頻 50–60 rpm · 20 分鐘", rest: "訓練結束", tips: "雙手握住活動手把帶動全身，踏頻維持穩定平順。", novice: "雙腳先踩穩踏板才開始踏；螢幕上 Resistance 是阻力、RPM 是踏頻，可先從低阻力開始。" },
+              { name: "室內划船機", en: "Rowing Machine (Indoor Rower)", q: "Indoor Rowing Machine", eq: ["rower"], weight: "阻力 4–5 級、划頻 20–24 spm (維持Zone 2) · 20 分鐘", rest: "訓練結束", tips: "腿部蹬腿發力 60%，再接髖部後仰與手臂拉槳，不單純用手臂硬拉。", novice: "動作順序是「腿 → 身體後仰 → 手臂」，回程相反；先把阻力 (Damper) 調低，慢慢熟悉順序；雙腳要固定在踏板的帶子裏。" },
+              { name: "低衝擊原地有氧", en: "Low-Impact Cardio (Marching / Step Touch)", q: "Low impact cardio workout at home no jumping", eq: ["home_space"], weight: "高抬膝踏步、左右踏步、側步觸地輪流做，每段 1 分鐘 · 20 分鐘", rest: "訓練結束", tips: "保持可以交談但微喘的 Zone 2 強度；手臂配合擺動，落地輕柔，不需跳躍。", novice: "太輕鬆就提高膝蓋或加快節奏；頭暈或胸口不適要立即停止。" }
+            ]
+          }
+        ],
+        cooldown: [
+          {
+            title: "大腿前側伸展", en: "Standing Quad Stretch",
+            target: "股四頭肌放鬆",
+            weight: "自體伸展 · 每側 30 秒",
+            rest: "左右切換",
+            tips: "骨盆微後傾，膝蓋垂直朝下併攏，不要借由拱腰來代償拉伸。",
+            novice: "站不穩可扶牆；或側躺把腳向臀部拉。"
+          },
+          {
+            title: "眼鏡蛇式", en: "Cobra Pose",
+            target: "腹直肌與前側筋膜",
+            weight: "自體伸展 · 30 秒 × 2 組",
+            rest: "中間休息 10 秒",
+            tips: "手臂輕推上半身，雙肩遠離耳朵下沉，若下背感到壓迫請降低抬起幅度。",
+            novice: "可改用前臂撐地 (Sphinx Pose)，比較輕鬆。"
+          },
+          {
+            title: "胸肌伸展", en: "Doorway Chest Stretch",
+            target: "胸大肌放鬆",
+            weight: "自體伸展 · 每側 30 秒",
+            rest: "左右切換",
+            tips: "前臂貼於牆面或門框支撐，身體以胸部為軸心輕輕轉開，勿硬扭肩關節。",
+            novice: "拉到微微緊就可以，不要拉到痛。"
+          }
+        ]
+      },
+      2: {
+        title: "Day 2：全身拉與背臀主導",
+        subtitle: "建議安排：週三 或 週四",
+        meta: ["3 項動態熱身", "6 項力量＋Zone 2", "3 項放鬆伸展"],
+        warmup: [
+          {
+            title: "貓牛式", en: "Cat-Cow Pose",
+            target: "脊椎與下背節段活動度",
+            weight: "自體體重 · 10 次循環",
+            rest: "配合深呼吸",
+            tips: "吸氣時胸口向前延展延展背部，吐氣時收腹圓背，避免過度下墜折腰。",
+            novice: "手在肩正下方、膝在髖正下方；動作跟呼吸走，不用做得很大。"
+          },
+          {
+            title: "彈力帶水平拉開", en: "Band Pull-Apart",
+            target: "後三角肌與菱形肌啟動",
+            weight: "輕量彈力帶 · 15 次",
+            rest: "連續執行",
+            tips: "手臂平舉於胸前高度，向兩側拉開時輕夾背後肩胛骨，不縮頸聳肩。",
+            novice: "選最輕的彈力帶；找不到的話，先用空手做「肩胛骨向後夾」代替。"
+          },
+          {
+            title: "側向弓步", en: "Lateral Lunge",
+            target: "髖關節、內收肌與臀中肌",
+            weight: "自體體重 · 每側 8 次",
+            rest: "左右交替",
+            tips: "重心往單側下坐時臀部向後推，支撐腳膝蓋對準腳尖，保持軀幹挺直。",
+            novice: "步幅小一點，下蹲淺一點；膝蓋和腳尖同方向。"
+          }
+        ],
+        main: [
+          {
+            category: "01. 上肢垂直拉 (背闊肌)",
+            target: "背闊肌、大圓肌",
+            variants: [
+              { name: "滑輪下拉", en: "Lat Pulldown Machine", eq: ["lat_pulldown"], weight: "20–25 kg，4 組 × 10–12 下", rest: "60–90 秒", tips: "先沉肩下壓肩胛骨，再順勢將手肘向下帶至上胸；嚴禁後仰甩腰或下拉至頸後。", novice: "先把大腿墊調到壓緊大腿；握距比肩稍寬；拉向上胸，不要拉到頸後；重量用輕一點。" },
+              { name: "單臂滑輪下拉", en: "Single-Arm Cable Pulldown", eq: ["cable"], weight: "每側 10–12.5 kg，4 組 × 每側 10–12 下", rest: "60–90 秒", tips: "專注單側背闊肌行程拉滿與下壓擠壓感，軀幹保持不偏轉。", novice: "要換上單把手 (Single Handle)；另一手扶著架穩定；不熟可先用上面的高位下拉機。" },
+              { name: "輔助引體向上", en: "Assisted Pull-Up / Chin-Up Machine", q: "Assisted Pull Up Machine", eq: ["assist_pullup"], weight: "輔助重量 35–40 kg，4 組 × 8–10 下", rest: "60–90 秒", tips: "雙手與肩同寬，手肘向下拉帶動身體上升，頂峰胸口輕觸單槓。", novice: "輔助重量愈大愈容易：做不到 8 下就再加輔助重量；膝蓋或雙腳踩在踏板上，先沉肩再向上拉。" },
+              { name: "彈力帶過頭下拉", en: "Banded Overhead Pulldown (Pull-Apart)", q: "Resistance band overhead lat pulldown pull apart", eq: ["flat_band"], weight: "中阻力長條彈力帶，3 組 × 12–15 下", rest: "60 秒", tips: "跪姿或站姿，雙手握住彈力帶舉過頭，手距略寬於肩；把帶向兩側拉開，同時手肘向下拉至頭部兩側略低位置，感覺背闊肌收緊，再慢慢回到頂部。", novice: "太輕就把帶在掌心多繞一圈縮短手距；肩膀不要聳起，下拉時想像把手肘放入後褲袋，腰部不要拱起。" }
+            ]
+          },
+          {
+            category: "02. 臀部外展 (臀中肌)",
+            target: "臀中肌、髖外展肌群",
+            variants: [
+              { name: "坐姿臀部外展", en: "Seated Hip Abduction Machine", eq: ["hip_abductor"], weight: "30–35 kg，4 組 × 12–15 下", rest: "45–60 秒", tips: "背部可微前傾，骨盆維持中立，由髖部帶動向兩側打開，頂端停頓 1 秒。", novice: "坐正，膝外側貼墊；重量先用輕；慢慢打開、慢慢收回。" },
+              { name: "側躺抬腿", en: "Side-Lying Leg Raise", beginner: true, eq: ["mat"], weight: "自體體重，4 組 × 每側 12–15 下", rest: "45–60 秒", tips: "側躺身體成一直線，上方腿向上抬至髖部高度再慢慢放下，骨盆不向後翻。", novice: "新手版：取代滑輪站姿髖外展；腳尖朝前，不要朝上；抬到髖高即可。" },
+              { name: "彈力帶側跨步 / 蚌殼式", en: "Banded Lateral Walk / Clamshell", q: "Banded Clamshell Exercise", eq: ["band"], weight: "中阻力環狀彈力帶，4 組 × 15–20 下", rest: "45–60 秒", tips: "彈力帶套在膝關節上方，維持骨盆水平不轉動，感受臀外側酸脹感。", novice: "先做蚌殼式 (Clamshell，側躺打開膝蓋) 較易；側走時微微下蹲，步幅小。" },
+              { name: "彈力帶站姿髖外展", en: "Standing Banded Hip Abduction", q: "Standing resistance band hip abduction", eq: ["flat_band", "chair"], weight: "中阻力長條彈力帶（兩端打結成環），3 組 × 每側 12–15 下", rest: "45–60 秒", tips: "把帶兩端打結成環，一端踩在支撐腳下，另一端套住活動腳腳踝；身體保持直立，活動腳向外側抬起約 30–45°，頂部停 1 秒再慢慢放下。", novice: "一手輕扶椅背保持平衡；上身不要向對側傾斜，腳尖向前不要外轉，發力感應在臀部外側。" }
+            ]
+          },
+          {
+            category: "03. 上肢水平拉 (中上背)",
+            target: "中背、菱形肌、中斜方肌",
+            variants: [
+              { name: "坐姿划船", en: "Seated Cable Row", eq: ["seated_row"], weight: "17.5–22.5 kg，3 組 × 10–12 下", rest: "45–60 秒", tips: "軀幹保持挺拔穩定，手肘貼近身體向後帶，肩胛骨往脊椎方向輕收夾緊。", novice: "腳踩踏板時膝蓋微彎；挺胸，手肘貼身往後拉，不要用背向後仰借力。" },
+              { name: "胸部支撐划船機", en: "Chest-Supported Row Machine", eq: ["chest_row"], weight: "15–20 kg，3 組 × 10–12 下", rest: "45–60 秒", tips: "胸口靠穩護墊避免下背代償，手肘向後拉並頂峰收縮。", novice: "胸口貼穩軟墊；肩膀不要聳；先用輕重量找到感覺。" },
+              { name: "單臂啞鈴划船", en: "One-Arm Dumbbell Row", eq: ["dumbbell", "bench"], weight: "每手 8–10 kg，3 組 × 每側 10–12 下", rest: "45–60 秒", tips: "單手支撐於臥推椅，脊椎中立平直，手肘朝臀部方向弧線拉起。", novice: "一手一膝撐在凳上，背保持平；啞鈴向髖部拉，不要轉身。" },
+              { name: "彈力帶坐姿划船", en: "Seated Resistance Band Row", q: "Seated resistance band row", eq: ["flat_band", "mat"], weight: "中阻力長條彈力帶，3 組 × 12–15 下", rest: "60–90 秒", tips: "坐在墊上雙腿伸直、膝蓋微屈，彈力帶中段繞過雙腳腳掌；挺胸坐直，先把肩胛骨向後下收，再把手肘沿身體兩側向後拉至腰旁，停 1 秒後慢慢放回。", novice: "帶太鬆就把兩端在手上多繞一圈；上身不要向後倒借力，頸和肩保持放鬆。" }
+            ]
+          },
+          {
+            category: "04. 後側鏈伸展 (下背/臀大肌)",
+            target: "豎脊肌、臀大肌",
+            variants: [
+              { name: "羅馬椅背伸", en: "Back Extension (45° Hyperextension Bench)", q: "45 Degree Back Extension Bench", eq: ["hyperext"], weight: "自體體重雙手抱胸，3 組 × 12–15 下", rest: "30–45 秒", tips: "以髖關節折疊為主，伸展到身體成一直線即可夾臀，切勿過度反弓挺腰。", novice: "把髖墊調到髖骨下方、腳跟扣緊；只抬到身體成一直線，不要過度反弓；不確定就先做下面的臀橋。" },
+              { name: "史密斯/槓鈴早安式", en: "Good Morning (Smith Machine / Barbell)", q: "Smith Machine Good Morning", eq: ["smith"], weight: "空槓或極輕重量 10–15 kg，3 組 × 10–12 下", rest: "45–60 秒", tips: "膝微屈，重心在腳跟，髖部往後推進行髖鉸鏈，確認無腰部酸痛感。", novice: "這個動作對髖鉸鏈要求較高：先徒手練（雙手抱胸、屁股向後推、背保持平），再用空槓，槓放在上背不壓頸；有腰部不適就停，改做臀橋 (Glute Bridge)。" },
+              { name: "地墊超人式", en: "Superman Hold", eq: ["mat"], weight: "自體體重，3 組 × 12–15 下 (頂峰停2秒)", rest: "30–45 秒", tips: "俯臥於墊上，四肢與胸口同時微抬離地，感受背後鏈整體均勻收緊。", novice: "手腳只需微微離地；頸部保持中立，眼睛看地面。" },
+              { name: "單腳羅馬尼亞硬舉", en: "Single-Leg Romanian Deadlift (Bodyweight)", q: "Bodyweight Single Leg Romanian Deadlift", eq: ["chair"], weight: "自體體重（可手持水樽加重），3 組 × 每側 10 下", rest: "60 秒", tips: "單腳站，膝蓋微屈；髖部向後推，上身前傾同時後腳向後伸，身體由頭至後腳跟成一直線，感覺支撐腳大腿後側拉緊後，用臀部發力站直。", novice: "平衡不穩時一手輕扶椅背；背部保持平直，不要為了下得更低而彎腰。" }
+            ]
+          },
+          {
+            category: "05. 軀幹抗側屈 (側腹/腰方肌)",
+            target: "腹內外斜肌、軀幹抗側屈",
+            variants: [
+              { name: "側棒式", en: "Side Plank", eq: ["mat"], weight: "自體體重，3 組 × 每側 30 秒", rest: "30–45 秒", tips: "手肘於肩膀正下方，肋骨與骨盆保持一直線不塌陷；初學可屈膝做。", novice: "做不到就屈膝側撐（Knee Side Plank），或把手肘撐在凳上；臀部不要下沉。" },
+              { name: "滑輪抗旋轉推", en: "Cable Pallof Press", eq: ["cable"], weight: "7.5–10 kg，3 組 × 每側 12 下", rest: "30–45 秒", tips: "雙手握把手從胸前向正前方推出，腹部全力抵抗旋轉回拉的力量。", novice: "滑輪高度和胸口同高；側身站、站距比肩寬；先用小重量，目標是不被拉得轉身。" },
+              { name: "單手農夫行走", en: "Single-Arm Farmer's Walk", eq: ["dumbbell"], weight: "每手 10–12 kg，3 組 × 每側走 30–40 秒", rest: "30–45 秒", tips: "單手提啞鈴行走，核心全力繃緊保持兩邊肩膀完全水平，不被拉歪。", novice: "重量可以從 6–8 kg 開始；站直、小步行走、肩膀保持水平。" },
+              { name: "側棒式骨盆上下", en: "Side Plank Hip Dip", q: "Side Plank Hip Dip", eq: ["mat"], weight: "前臂支撐，3 組 × 每側 10–12 下", rest: "30–45 秒", tips: "前臂撐地，手肘在肩膀正下方，身體成一直線；骨盆慢慢下降約 5–10 cm，再用側腹推回原位，全程身體不前後轉動。", novice: "雙腳疊起太不穩可前後錯開；肩膀不適就改回靜態側棒式。" }
+            ]
+          },
+          {
+            category: "06. 有氧心肺 (Zone 2)",
+            target: "心肺耐力與下肢肌耐力",
+            variants: [
+              { name: "階梯機 / 坡度快走", en: "StairMaster (Stair Climber) / Incline Walk", q: "StairMaster Stair Climber", eq: ["stairmaster", "treadmill"], weight: "階梯機 4–6 級 或 坡度快走，20 分鐘", rest: "訓練結束", tips: "踩階梯機時不要用雙手用力死撐手把扶手，挺胸保持自然微喘步伐。", novice: "階梯機較吃力，新手可先選「坡度快走」；用階梯機就從最低級開始，手只輕扶。" },
+              { name: "風扇車 / 划船機", en: "Air Bike / Indoor Rower", q: "Air Bike Assault Bike", eq: ["air_bike", "rower"], weight: "風扇車踩踏 (轉速 50-60 rpm) 或划船阻力 4-5 級，20 分鐘", rest: "訓練結束", tips: "維持均勻阻力輸出，心率控制在輕鬆微喘可說話範疇。", novice: "風扇車踩得越大力阻力越大，容易一不小心過猛；Zone 2 要刻意慢慢踩，喘到說不出話就放慢。划船機請先看上面的動作順序。" },
+              { name: "坡度跑步機", en: "Incline Treadmill Walk", eq: ["treadmill"], weight: "坡度 10–12%、速度約 4.5 km/h，20 分鐘", rest: "訓練結束", tips: "高坡度慢走鍛鍊臀腿後側鏈，雙手隨步伐輕擺不扶扶手。", novice: "新手可由坡度 5–8% 起步，覺得小腿或下背吃力就調低；有安全夾的話夾好。" },
+              { name: "踏台有氧", en: "Step-Up Cardio (Stairs / Low Step)", q: "Step up cardio low impact stairs", eq: ["step"], weight: "樓梯第一級或矮踏台，左右腳輪流上落 · 20 分鐘", rest: "訓練結束", tips: "整隻腳掌踏上台階，用前腳發力站上，再控制落地；保持 Zone 2 強度，每 2–3 分鐘換帶頭的腳。", novice: "踏台高度 15–20 cm 已足夠；旁邊有扶手或牆較安全，不要用會滑動的物件當踏台。" }
+            ]
+          }
+        ],
+        cooldown: [
+          {
+            title: "鴿式伸展", en: "Pigeon Pose",
+            target: "臀大肌與臀中肌深層放鬆",
+            weight: "自體伸展 · 每側 30–45 秒",
+            rest: "左右交替",
+            tips: "前腳彎曲橫置地墊，後腳伸直下沉，髖部不適者可改為仰臥抱膝。",
+            novice: "做不到可改用仰臥「4 字伸展」(Figure-4 Stretch)，比較易。"
+          },
+          {
+            title: "側向延伸嬰兒式", en: "Child's Pose Side Reach",
+            target: "背闊肌與下背肌群",
+            weight: "自體伸展 · 每側 30 秒",
+            rest: "左右交替",
+            tips: "臀部往腳跟坐實，雙手向前伸展後斜向單側移動，感受對側背部拉長。",
+            novice: "膝蓋不舒服可在膝下墊毛巾；臀部坐不到腳跟也沒問題。"
+          },
+          {
+            title: "仰臥脊椎扭轉", en: "Supine Spinal Twist",
+            target: "腰方肌與腹外斜肌放鬆",
+            weight: "自體伸展 · 每側 30 秒",
+            rest: "左右交替",
+            tips: "平躺將單膝引導向對側地面，兩側肩膀盡量貼平地面，溫和扭轉呼吸。",
+            novice: "膝蓋不用碰到地面，下面墊個枕頭或毛巾支撐。"
+          }
+        ]
+      },
+      3: {
+        title: "Day 3：全身綜合與核心",
+        subtitle: "建議安排：週五 或 週六",
+        meta: ["3 項動態熱身", "6 項力量＋Zone 2", "3 項放鬆伸展"],
+        warmup: [
+          {
+            title: "臀橋", en: "Glute Bridge",
+            target: "臀大肌神經啟動",
+            weight: "自體體重 · 15 次 (頂峰停1秒)",
+            rest: "連續節奏",
+            tips: "雙腳掌踩實地墊，由臀部發力推起骨盆，頂端微夾臀，不以腰部向上過度拱起。",
+            novice: "感覺腰痛就把腳靠近臀部，推高的幅度小一點。"
+          },
+          {
+            title: "死蟲預備式", en: "Dead Bug (Prep)",
+            target: "骨盆中立與深層核心啟動",
+            weight: "自體體重 · 每側 6 次",
+            rest: "對側交替",
+            tips: "腰背下緣始終平貼地墊，手腳緩慢交替下放，測試核心控制度。",
+            novice: "先只動腿或只動手，熟練後才手腳一起做。"
+          },
+          {
+            title: "肩胛伏地挺身", en: "Scapular Push-Up",
+            target: "前鋸肌與肩胛活動度",
+            weight: "自體體重 · 12 次",
+            rest: "連續動作",
+            tips: "手肘全程保持打直，只讓肩胛骨在背部進行靠近與分開，軀幹不塌腰。",
+            novice: "幅度很小；做不到可站著，雙手撐牆來做。"
+          }
+        ],
+        main: [
+          {
+            category: "01. 全身下肢主導 (深蹲)",
+            target: "股四頭肌、臀大肌",
+            variants: [
+              { name: "高腳杯深蹲", en: "Goblet Squat", eq: ["dumbbell"], weight: "高腳杯啞鈴 8–10 kg，4 組 × 10–12 下", rest: "60–90 秒", tips: "雙手捧啞鈴於胸前，全腳掌踩穩，膝蓋順應腳尖方向自然下蹲。", novice: "雙手捧著啞鈴一端貼胸；腳尖微外開；蹲到大腿接近水平即可，膝蓋不要內扣。" },
+              { name: "史密斯箱式深蹲", en: "Smith Machine Box Squat", eq: ["smith", "bench"], weight: "空槓至加片 10 kg，4 組 × 10–12 下", rest: "60–90 秒", tips: "下蹲碰觸跳箱或臥推凳時稍停但不放鬆核心，再由腿臀推起站直。", novice: "把訓練凳放在槓正下方，高度大約到膝蓋；先用空槓；坐到凳上稍停再站起；離開前確認槓已轉動扣在掛鉤 (Hook) 上。" },
+              { name: "啞鈴相撲深蹲", en: "Dumbbell Sumo Squat", eq: ["dumbbell"], weight: "啞鈴 10–12 kg，4 組 × 10–12 下", rest: "60–90 秒", tips: "寬站距且腳尖朝外 30–45 度，著重大腿內收肌與臀大肌啟動發力。", novice: "啞鈴垂在兩腿之間；膝蓋跟著腳尖方向；背挺直。" },
+              { name: "彈力帶前蹲", en: "Banded Front Squat", q: "Resistance band front squat", eq: ["flat_band"], weight: "中阻力長條彈力帶，3 秒下降，4 組 × 12–15 下", rest: "60–90 秒", tips: "雙腳與肩同寬踩住彈力帶中段，兩端拉起搭在鎖骨前，雙手交叉在胸前按住；用 3 秒下降至大腿接近水平，再用腳跟發力站起。", novice: "帶不夠長就把雙腳收窄一點；確保彈力帶踩實在鞋底中間，以免彈起，膝蓋跟隨腳尖方向。" }
+            ]
+          },
+          {
+            category: "02. 上肢肩部 (三角肌)",
+            target: "三角肌",
+            variants: [
+              { name: "器械肩推", en: "Shoulder Press Machine", eq: ["shoulder_press"], weight: "10–15 kg，3 組 × 10–12 下", rest: "45–60 秒", tips: "背部貼穩椅背，核心輕收；推舉時避免聳肩，手肘不向外過度後擺。", novice: "座椅高度調到把手與肩膀同高；腰貼椅背；推的時候肩膀不要聳起。" },
+              { name: "坐姿側平舉機", en: "Lateral Raise Machine", beginner: true, eq: ["lateral_raise"], weight: "5–10 kg，3 組 × 12–15 下", rest: "45–60 秒", tips: "坐正，手肘微彎，用手肘帶動向兩側抬至肩高，慢慢放下，不聳肩。", novice: "新手版：取代滑輪肩上推（站姿較難穩定）；用最輕重量，抬到肩高即可。" },
+              { name: "坐姿啞鈴肩推", en: "Seated Dumbbell Shoulder Press", eq: ["dumbbell", "bench"], weight: "每手 5–7 kg，3 組 × 10–12 下", rest: "45–60 秒", tips: "椅背立起約 75–85 度，啞鈴從耳側水平順暢推過頭頂，不撞擊。", novice: "先用 3–5 kg；啞鈴在身體前方一點的位置推，手肘不要往後；不熟可先用肩推機。" },
+              { name: "坐姿彈力帶肩推", en: "Seated Banded Overhead Press", q: "Seated resistance band shoulder press", eq: ["flat_band", "chair"], weight: "中阻力長條彈力帶，3 組 × 10–12 下", rest: "60–90 秒", tips: "坐在椅上，彈力帶中段壓在臀部下，兩端從身體兩側拉至肩膀高度；核心收緊，雙手向上推至手臂接近伸直，再慢慢降回耳朵高度。", novice: "坐姿距離較短，彈力帶不會拉得太盡；推到頂時肋骨不要外翻、腰不要拱，手腕保持在手肘正上方。" }
+            ]
+          },
+          {
+            category: "03. 上肢水平孤立 (胸大肌)",
+            target: "胸大肌 (夾胸孤立)",
+            variants: [
+              { name: "坐姿器械夾胸", en: "Pec Fly Machine (Pec Deck)", q: "Pec Deck Machine", eq: ["pec_fly"], weight: "15–20 kg，3 組 × 12–15 下", rest: "45–60 秒", tips: "手肘微彎固定角度，專注於胸部肌肉環抱夾緊，向外拉開時控制張力幅度。", novice: "座椅調到把手與胸口同高；手肘微彎，慢慢合攏，不用拉太開。" },
+              { name: "滑輪夾胸", en: "Cable Fly", eq: ["cable"], weight: "每側 5–7.5 kg，3 組 × 12–15 下", rest: "45–60 秒", tips: "以肩關節為軸心，向前環抱合攏，感受胸肌內側頂峰收縮。", novice: "前後腳站穩；如果難控制，改用上面的夾胸機更易。" },
+              { name: "上斜 / 平躺啞鈴飛鳥", en: "Dumbbell Fly (Incline / Flat)", q: "Dumbbell Fly", eq: ["dumbbell", "bench"], weight: "每手 4–6 kg，3 組 × 12–15 下", rest: "45–60 秒", tips: "重量切勿過重，以肩關節舒適、胸大肌全程能主導控制為基準。", novice: "新手容易拉傷肩膀：用很輕的啞鈴（2–4 kg 起），手肘微彎固定，只張開到胸口高度；肩前感到拉扯就停，不放心可改用夾胸機。" },
+              { name: "彈力帶繞背夾胸", en: "Banded Chest Fly (Band Behind Back)", q: "Resistance band chest fly behind back", eq: ["flat_band"], weight: "中阻力長條彈力帶，3 組 × 12–15 下", rest: "60 秒", tips: "彈力帶繞過上背（肩胛骨高度），兩手各握一端，手臂向兩側張開、手肘微屈；用胸肌把雙手向前畫弧線合攏至胸口前方，停 1 秒再慢慢張開。", novice: "太緊或太鬆就調整手上繞帶的長度；手肘角度全程固定，不要變成推的動作，肩膀保持下沉。" }
+            ]
+          },
+          {
+            category: "04. 下腹與髖屈肌 (抬腿)",
+            target: "腹直肌下段、髖屈肌群",
+            variants: [
+              { name: "隊長椅抬腿", en: "Captain's Chair Leg Raise", eq: ["captain"], weight: "自體體重雙膝微彎，3 組 × 12–15 下", rest: "30–45 秒", tips: "慢速抬起至大腿近水平，由下腹捲收骨盆，避免下肢借力甩盪。", novice: "背貼緊靠墊、前臂撐穩；先只抬膝蓋 (Knee Raise)，熟練後才把腿伸直。" },
+              { name: "仰臥收膝", en: "Lying Knee Tuck", beginner: true, eq: ["mat"], weight: "自體體重，3 組 × 12–15 下", rest: "30–45 秒", tips: "仰臥，雙腿離地，將膝蓋收向胸口再慢慢放開，下背保持貼地。", novice: "新手版：取代抗力球傳球捲腹；腰不要拱離地面；慢慢做。" },
+              { name: "仰臥抬腿", en: "Lying Leg Raise", eq: ["mat"], weight: "自體體重，3 組 × 12–15 下", rest: "30–45 秒", tips: "雙腿下放時下背緊貼墊面；若下背離地，可膝蓋微彎或縮小下放幅度。", novice: "可以屈膝做；腿放到離地約 20–30 cm 就停，不用放到底。" },
+              { name: "坐姿收膝", en: "Seated Knee Tuck", q: "Seated Knee Tuck", eq: ["mat"], weight: "自體體重，3 組 × 12–15 下", rest: "30–45 秒", tips: "坐在地上，雙手放在身後撐地，上身微微後傾；雙腳離地，吐氣把膝蓋收向胸口，再慢慢伸直雙腿至接近地面。", novice: "腰部感到壓力就縮小伸腿幅度；上身保持穩定，不要前後搖晃借力。" }
+            ]
+          },
+          {
+            category: "05. 核心抗旋轉 (深層)",
+            target: "腹橫肌與對側軀幹協調",
+            variants: [
+              { name: "死蟲式", en: "Dead Bug", eq: ["mat"], weight: "自體體重，3 組 × 每側 10 次", rest: "30–45 秒", tips: "肋骨與骨盆保持收納穩定，對側手腳緩慢向外延伸，不憋氣不晃動。", novice: "先只動一手一腳；下背貼地；伸出時吐氣。" },
+              { name: "仰臥滑跟", en: "Heel Slide (Dead Bug Regression)", q: "Heel Slide Exercise Core", beginner: true, eq: ["mat"], weight: "自體體重，3 組 × 每側 10 次", rest: "30–45 秒", tips: "仰臥屈膝，一隻腳跟貼地慢慢向前滑直再收回，下背保持貼地。", novice: "新手版：取代滑輪死蟲式；全程下背貼地、骨盆不動。" },
+              { name: "鳥狗式", en: "Bird-Dog", eq: ["mat"], weight: "自體體重，3 組 × 每側 10–12 次 (頂峰停2秒)", rest: "30–45 秒", tips: "四足跪姿，對側手腳直線延伸，骨盆保持平行不側傾偏轉。", novice: "先只抬腿或只抬手；骨盆不要歪。" },
+              { name: "平板交替觸肩", en: "Plank Shoulder Tap", q: "Plank Shoulder Tap", eq: ["mat"], weight: "高位平板，3 組 × 每側 10 下", rest: "30–45 秒", tips: "雙手在肩下撐成高位平板，雙腳稍為分開；一手離地輕觸對側肩膀再放回，盡量令骨盆不左右擺動。", novice: "骨盆擺動太大就把雙腳分得更開或放慢；不穩時可改為跪姿版本。" }
+            ]
+          },
+          {
+            category: "06. 有氧心肺 (Zone 2)",
+            target: "心肺耐力與全身能量消耗",
+            variants: [
+              { name: "坡度跑步機", en: "Incline Treadmill Walk", eq: ["treadmill"], weight: "坡度 9–11%、速度 4.5–5.0 km/h · 20 分鐘", rest: "訓練結束", tips: "維持可正常交談微喘節奏，保持規律抬腿踏地，不手扶控制盤。", novice: "新手可由坡度 3–5% 起步，再慢慢加；有安全夾 (Safety Clip) 的話夾在衣服上。" },
+              { name: "直立 / 坐姿健身車", en: "Upright / Recumbent Exercise Bike", q: "Exercise Bike Upright", eq: ["bike"], weight: "阻力 5–7 級、踏頻 70–80 rpm · 20 分鐘", rest: "訓練結束", tips: "踏頻均勻平順，心率保持在綠色 Zone 2 有氧燃脂區間。", novice: "先調座椅，腳踩到最低點時膝蓋仍微彎；坐姿式 (Recumbent) 有靠背更省力。" },
+              { name: "滑步機 / 階梯機", en: "Elliptical Trainer / StairMaster", q: "Elliptical Trainer", eq: ["elliptical", "stairmaster"], weight: "滑步機阻力 5–7 級 (55–65 rpm) 或 階梯機 4–5 級 · 20 分鐘", rest: "訓練結束", tips: "平緩流暢踏步，調控阻力至適中，心率維持在微喘可說話範圍。", novice: "新手建議選滑步機較易；階梯機初試選最低級，手只輕扶。" },
+              { name: "影子拳擊", en: "Low-Impact Shadow Boxing", q: "Low impact shadow boxing cardio", eq: ["home_space"], weight: "直拳、勾拳配合左右移步，每 3 分鐘換組合 · 20 分鐘", rest: "訓練結束", tips: "膝蓋微屈、核心收緊，出拳時轉動髖部；不需跳躍，保持可以交談的 Zone 2 強度。", novice: "出拳時不要完全打直鎖死手肘；先慢速練好動作再加快節奏。" }
+            ]
+          }
+        ],
+        cooldown: [
+          {
+            title: "下犬式", en: "Downward-Facing Dog",
+            target: "小腿、腿後側及肩背後鏈",
+            weight: "自體伸展 · 30–45 秒",
+            rest: "呼吸放鬆",
+            tips: "膝蓋可微彎，以背部脊椎延伸拉長為優先，再輕輕把腳跟沉向地面。",
+            novice: "手腳距離縮短一點也可以；膝蓋可彎；腳跟不用踩到地。"
+          },
+          {
+            title: "橫跨胸前肩部伸展", en: "Cross-Body Shoulder Stretch",
+            target: "三角肌後側伸展",
+            weight: "自體伸展 · 每側 30 秒",
+            rest: "左右切換",
+            tips: "手臂橫越胸前，對側手輕扣手肘靠近身體，肩膀放鬆不轉體代償。",
+            novice: "輕拉到微緊即可；肩膀不要聳起。"
+          },
+          {
+            title: "低弓步髖屈肌伸展", en: "Low Lunge Hip Flexor Stretch",
+            target: "髖屈肌群與髂腰肌",
+            weight: "自體伸展 · 每側 30 秒",
+            rest: "左右切換",
+            tips: "後膝可墊瑜珈墊，骨盆微後傾後重心輕微向前推，感受大腿根部伸展。",
+            novice: "後膝墊毛巾或瑜伽墊；站不穩可雙手撐在前腳旁。"
+          }
+        ]
+      }
+    };
+
+    // ---------- Persistent storage helpers ----------
+    // 所有讀寫都包在 try/catch：若瀏覽器封鎖儲存功能，頁面仍可正常使用（只是不會記住）
+    const STORAGE_KEY_DONE = 'fit247_completed_v1';
+    const STORAGE_KEY_VARIANTS = 'fit247_variants_v1';
+    const STORAGE_KEY_DAY = 'fit247_day_v1';
+    const STORAGE_KEY_HOME = 'fit247_home_backup_v1'; // 居家模式開啟前的方案選擇（用作還原）
+
+    function loadStoredDay() {
+      try {
+        const d = parseInt(localStorage.getItem(STORAGE_KEY_DAY), 10);
+        return (d === 1 || d === 2 || d === 3) ? d : 1;
+      } catch (e) {
+        return 1;
+      }
+    }
+
+    function saveStoredDay(day) {
+      try {
+        localStorage.setItem(STORAGE_KEY_DAY, String(day));
+      } catch (e) {
+        /* storage unavailable — ignore */
+      }
+    }
+
+    function loadStored(key) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        return (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) ? parsed : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveStored(key, obj) {
+      try {
+        localStorage.setItem(key, JSON.stringify(obj));
+      } catch (e) {
+        /* storage unavailable — ignore */
+      }
+    }
+
+    // State management
+    let currentDay = 1;
+    let completedItems = loadStored(STORAGE_KEY_DONE);    // key: `d${day}_${type}_${idx}` -> true
+    let chosenVariants = loadStored(STORAGE_KEY_VARIANTS); // key: `d${day}_m_${idx}` -> variant index (0, 1, 2)
+    let homeBackup = loadStored(STORAGE_KEY_HOME);       // key: `d${day}` -> { `d${day}_m_${idx}`: variant index }
+    let activeItem = null; // currently opened in bottom sheet
+    let activeVariantIdx = 0;
+
+    // Timer state
+    let timerInterval = null;
+    let timerRemaining = 0;
+
+    function init() {
+      switchDay(loadStoredDay()); // 重開時回到上次看的 Day
+    }
+
+    function switchDay(day) {
+      currentDay = day;
+      saveStoredDay(day);
+      document.querySelectorAll('.day-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', idx + 1 === day);
+      });
+      renderView();
+    }
+
+    function countCompleted() {
+      return Object.keys(completedItems).filter(k => completedItems[k]).length;
+    }
+
+    function countVariantsChanged() {
+      return Object.keys(chosenVariants).filter(k => chosenVariants[k]).length;
+    }
+
+    function updateResetSection() {
+      const count = countCompleted();
+      const vCount = countVariantsChanged();
+      document.getElementById('resetHint').textContent =
+        `三天合共已勾選 ${count} 項 ｜ 已改用替代方案 ${vCount} 項`;
+      document.getElementById('resetBtn').disabled = count === 0;
+      document.getElementById('resetVariantsBtn').disabled = vCount === 0;
+    }
+
+    function renderView() {
+      const data = workoutData[currentDay];
+
+      // Render Overview
+      document.getElementById('overviewCard').innerHTML = `
+        <h2>${data.title}</h2>
+        <div style="font-size:0.8rem; color:var(--text-sub);">${data.subtitle}</div>
+        <div class="overview-meta">
+          ${data.meta.map(m => `<div class="meta-tag"><span>●</span> ${m}</div>`).join('')}
+        </div>
+      `;
+
+      // Render Warmup
+      const warmupEl = document.getElementById('warmupList');
+      warmupEl.innerHTML = data.warmup.map((item, idx) => {
+        const key = `d${currentDay}_w_${idx}`;
+        const isDone = completedItems[key];
+        return `
+          <div class="t-item ${isDone ? 'completed' : ''}" onclick="openDrawer('warmup', ${idx})">
+            <div class="t-dot"></div>
+            <div class="t-content">
+              <div class="t-info">
+                <div class="t-tag-row">
+                  <span class="badge-idx">熱身 0${idx+1}</span>
+                  <span class="badge-sub">${item.target}</span>
+                </div>
+                <div class="t-main-title">${item.title}</div>
+                <div class="t-en">${item.en || ''}</div>
+                <div class="t-preview-spec">${item.weight}</div>
+              </div>
+              <div class="t-arrow"><svg class="ico i-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Render Main
+      const mainEl = document.getElementById('mainWorkoutList');
+      mainEl.innerHTML = data.main.map((item, idx) => {
+        const key = `d${currentDay}_m_${idx}`;
+        const isDone = completedItems[key];
+        const vIdx = chosenVariants[key] || 0;
+        const currentVariant = item.variants[vIdx] || item.variants[0];
+        const vTag = ["原定", "替代 A", "替代 B", "居家"][vIdx] || "原定";
+
+        return `
+          <div class="t-item ${isDone ? 'completed' : ''}" onclick="openDrawer('main', ${idx})">
+            <div class="t-dot"></div>
+            <div class="t-content">
+              <div class="t-info">
+                <div class="t-tag-row">
+                  <span class="badge-idx">${item.category.split('.')[0]}</span>
+                  <span class="badge-sub">[${vTag}] ${item.target}</span>
+                  ${currentVariant.beginner ? '<span class="badge-new"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-9"/><path d="M12 12c0-4 2.5-6.5 7-6.5 0 4-2.5 6.5-7 6.5z"/><path d="M12 14c0-3-2-5-6-5 0 3 2 5 6 5z"/></svg> 新手版</span>' : ''}
+                </div>
+                <div class="t-main-title">${currentVariant.name}</div>
+                <div class="t-en">${currentVariant.en || ''}</div>
+                <div class="t-preview-spec">${currentVariant.weight} ｜ 休息 ${currentVariant.rest}</div>
+              </div>
+              <div class="t-arrow"><svg class="ico i-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Render Cooldown
+      const coolEl = document.getElementById('cooldownList');
+      coolEl.innerHTML = data.cooldown.map((item, idx) => {
+        const key = `d${currentDay}_c_${idx}`;
+        const isDone = completedItems[key];
+        return `
+          <div class="t-item ${isDone ? 'completed' : ''}" onclick="openDrawer('cooldown', ${idx})">
+            <div class="t-dot"></div>
+            <div class="t-content">
+              <div class="t-info">
+                <div class="t-tag-row">
+                  <span class="badge-idx">放鬆 0${idx+1}</span>
+                  <span class="badge-sub">${item.target}</span>
+                </div>
+                <div class="t-main-title">${item.title}</div>
+                <div class="t-en">${item.en || ''}</div>
+                <div class="t-preview-spec">${item.weight}</div>
+              </div>
+              <div class="t-arrow"><svg class="ico i-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      updateResetSection();
+      updateHomeModeUI();
+    }
+
+    // Open Bottom Sheet Drawer
+    function openDrawer(type, idx) {
+      activeItem = { type, idx };
+      const data = workoutData[currentDay];
+      const segmentedEl = document.getElementById('dOptionSegmented');
+
+      if (type === 'main') {
+        segmentedEl.style.display = 'flex';
+        const key = `d${currentDay}_m_${idx}`;
+        activeVariantIdx = chosenVariants[key] || 0;
+        updateDrawerVariantButtons();
+        loadDrawerMainData();
+      } else {
+        segmentedEl.style.display = 'none';
+        const item = (type === 'warmup') ? data.warmup[idx] : data.cooldown[idx];
+        document.getElementById('dCategory').textContent = type === 'warmup' ? '訓練前熱身' : '訓練後放鬆';
+        document.getElementById('dTarget').textContent = item.target;
+        document.getElementById('dTitle').textContent = item.title;
+        document.getElementById('dSpecWeight').textContent = item.weight;
+        document.getElementById('dSpecRest').textContent = item.rest;
+        document.getElementById('dTipsText').textContent = item.tips;
+        renderDrawerExtras(item);
+      }
+
+      updateFinishButtonState();
+      document.getElementById('drawerOverlay').classList.add('active');
+      document.getElementById('bottomSheet').classList.add('active');
+    }
+
+    function selectVariant(vIdx) {
+      activeVariantIdx = vIdx;
+      const key = `d${currentDay}_m_${activeItem.idx}`;
+      chosenVariants[key] = vIdx;
+      saveStored(STORAGE_KEY_VARIANTS, chosenVariants);
+      updateDrawerVariantButtons();
+      loadDrawerMainData();
+      renderView(); // Sync outer timeline text
+    }
+
+    // Equipment cards, beginner tip and search links in the drawer
+    function googleImagesUrl(q) {
+      return 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(q);
+    }
+
+    function youtubeUrl(q) {
+      return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q);
+    }
+
+    function renderDrawerExtras(obj) {
+      const en = obj.en || '';
+      document.getElementById('dEn').textContent = en;
+      document.getElementById('dBeginner').style.display = obj.beginner ? 'inline-block' : 'none';
+
+      // Equipment cards (main workout only)
+      const keys = obj.eq || [];
+      document.getElementById('dEquip').innerHTML = keys.map(k => {
+        const e = EQUIP[k];
+        if (!e) return '';
+        return `
+          <div class="equip-card">
+            <div class="equip-art">${e.svg}</div>
+            <div class="equip-info">
+              <div class="equip-name">${e.zh}</div>
+              <div class="equip-en">${e.en}</div>
+              <div class="equip-zone"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.5"/></svg> ${e.zone}</div>
+              <div class="equip-look">${e.look}</div>
+              <a class="equip-link" href="${googleImagesUrl(e.q || (e.en + ' gym'))}" target="_blank" rel="noopener"><svg class="ico " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg> 看器材相片</a>
+            </div>
+          </div>`;
+      }).join('');
+
+      // Beginner tip
+      const noviceBox = document.getElementById('dNoviceBox');
+      if (obj.novice) {
+        document.getElementById('dNoviceText').textContent = obj.novice;
+        noviceBox.style.display = 'block';
+      } else {
+        noviceBox.style.display = 'none';
+      }
+
+      // Search links
+      const q = obj.q || en;
+      document.getElementById('dLinkImg').href = googleImagesUrl(q + ' exercise');
+      document.getElementById('dLinkVideo').href = youtubeUrl(q + ' how to beginner');
+    }
+
+    function updateDrawerVariantButtons() {
+      const buttons = document.querySelectorAll('#dOptionSegmented .opt-btn');
+      buttons.forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === activeVariantIdx);
+      });
+    }
+
+    function loadDrawerMainData() {
+      const item = workoutData[currentDay].main[activeItem.idx];
+      const variant = item.variants[activeVariantIdx];
+
+      document.getElementById('dCategory').textContent = item.category;
+      document.getElementById('dTarget').textContent = item.target;
+      document.getElementById('dTitle').textContent = variant.name;
+      document.getElementById('dSpecWeight').textContent = variant.weight;
+      document.getElementById('dSpecRest').textContent = variant.rest;
+      document.getElementById('dTipsText').textContent = variant.tips;
+      renderDrawerExtras(variant);
+    }
+
+    function updateFinishButtonState() {
+      if (!activeItem) return;
+      const prefix = activeItem.type === 'warmup' ? 'w' : (activeItem.type === 'main' ? 'm' : 'c');
+      const key = `d${currentDay}_${prefix}_${activeItem.idx}`;
+      const isDone = !!completedItems[key];
+
+      const btn = document.getElementById('dFinishBtn');
+      const text = document.getElementById('finishBtnText');
+      if (isDone) {
+        btn.classList.add('is-done');
+        text.innerHTML = '已完成 (點擊取消)';
+      } else {
+        btn.classList.remove('is-done');
+        text.innerHTML = '標記完成並關閉';
+      }
+    }
+
+    function toggleCurrentCompleted() {
+      if (!activeItem) return;
+      const prefix = activeItem.type === 'warmup' ? 'w' : (activeItem.type === 'main' ? 'm' : 'c');
+      const key = `d${currentDay}_${prefix}_${activeItem.idx}`;
+
+      if (completedItems[key]) {
+        delete completedItems[key];
+      } else {
+        completedItems[key] = true;
+      }
+      saveStored(STORAGE_KEY_DONE, completedItems);
+      renderView();
+      closeDrawer();
+    }
+
+    function closeDrawer() {
+      document.getElementById('drawerOverlay').classList.remove('active');
+      document.getElementById('bottomSheet').classList.remove('active');
+      activeItem = null;
+    }
+
+    // Reset all checkmarks
+    let pendingReset = null; // 'checks' | 'variants'
+
+    function openResetConfirm(kind) {
+      const titleEl = document.getElementById('resetModalTitle');
+      const textEl = document.getElementById('resetModalText');
+
+      if (kind === 'variants') {
+        const vCount = countVariantsChanged();
+        if (vCount === 0) return;
+        titleEl.textContent = '重設所有替代方案？';
+        textEl.textContent =
+          `Day 1 至 Day 3 合共 ${vCount} 項動作會改回「原定方案」。（勾選記錄不受影響）`;
+      } else {
+        const count = countCompleted();
+        if (count === 0) return;
+        titleEl.textContent = '取消所有勾選？';
+        textEl.textContent =
+          `將清除 Day 1 至 Day 3 合共 ${count} 項勾選記錄，此操作無法復原。（已選的替代方案不受影響）`;
+      }
+
+      pendingReset = kind;
+      document.getElementById('resetModal').classList.add('active');
+    }
+
+    function closeResetConfirm() {
+      document.getElementById('resetModal').classList.remove('active');
+      pendingReset = null;
+    }
+
+    function confirmReset() {
+      if (pendingReset === 'variants') {
+        chosenVariants = {};
+        saveStored(STORAGE_KEY_VARIANTS, chosenVariants);
+        homeBackup = {};
+        saveStored(STORAGE_KEY_HOME, homeBackup);
+      } else if (pendingReset === 'checks') {
+        completedItems = {};
+        saveStored(STORAGE_KEY_DONE, completedItems);
+      }
+      closeResetConfirm();
+      renderView();
+    }
+
+    // ---------- 居家模式：一鍵切換當日主訓練為居家版 ----------
+    const HOME_VARIANT = 3;
+
+    function isHomeModeOn(day) {
+      const main = workoutData[day].main;
+      return main.every((_, idx) => chosenVariants[`d${day}_m_${idx}`] === HOME_VARIANT);
+    }
+
+    function updateHomeModeUI() {
+      const on = isHomeModeOn(currentDay);
+      const sw = document.getElementById('homeSwitch');
+      sw.classList.toggle('on', on);
+      sw.setAttribute('aria-checked', on ? 'true' : 'false');
+      document.getElementById('homeMode').classList.toggle('on', on);
+      document.getElementById('homeModeSub').textContent = on
+        ? '已開啟：今日主訓練全部為居家版；關閉會還原之前的選擇'
+        : '今日 6 項主訓練一鍵改用居家版';
+    }
+
+    function toggleHomeMode() {
+      const day = currentDay;
+      const main = workoutData[day].main;
+      const dayKey = `d${day}`;
+      if (isHomeModeOn(day)) {
+        const backup = homeBackup[dayKey] || {};
+        main.forEach((_, idx) => {
+          const key = `d${day}_m_${idx}`;
+          const prev = backup[key];
+          if (prev && prev !== HOME_VARIANT) chosenVariants[key] = prev;
+          else delete chosenVariants[key];
+        });
+        delete homeBackup[dayKey];
+      } else {
+        const backup = {};
+        main.forEach((_, idx) => {
+          const key = `d${day}_m_${idx}`;
+          if (chosenVariants[key]) backup[key] = chosenVariants[key];
+          chosenVariants[key] = HOME_VARIANT;
+        });
+        homeBackup[dayKey] = backup;
+      }
+      saveStored(STORAGE_KEY_VARIANTS, chosenVariants);
+      saveStored(STORAGE_KEY_HOME, homeBackup);
+      renderView();
+    }
+
+    // Timer functionality
+    function toggleRestTimer() {
+      const timerBtn = document.getElementById('timerBtn');
+      const timerText = document.getElementById('timerText');
+
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        timerBtn.classList.remove('running');
+        timerText.textContent = '組間計時';
+        return;
+      }
+
+      // Default 60 seconds
+      timerRemaining = 60;
+      timerBtn.classList.add('running');
+      timerText.textContent = `${timerRemaining}s 休息`;
+
+      timerInterval = setInterval(() => {
+        timerRemaining--;
+        if (timerRemaining <= 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          timerBtn.classList.remove('running');
+          timerText.textContent = '計時完畢!';
+          if (navigator.vibrate) navigator.vibrate([150, 100, 150]);
+          setTimeout(() => {
+            timerText.textContent = '組間計時';
+          }, 2500);
+        } else {
+          timerText.textContent = `${timerRemaining}s 休息`;
+        }
+      }, 1000);
+    }
+
+    function toggleRules(show) {
+      document.getElementById('rulesModal').classList.toggle('active', show);
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
