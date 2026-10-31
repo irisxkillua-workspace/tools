@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Clinical Case Lab – EDF5000 & EDF5001</title>
+<style>
+:root{--bg:#f2f5f7;--card:#fff;--ink:#1c2733;--mute:#5b6b7a;--line:#d7dee4;--acc:#1f6f78;--accbg:#dceef0;--ok:#2f7d4f;--mid:#a86d0c;--no:#a63f36;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12191f;--card:#1b252d;--ink:#e6edf2;--mute:#9aabb9;--line:#2e3b46;--acc:#58b7c1;--accbg:#18363b;--ok:#6cc58d;--mid:#e0a846;--no:#e57f74;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12191f;--card:#1b252d;--ink:#e6edf2;--mute:#9aabb9;--line:#2e3b46;--acc:#58b7c1;--accbg:#18363b;--ok:#6cc58d;--mid:#e0a846;--no:#e57f74;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}
+main{max-width:960px;margin:0 auto;padding:20px 16px 48px}
+h1{font:600 28px/1.15 ui-serif,"New York",Georgia,serif;margin:0 0 4px}
+h2{font:600 19px/1.25 ui-serif,"New York",Georgia,serif;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 12px}.sm{font-size:13px;color:var(--mute)}
+button,select{font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer}
+button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+button[aria-pressed=true]{background:var(--acc);color:#fff;border-color:var(--acc)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sp{flex:1}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0}
+.note{background:var(--accbg);border-radius:8px;padding:10px 12px;font-size:14px;margin:10px 0}
+textarea{width:100%;min-height:62px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px;font:14px/1.45 inherit;resize:vertical}
+textarea.mono{font:13px/1.45 ui-monospace,Menlo,monospace;min-height:150px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}@media(max-width:700px){.g3{grid-template-columns:1fr}}
+.fl{display:block;font-weight:600;font-size:14px;margin:8px 0 2px}.fl small{font-weight:400;color:var(--mute);display:block}
+.meta{display:flex;gap:8px;align-items:center;margin-top:3px;font-size:13px;color:var(--mute)}.meta select{padding:2px 6px;font-size:13px}
+.sc li{margin:3px 0}
+.wrap{overflow-x:auto}table{border-collapse:collapse;min-width:900px;width:100%}th,td{border:1px solid var(--line);padding:4px;vertical-align:top}th{font-size:13px;background:var(--accbg);text-align:left;padding:6px}td textarea{min-width:140px;min-height:70px;font-size:13px}
+</style></head><body><main>
+<h1>Clinical Case Lab</h1>
+<p class="sub">5P formulation builder · capstone matrix · AI-lab prompt builder</p>
+<div class="row" id="nav"></div><div id="v"></div>
+<script>
+const CASES=[["leah","Leah (24)","Army medical discharge"],["komiko","Komiko (26)","EDF5000 Case 2 (cultural identity conflict)"],["sarah","Sarah (21)",""],["jim","Jim (58)",""],["sasha","Sasha (60)",""],["colin","Colin (75)",""],["janet","Janet (70)","Pairs with the LGBTQ adults guide"],["ganesh","Ganesh (20)","India to Australia, parental divorce (EDF5001 A2 Case B)"],["lee","Lee (48)","EDF5001 case"],["lisa","Lisa (33)","EDF5001 skills drill, not a report"],["custom","Custom case","Your own case"]];
+const PP=[["pp1","Main concerns (in the client’s and family’s own words)"],["pp2","Symptoms and behaviours (frequency, intensity, duration)"],["pp3","Settings where difficulties occur"],["pp4","Impact on functioning (learning, relationships, daily routines)"],["pp5","Goals for therapy, and assumptions"]];
+const PS=[["pd","Predisposing factors","What made the client vulnerable to developing these difficulties?",["Genetics, family mental health history, temperament, developmental or medical conditions, prenatal factors","Attachment history, early experiences, trauma, core beliefs, learning or cognitive profile","Family structure, parenting style, socioeconomic factors, culture, early school experiences"]],
+["pc","Precipitating factors","What triggered the onset or recent worsening?",["Illness, injury, puberty, sleep disruption, medication changes","Loss, rejection, a frightening or traumatic event, academic failure","School transition, family separation, a new sibling, relocation, bullying, conflict"]],
+["pe","Perpetuating factors","What keeps the difficulties going?",["Ongoing health issues, poor sleep, untreated conditions","Avoidance, unhelpful thinking patterns, low self-esteem, limited emotion regulation skills","Accommodation or reinforcement by others, family conflict, parental stress, ongoing peer or school difficulties, limited access to services"]],
+["pr","Protective factors","What strengths and supports can be built on?",["Good physical health, easy temperament, healthy sleep and activity","Insight, motivation, coping skills, interests and talents, problem-solving ability","Secure attachment, engaged parents/carers, supportive school, friendships, community or cultural connection"]]];
+const DOM=["Biological","Psychological","Social"];
+const END=[["sm","Formulation summary","Pull the 5 P’s into a brief narrative of how the difficulties developed and are maintained."],["tt","Treatment targets (from perpetuating factors)",""],["st","Strengths to build on (from protective factors)",""],["iv","Recommended interventions and next steps",""]];
+const RW=["Infancy & toddlerhood (M3)","Early childhood (M3)","Middle childhood (M4)","Adolescence (M4)","Young adulthood (M5)","Middle adulthood (M5)","Later adulthood (M6)"];
+const CL=["M1 Change & assessment","M2 Mood","M3 Anxiety","M4 Relational & anger","M5 Stress & coping","M6 Life transitions"];
+const SK=["Guided reflection on unconscious bias (MSJCC)","Therapeutic alliance with a guarded, mandated adolescent","Initial assessment interview, then DASS-21/K10 debrief in non-stigmatising language","Negotiating SMART goals","Cognitive restructuring and behavioural activation with a depressed client","Co-designing a graded in-vivo exposure hierarchy","Assertiveness and boundary-setting (skills drill)","Anger de-escalation","Somatic relaxation and Solution-Focused agency","Life transitions session (Sessions 1 and 2)","Midlife generativity vs. stagnation","Gerontological session: autonomy, physical decline and identity","Capstone: two-session mock simulation"];
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let S={cs:"leah",c:{},mx:{},sk:0,md:0,two:false},tab="p5";
+try{const x=JSON.parse(localStorage.getItem("edfcl")||"null");if(x)S=Object.assign(S,x)}catch(e){}
+const save=()=>{try{localStorage.setItem("edfcl",JSON.stringify(S))}catch(e){}};
+const cur=()=>S.c[S.cs]=S.c[S.cs]||{ref:"",f:{}};
+const fv=k=>cur().f[k]||{t:"",s:"",n:false};
+const cn=()=>CASES.find(c=>c[0]==S.cs);
+const csel=()=>`<select id="cs" aria-label="Case">${CASES.map(c=>`<option value="${c[0]}" ${S.cs==c[0]?"selected":""}>${c[1]}</option>`).join("")}</select>`;
+function fld(k,label,hint){const f=fv(k);return `<label class="fl" for="f_${k}">${esc(label)}${hint?`<small>${esc(hint)}</small>`:""}</label><textarea id="f_${k}" data-f="${k}">${esc(f.t)}</textarea><div class="meta"><select data-s="${k}" aria-label="Basis"><option value="">Basis…</option>${["Client report","Third party","My inference"].map(o=>`<option ${f.s==o?"selected":""}>${o}</option>`).join("")}</select><label><input type="checkbox" data-n="${k}" ${f.n?"checked":""}> Not stated in the case</label></div>`}
+function p5(){const c=cur();let h=`<div class="row" style="margin-top:12px">${csel()}<span class="sm">${esc(cn()[2])}</span></div>
+<div class="note">Prompts come from your Hub’s 5P template, whose examples lean towards children and adolescents. Adapt them for adult cases. This tool gives structure only; it does not supply answers. Tick “Not stated in the case” rather than filling a gap with an assumption.</div>
+<details class="card"><summary><b>Case details</b> <span class="sm">(paste from the Hub; also used by the prompt builder)</span></summary><textarea class="mono" id="ref" aria-label="Case details">${esc(c.ref)}</textarea></details>
+<div class="card"><h2>1. Presenting problem</h2><p class="sm" style="margin:0">What are the main difficulties, and why is help being sought now?</p>${PP.map(p=>fld(p[0],p[1])).join("")}</div>`;
+PS.forEach(p=>{h+=`<div class="card"><h2>${p[1]}</h2><p class="sm" style="margin:0">${p[2]}</p><div class="g3">${DOM.map((d,i)=>`<div>${fld(p[0]+i,d,p[3][i])}</div>`).join("")}</div></div>`});
+h+=`<div class="card"><h2>Formulation summary and treatment plan</h2>${END.map(e=>fld(e[0],e[1],e[2])).join("")}</div>${chk()}`;return h}
+function chk(){const f=cur().f,ks=Object.keys(f),all=PP.length+12,fl=ks.filter(k=>f[k].t.trim()).length,ns=ks.filter(k=>f[k].n).length,inf=ks.filter(k=>f[k].s=="My inference"&&f[k].t.trim()).length,nb=ks.filter(k=>f[k].t.trim()&&!f[k].s).length;
+return `<div class="card"><h2>Self-check</h2><p class="sm">${fl} of ${all+4} fields written · ${ns} marked not stated · ${inf} based on your inference · ${nb} with no basis chosen</p><ul class="sc"><li>Does every treatment target trace back to a perpetuating factor?</li><li>Does every strength trace back to a protective factor?</li><li>Is each perpetuating factor something keeping the problem going now, not only history?</li><li>Where the case supports more than one explanation, have you held them side by side as provisional?</li><li>Which entries rest on the client’s own report, and which on third parties or on you?</li></ul>
+<div class="row"><button data-exp>Build text copy</button><button data-copy="ex">Copy</button></div><textarea class="mono" id="ex" readonly aria-label="Formulation text" style="margin-top:8px"></textarea></div>`}
+function exp(){const f=cur().f,g=k=>{const x=f[k]||{};return (x.n?"[Not stated in the case] ":"")+(x.t||"")+(x.s?" ("+x.s+")":"")};
+let t="5P formulation: "+cn()[1]+"\n\n1. Presenting problem\n"+PP.map(p=>"- "+p[1]+": "+g(p[0])).join("\n");
+PS.forEach((p,i)=>{t+="\n\n"+(i+2)+". "+p[1]+"\n"+DOM.map((d,j)=>"- "+d+": "+g(p[0]+j)).join("\n")});
+t+="\n\n"+END.map(e=>e[1]+":\n"+g(e[0])).join("\n\n");$("#ex").value=t}
+function mx(){const n=Object.values(S.mx).filter(x=>x.trim()).length;
+return `<div class="note" style="margin-top:12px">Capstone matrix (Dec 28): for each cell, ask what changes about assessment, presentation or intervention when this module’s approach meets this life stage. Start each entry with S: (from your sources) or I: (your inference). Your Layer 3 capstone page is the starting point. EDF5000 M5–M6 rows need your own work until that Layer 2 synthesis exists.</div><p class="sm">${n} of ${RW.length*CL.length} cells filled</p>
+<div class="wrap"><table><tr><th></th>${CL.map(c=>`<th>${c}</th>`).join("")}</tr>${RW.map((r,i)=>`<tr><th>${r}</th>${CL.map((c,j)=>`<td><textarea data-m="${i}_${j}" aria-label="${esc(r+" × "+c)}">${esc(S.mx[i+"_"+j]||"")}</textarea></td>`).join("")}</tr>`).join("")}</table></div>`}
+function pb(){const c=cn(),ref=cur().ref.trim()||"[paste the case details here]";
+const role=S.md==0?`You are role-playing a FICTIONAL counselling client so a Master of Counselling student can practise. This is not a real person.
+
+Case: ${c[1]}${c[2]?" ("+c[2]+")":""}
+Case details (use only these; where something is not stated, stay vague or say you don't know, and do not invent history or diagnoses):
+${ref}
+
+Skill focus for me: ${SK[S.sk]}
+
+Rules:
+- Stay in character until I type END SESSION.
+- Respond at a realistic pace. Do not volunteer insight or solve my work for me.
+- Do not diagnose, and do not give model answers during the session.
+- ${S.two?"Run two sessions: after Session 1 and the debrief, ask me to plan Session 2, then run it.":"Run one session."}
+- Use only the course synthesis I attach for concepts. Do not bring in outside theories, research or citations.
+
+After END SESSION, act as a supervisor and debrief me: (1) what I did, quoting short phrases; (2) what the client's responses showed; (3) what could be improved and why. Label each point as observed, inferred, or needs verification. Do not treat a fictional client's reaction as evidence that a technique works.`:`I will paste a transcript of my practice session. Act as a supervisor, not a client.
+
+Case: ${c[1]}${c[2]?" ("+c[2]+")":""}
+Case details: ${ref}
+Skill focus: ${SK[S.sk]}
+
+Debrief me using only the course synthesis I attach: (1) what I did, quoting short phrases; (2) what the client's responses showed; (3) what could be improved and why. Label each point as observed, inferred, or needs verification. Do not diagnose, add outside theories, or treat a fictional client's reaction as proof that a technique works. Ask me one question at a time.`;
+return `<div class="row" style="margin-top:12px">${csel()}<select id="sk" aria-label="Skill focus">${SK.map((s,i)=>`<option value="${i}" ${S.sk==i?"selected":""}>${s}</option>`).join("")}</select><select id="md" aria-label="Mode"><option value="0" ${S.md==0?"selected":""}>AI plays the client, then debriefs</option><option value="1" ${S.md==1?"selected":""}>Debrief my pasted transcript</option></select><label><input type="checkbox" id="two" ${S.two?"checked":""}> Two sessions</label></div>
+<div class="note">Paste this into Notion AI or Claude, and attach the relevant Layer 2 synthesis from your Hub. Case details come from the Case details box in the 5P tab.</div><textarea class="mono" id="pt" readonly aria-label="Prompt" style="min-height:360px">${esc(role)}</textarea><div class="row" style="margin-top:8px"><button data-copy="pt">Copy prompt</button></div>`}
+function bk(){return `<div class="card" style="margin-top:12px"><p class="sub">Everything is saved in this browser only. Copy the text as a backup; paste a backup into the box and load it to restore.</p><textarea class="mono" id="bk" aria-label="Backup">${esc(JSON.stringify(S))}</textarea><div class="row" style="margin-top:8px"><button data-copy="bk">Copy backup</button><button data-load>Load from box</button></div></div>`}
+function draw(){$("#nav").innerHTML=[["p5","5P builder"],["mx","Capstone matrix"],["pb","AI-lab prompt"],["bk","Backup"]].map(t=>`<button data-t="${t[0]}" aria-pressed="${tab==t[0]}">${t[1]}</button>`).join("");$("#v").innerHTML={p5,mx,pb,bk}[tab]()}
+document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const D=b.dataset;
+if(D.t)tab=D.t;else if("exp"in D){exp();return}else if(D.copy){const t=$("#"+D.copy);t.select();try{navigator.clipboard.writeText(t.value)}catch(x){}return}
+else if("load"in D){try{const x=JSON.parse($("#bk").value);if(x&&x.c){S=x;save()}}catch(x){alert("That text is not a valid backup.")}}else return;draw()});
+document.addEventListener("input",e=>{const t=e.target,D=t.dataset;
+if(D.f){const f=cur().f[D.f]=cur().f[D.f]||{t:"",s:"",n:false};f.t=t.value}else if(D.m)S.mx[D.m]=t.value;else if(t.id=="ref")cur().ref=t.value;else return;save()});
+document.addEventListener("change",e=>{const t=e.target,D=t.dataset,g=k=>cur().f[k]=cur().f[k]||{t:"",s:"",n:false};
+if(D.s)g(D.s).s=t.value;else if(D.n)g(D.n).n=t.checked;else if(t.id=="cs"){S.cs=t.value;save();draw();return}else if(t.id=="sk")S.sk=+t.value;else if(t.id=="md")S.md=+t.value;else if(t.id=="two")S.two=t.checked;else return;save();if(tab=="pb")draw()});
+draw();
+</script></main></body></html>

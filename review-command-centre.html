@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Review Command Centre – EDF5000 & EDF5001</title>
+<style>
+:root{--bg:#f2f5f7;--card:#fff;--ink:#1c2733;--mute:#5b6b7a;--line:#d7dee4;--acc:#1f6f78;--accbg:#dceef0;--ok:#2f7d4f;--okbg:#dff0e5;--mid:#a86d0c;--midbg:#f6e9cc;--no:#a63f36;--nobg:#f5dedb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12191f;--card:#1b252d;--ink:#e6edf2;--mute:#9aabb9;--line:#2e3b46;--acc:#58b7c1;--accbg:#18363b;--ok:#6cc58d;--okbg:#1b3626;--mid:#e0a846;--midbg:#3a2e14;--no:#e57f74;--nobg:#3d201d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12191f;--card:#1b252d;--ink:#e6edf2;--mute:#9aabb9;--line:#2e3b46;--acc:#58b7c1;--accbg:#18363b;--ok:#6cc58d;--okbg:#1b3626;--mid:#e0a846;--midbg:#3a2e14;--no:#e57f74;--nobg:#3d201d;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}
+main{max-width:860px;margin:0 auto;padding:20px 16px 48px}
+h1{font:600 28px/1.15 ui-serif,"New York",Georgia,serif;margin:0 0 4px}
+h2{font:600 20px/1.25 ui-serif,"New York",Georgia,serif;margin:0 0 6px}
+h3{font-size:15px;margin:18px 0 6px}
+.sub{color:var(--mute);margin:0 0 14px}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc)}
+nav{display:flex;gap:6px;margin:14px 0;flex-wrap:wrap}
+button{font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+nav button[aria-pressed=true]{background:var(--acc);color:#fff;border-color:var(--acc)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 12px}
+.t{display:flex;gap:10px;align-items:flex-start;padding:6px 0;cursor:pointer}
+.t input{margin-top:4px;width:17px;height:17px;accent-color:var(--acc);flex:none}
+.t input:checked+span{color:var(--mute);text-decoration:line-through}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row .sp{flex:1}
+.note{background:var(--accbg);border-radius:8px;padding:10px 12px;margin:0 0 12px}
+.rest{background:var(--midbg)}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.chip{min-width:44px;padding:4px 6px;font-size:13px}
+.chip.f{background:var(--okbg);border-color:var(--ok)}.chip.p{background:var(--accbg)}.chip.r{background:var(--midbg);border-style:dashed}.chip.cu{border-style:dashed}
+.rt{display:flex;gap:4px}.rt button{padding:3px 9px;font-size:13px}
+.rt button[aria-pressed=true].c{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.rt button[aria-pressed=true].s{background:var(--midbg);border-color:var(--mid);color:var(--mid)}
+.rt button[aria-pressed=true].n{background:var(--nobg);border-color:var(--no);color:var(--no)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--line);margin-right:3px}
+.dot.c{background:var(--ok)}.dot.s{background:var(--mid)}.dot.n{background:var(--no)}
+.oi{padding:10px 0;border-top:1px solid var(--line)}.oi small{display:block;color:var(--mute);max-width:70ch}
+textarea{width:100%;min-height:120px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px;font:13px/1.45 ui-monospace,Menlo,monospace}
+</style></head><body><main>
+<h1>Review Command Centre</h1>
+<p class="sub">EDF5000 and EDF5001 review plan · Nov 1 – Dec 31, 2026</p>
+<div class="bar" aria-hidden="true"><i id="ov"></i></div><p class="sub" id="ovt"></p>
+<nav id="nav"></nav><div id="v"></div>
+<noscript>This page needs JavaScript.</noscript>
+</main>
+<script>
+const CU="Catch-up: overflow reading, longer recordings, Layer 2 synthesis review";
+const W=[
+{id:"w0",t:"Orientation",m:"Review setup",d:[["2026-11-01",["Re-read the EDF5000 Unit Schedule and tutor comments","Skim EDF5000 Learning objectives as a self-rating checklist"]]],l:["Identify key growth areas from A1 to target in Month 1","Rate each objective in the Objectives tab (Nov 1 snapshot)"]},
+{id:"w1",t:"Week 1 · EDF5000",m:"Module 1: Cultural competence & “normal” development",d:[
+["2026-11-02",["Read Walters (1980) and Mayes et al. (2016)","Lecture 01 and slides (Hub: Lecture 1 consol)"]],
+["2026-11-03",["Read Amodio (2014) and Marcelin et al. (2019)","The Modern Counselor; Myth of Normal Development","Hub video: What is normal from a counselling perspective"]],
+["2026-11-04",["Read Nassar & Singh (2020) and Singh, Appling & Trepal (2020)","Lecture 02; Shifting the Frame"]],
+["2026-11-05",["Tutorial 01 and slides"]],["2026-11-06",["Tutorial 01 SG; Context Defines a Normal Mind"]],
+["2026-11-07",["Read the M1 Module Synthesis (Layer 2)"],"c"],["2026-11-08",["Re-read your submitted M1 forum response (culturally competent and socially just practice)"],"c"]],
+l:["Outline an alternative A1 Part 1 response (“normal development” help/hinder) for an unattempted stage","AI Lab: guided reflection on unconscious bias (MSJCC)","AI Lab: role-play cultural identity conflict with Case 2: Komiko (26)"]},
+{id:"w2",t:"Week 2 · EDF5000",m:"Module 2: Lifespan theories & prenatal (Mon–Wed) · Module 3: Infancy & toddlerhood (Thu–Fri)",d:[
+["2026-11-09",["Layer 1 summaries: Stages of Life; Theories of Human Development, then skim chapters","Lecture 03 and slides"]],
+["2026-11-10",["Cognitive & Intellectual Theories; Prenatal & Heredity (summaries first)","Lecture 04"]],
+["2026-11-11",["Tutorial 02; Clinical Formulation; Counselor as Detective","Hub video: Theories of development"]],
+["2026-11-12",["Read Infancy Physical/Cognitive v2","Lecture 05 and slides"]],
+["2026-11-13",["Read Infancy Emotional/Social","Article: Inequality in early childhood (Walker (2011) is a local file)"]],
+["2026-11-14",["M2 Deep Synthesis (Layer 2, “Not started”)"],"c"],["2026-11-15",[CU],"c"]],
+l:["Build a cross-theoretical comparison table (Erikson, Piaget, Vygotsky, Bandura, Bronfenbrenner)","AI Lab: Clinical Detective case formulation (AI gives symptoms; you map them to developmental crises)","AI Lab: role-play psychoeducation with anxious new parents on infant attachment and co-regulation"]},
+{id:"w3",t:"Week 3 · EDF5000",m:"Module 3: Early childhood (Mon–Tue) · Module 4: Middle childhood & adolescence (Wed–Fri)",d:[
+["2026-11-16",["Read Early Childhood Physical/Cognitive and Emotional/Social","Lecture 06"]],
+["2026-11-17",["Tutorial 03 and slides; Tutorial 03 SG","Hub video: Lifespan Development – Early Childhood"]],
+["2026-11-18",["Read Middle Childhood Physical/Cognitive and Emotional/Social","Lecture 07; Decoding Middle Childhood"]],
+["2026-11-19",["Read Adolescent Physical/Cognitive and Emotional/Social","Lecture 08; Decoding Adolescence"]],
+["2026-11-20",["Read Bennett et al. (2017); Hub articles: Engaging young people in therapy; Late adolescence / young adulthood","Tutorial 04 (use the v2 transcript for the A2 walkthrough)"]],
+["2026-11-21",[CU],"c"],["2026-11-22",[CU],"c"]],
+l:["Moodle task “Reflection on childhood” (EDF5000-M3)","Outline the A2 case-report structure for Leah (24, Army medical discharge) from the Tutorial 4v2 walkthrough; hold the 5P formulation for Week 4","AI Lab: therapeutic alliance with a guarded, mandated adolescent (Bennett et al., 2017)"]},
+{id:"w4",t:"Week 4 · EDF5000",m:"Module 5: Young & middle adulthood (Mon–Wed) · Module 6: Late adulthood & ageing (Thu–Fri)",d:[
+["2026-11-23",["Read Young Adulthood Physical; Young Adulthood Social/Emotional/Career; Gogtay et al. (2004); Neves et al. (2019)","Lecture 09"]],
+["2026-11-24",["Read Middle Adulthood Physical/Cognitive; Midlife Transition Issues; Week 10 Theory Alignment","Lecture 10"]],
+["2026-11-25",["Tutorial 05 (+ v2); Decoding Module 5; Finished Adult","Review the 5P Framework Guide","Read Counseling LGBTQ Adults Throughout the Life Span"]],
+["2026-11-26",["Read Old Age Physical/Cognitive; Later Adulthood Relationships/Psychosocial (summaries first)","Lecture 11 and Notes"]],
+["2026-11-27",["Read Fullen (2019) and Rantanen (2019)","Tutorial 06","Lecture 12 only if the recording is uploaded; otherwise move to Nov 28–29"]],
+["2026-11-28",["Hub M6 videos: Erikson psychosocial theorists; Why Some Old People Act Half Their Age; Mental Illness in the Elderly; The Reality of Retirement; Levitin on Successful Aging","Hub M6 articles: Harvard Health memory and ageing; Ageing activism"],"c"],
+["2026-11-29",["Once Lecture 12 is in the Hub, generate the EDF5000 M5–M6 Layer 2 synthesis","Re-rate EDF5000 Learning objectives (Nov 28–29 snapshot)"],"c"]],
+l:["Midlife Reflection Task (EDF5000-M5-Reflection) and M6 Reflection","Full 5P formulation for Leah","Draft 5P formulations for other A2 cases: Sarah (21), Jim (58), Sasha (60), Colin (75) or Janet (70; pairs with the LGBTQ guide)","AI Lab: midlife generativity vs. stagnation role-play (Jim or Sasha)","AI Lab: gerontological role-play on autonomy, physical decline and identity (Colin or Janet)"]},
+{id:"w5",t:"Week 5 · EDF5001",m:"Module 1: Change, assessment & evaluation (Mon–Wed) · Module 2: Mood-related issues, part 1 (Thu–Fri)",d:[
+["2026-11-30",["Read Conducting an Interview Assessment (Ch. 7)","Lecture 01 and slides; Counsellor’s Roadmap"]],
+["2026-12-01",["Read Assessing & Conceptualizing Client (Ch. 6) and Influencing Responses (Ch. 5)","Lecture 02 slides (or transcript); Counsellor’s Paradigm; Counseling Assessment"]],
+["2026-12-02",["Tutorial 01 and slides; Tutorial 01 SG","Hub video: First counselling session / treatment fit","Re-read the Hub page linked on this day in the plan"]],
+["2026-12-03",["Read Counselling Those Troubled by Depression","Lecture 03 slides (or transcript); Hub video: Science of depression"]],
+["2026-12-04",["Read Constructing, Contextualizing and Evaluating Treatment Goals (Ch. 8)"]],
+["2026-12-05",["EDF5001 M1 Deep Synthesis (Layer 2, “Not started”)"],"c"],["2026-12-06",["Beyond Blue depression treatments page"],"c"]],
+l:["Fill out the Client Information Form and Evaluation Session Template for a mock client","Practise scoring DASS-21 (Lovibond, 1995) and K10","AI Lab: initial assessment interview; debrief DASS-21/K10 in non-stigmatising language; negotiate SMART goals"]},
+{id:"w6",t:"Week 6 · EDF5001",m:"Module 2: Mood-related issues, part 2 (Mon–Tue) · Module 3: Anxiety-related issues (Wed–Fri)",d:[
+["2026-12-07",["Read Cognitive Change Strategies (Ch. 11)","Lecture 04 slides (or transcript)"]],
+["2026-12-08",["Tutorial 02 and slides"]],
+["2026-12-09",["Read Exposure Therapy for Anxiety, Fear, Trauma","Lecture 05 and slides"]],
+["2026-12-10",["Read Making Decisions","Lecture 06 slides (or transcript)"]],
+["2026-12-11",["Tutorial 03 and slides"]],
+["2026-12-12",["M2 Layer 2 synthesis"],"c"],["2026-12-13",["M3 Layer 2 synthesis (“Not started”)"],"c"]],
+l:["Complete the Activity Planner (with the Fun Activities Catalogue), ATQ-B, PDSS-SR and Worry Diary","Practice 400-word reflection on the Tutorial 2 or 3 case","Revisit the M3 forum “Personal Storytelling – Bianca’s experience of anxiety” (status “Planning”)","AI Lab: cognitive restructuring and behavioural activation with a depressed client","AI Lab: co-design a graded in-vivo exposure hierarchy with an avoidant client"]},
+{id:"w7",t:"Week 7 · EDF5001",m:"Module 4: Relational issues & anger (Mon–Wed) · Module 5: Stress management, part 1 (Thu–Fri)",d:[
+["2026-12-14",["Read Counselling Those Troubled by Anger and Dealing with Difficult Relationships","Lecture 07 (transcript in the AI meeting block) and Lecture 08 (Notion transcript)"]],
+["2026-12-15",["Tutorial 04 and slides","Hub videos: coping with relationship issues and attending counselling; Signs of passive-aggressive behaviour"]],
+["2026-12-16",["Tutorial 04 SG","Read Fritz & Helgeson (1998), Speed et al. (2018), Yoshinaga & Cooper (2025)"]],
+["2026-12-17",["Read Cognitive Stress Management","Lecture 09 slides (or transcript); Stress: Anatomy to Action"]],
+["2026-12-18",["Read Self-Calming Approaches to Stress Management and Cohen et al. (1983)"]],
+["2026-12-19",["M4 Layer 2 Deep Synthesis"],"c"],["2026-12-20",["Universal Declaration of Human Rights page (M4 Hub website)"],"c"]],
+l:["Complete and score the Rathus Assertiveness Schedule (RAS) and Perceived Stress Scale (PSS-10)","M4 Moodle counselling session reflection","Part A style reflection on the M4 tutorial case","AI Lab: assertiveness and boundary-setting with Lisa (33), as a skills drill, not a report","AI Lab: anger de-escalation practice"]},
+{id:"w8",t:"Week 8 · EDF5001",m:"Module 5: Stress management, part 2 (Mon–Tue) · Module 6: Life transitions (Wed) · Dec 24–25 off",d:[
+["2026-12-21",["Read Working Together to Change Behaviour","Lecture 10 slides (or transcript)"]],
+["2026-12-22",["Tutorial 05 and Tutorial 05 HK","Review your Lee case outline and draft"]],
+["2026-12-23",["Read Negotiating Life Transitions and Svob et al. (2014)","Lecture 11 and slides"]],
+["2026-12-24",[],"r"],["2026-12-25",[],"r"],
+["2026-12-26",["Lecture 12 slides (or transcript)","Tutorial 06 and slides","M5 and M6 Layer 2 Deep Syntheses"],"c"],
+["2026-12-27",["M5 extras: Military Sleep Method guide; Rosebush video; Headspace and Smiling Mind pages"],"c"]],
+l:["Rehearse aloud: Calming Breathing, Progressive Muscle Relaxation, Imagery and Meditation scripts (covers the M5 Moodle Mindfulness Meditation Exercise)","Life Transitions Sheet for A2 Case B: Ganesh (20, India to Aus, parental divorce)","EDF5001 M6 Reflection","AI Lab: walk Lee (48) through somatic relaxation and Solution-Focused agency","AI Lab: role-play Sessions 1 and 2 with Ganesh"]},
+{id:"w9",t:"Week 9 · Capstone",m:"Cross-unit capstone & clinical synthesis · Dec 31 off",d:[
+["2026-12-28",["Master clinical reference matrix: map EDF5000 lifespan stages to EDF5001 interventions (start from the Layer 3 capstone page and prompt)","Extend manually to EDF5000 M5–M6"]],
+["2026-12-29",["Read Rogers (1957) and Rennie (1994)","Suarez-Delucchi (2022) and the Journal Literature Digest (local files)"]],
+["2026-12-30",["Full 2-session mock clinical simulation","Final guided reflection on your emerging personal counselling model","Re-rate both Learning objectives pages against Nov 1 (Dec 30 snapshot)"]],
+["2026-12-31",[],"r"]],
+l:["Capstone AI simulation: AI client with intersecting developmental and transition/stress challenges; you run assessment, 5P formulation, goals and intervention, then an AI supervisor debrief against Monash criteria"]}];
+const O=[
+["EDF5000 unit outcomes",[
+["a1","Identify key physical and psychosocial stages of development"],["a2","Describe and differentiate major developmental theories and frameworks across the lifespan"],["a3","Apply the fundamental principles of lifespan development to current issues and problems"],["a4","Evaluate, integrate and apply relevant evidence-based research to assess client presentation"],["a5","Design evidence-based counselling intervention strategies informed by relevant lifespan research"]]],
+["EDF5000 modules",[
+["b1","M1 What is ‘normal’ development? & culturally competent, socially just counsellor","Key considerations of cultural competence and social justice · how they affect practice across the lifespan · integrating culturally sensitive approaches · the concept of normal development"],
+["b2","M2 Lifespan development and theories","Fundamental principles · major theories and frameworks · cognitive and intellectual development, moral development and humanism"],
+["b3","M3 Early childhood","Principles of early childhood development · major theories and frameworks · emotional/social and cognitive/intellectual development"],
+["b4","M4 Middle childhood & adolescence","Principles · major theories and frameworks · emotional/social and cognitive/intellectual development"],
+["b5","M5 Young & middle adulthood","Principles of adult development · major adult theories · emotional and social development, career development and family"],
+["b6","M6 Later adulthood & old age","Principles · major older adult theories · emotional and social development, career development and family"]]],
+["EDF5001 unit outcomes",[
+["c1","Describe and integrate theoretical frameworks of positive change to develop individualised support plans"],["c2","Identify common presenting issues in various counselling settings and evaluate their impact on usual functioning"],["c3","Analyse principles of cognitive, behavioural and interpersonal change and apply them in diverse settings"],["c4","Develop and apply stress management strategies and enhance coping skills and mental wellbeing"],["c5","Analyse sociocultural diversity and inclusion using an intersectionality framework"]]],
+["EDF5001 modules",[
+["d1","M1 Introduction to change and evaluation","Unit structure and assessment · frameworks of change and transition · models of mental health · counsellor’s role · role of assessment · assessment theory in practice"],
+["d2","M2 Mood-related issues","Physiology of mood issues · common causes · measures of mood · what counsellors can address · symptoms indicating referral"],
+["d3","M3 Anxiety-related issues","Symptoms of anxiety · measures of severity · skills for mild and moderate anxiety · recognising severe anxiety disorders"],
+["d4","M4 Relational issues","Passive, assertive and aggressive styles · value of each in context · measures of assertiveness · techniques for relationship issues · symptoms of sexual dysfunction"],
+["d5","M5 Stress management and coping","Fight or flight · assessment for stress · counselling techniques for stress · coping skills · when referral is required"],
+["d6","M6 Life transitions & adaptation","Life milestones and transitions (developmental, migratory, career) · impact on mental health · supporting people through transitions"]]]];
+const SN=["Nov 1 (start)","Nov 28–29","Dec 30 (final)"];
+const days=[];W.forEach(w=>w.d.forEach(x=>days.push({date:x[0],t:x[1],ty:x[2]||"",w})));
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const fmt=s=>new Date(s+"T00:00:00").toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long"});
+let S={done:{},rate:[{},{},{}],note:""},tab="today",snap=0;
+try{const x=JSON.parse(localStorage.getItem("edfcc")||"null");if(x)S=Object.assign(S,x)}catch(e){}
+const save=()=>{try{localStorage.setItem("edfcc",JSON.stringify(S))}catch(e){}};
+const t0=ymd(new Date());let cur=t0<days[0].date?days[0].date:t0>days[days.length-1].date?days[days.length-1].date:(days.find(d=>d.date>=t0)||days[0]).date;
+const dk=(d,i)=>d.date+"|"+i,lk=(w,i)=>w.id+"|L"+i;
+const wTasks=w=>{let a=[];w.d.forEach(x=>x[1].forEach((_,i)=>a.push(dk({date:x[0]},i))));w.l.forEach((_,i)=>a.push(lk(w,i)));return a};
+function overall(){let a=[];W.forEach(w=>a=a.concat(wTasks(w)));const n=a.filter(k=>S.done[k]).length;$("#ov").style.width=(100*n/a.length)+"%";$("#ovt").textContent=n+" of "+a.length+" items done";}
+function nav(){const T=[["today","Today"],["plan","Plan"],["obj","Objectives"],["nt","Notion list"]];$("#nav").innerHTML=T.map(t=>`<button data-tab="${t[0]}" aria-pressed="${tab==t[0]}">${t[1]}</button>`).join("")}
+const chk=(k,t)=>`<label class="t"><input type="checkbox" data-k="${esc(k)}" ${S.done[k]?"checked":""}><span>${esc(t)}</span></label>`;
+function vToday(){const i=days.findIndex(d=>d.date===cur),d=days[i],w=d.w;
+let h=`<div class="row"><button data-go="${Math.max(i-1,0)}">‹ Previous</button><button data-go="${Math.min(i+1,days.length-1)}">Next ›</button><span class="sp"></span><button data-jump>Go to today</button></div>`;
+if(t0<days[0].date)h+=`<p class="note">The plan starts on Sunday 1 November. Showing the first day.</p>`;
+h+=`<h2 style="margin-top:14px">${fmt(d.date)}</h2><p class="sub">${esc(w.t)} · ${esc(w.m)}</p>`;
+if(d.ty=="r")h+=`<div class="card rest"><b>Rest day.</b> No study. Its topics are shifted into the Dec 26–27 catch-up.</div>`;
+else{h+=`<div class="card"><h3 style="margin-top:0">${d.ty=="c"?"Catch-up block":"Hours 1–2 · Core study and tutorial"}</h3>${d.t.map((t,j)=>chk(dk(d,j),t)).join("")}</div>`;
+if(d.ty!="c")h+=`<div class="card"><h3 style="margin-top:0">Hour 3 · Small assignments and AI lab (this week’s list)</h3>${w.l.map((t,j)=>chk(lk(w,j),t)).join("")}</div>`;}
+return h}
+function vPlan(){return W.map(w=>{const a=wTasks(w),n=a.filter(k=>S.done[k]).length;
+const ch=w.d.map(x=>{const c=x[1].map((_,i)=>S.done[dk({date:x[0]},i)]).filter(Boolean).length,f=x[1].length&&c==x[1].length;
+return `<button class="chip ${x[2]=="r"?"r":f?"f":c?"p":x[2]=="c"?"cu":""}" data-day="${x[0]}" title="${fmt(x[0])}">${new Date(x[0]+"T00:00:00").toLocaleDateString("en-AU",{day:"numeric",month:"short"})}</button>`}).join("");
+return `<div class="card"><div class="row"><b>${esc(w.t)}</b><span class="sp"></span><span class="sub" style="margin:0">${n}/${a.length}</span></div><p class="sub" style="margin:2px 0 8px">${esc(w.m)}</p><div class="bar"><i style="width:${100*n/a.length}%"></i></div><div class="chips">${ch}</div></div>`}).join("")}
+function vObj(){const r=S.rate[snap];let cnt={c:0,s:0,n:0};O.forEach(g=>g[1].forEach(o=>{if(r[o[0]])cnt[r[o[0]]]++}));
+let h=`<div class="row">${SN.map((s,i)=>`<button data-snap="${i}" aria-pressed="${snap==i}" style="${snap==i?"background:var(--accbg);border-color:var(--acc)":""}">${s}</button>`).join("")}</div>
+<p class="sub" style="margin-top:10px">Rating snapshot: ${SN[snap]} · Confident ${cnt.c} · Shaky ${cnt.s} · Not covered ${cnt.n}. The three dots after each title show your ratings across snapshots.</p>`;
+h+=O.map(g=>`<div class="card"><h2>${g[0]}</h2>${g[1].map(o=>`<div class="oi"><div class="row"><div class="sp"><b>${esc(o[1])}</b> <span aria-hidden="true">${[0,1,2].map(i=>`<span class="dot ${S.rate[i][o[0]]||""}"></span>`).join("")}</span>${o[2]?`<small>${esc(o[2])}</small>`:""}</div>
+<div class="rt">${[["c","Confident"],["s","Shaky"],["n","Not covered"]].map(b=>`<button class="${b[0]}" data-r="${o[0]}|${b[0]}" aria-pressed="${r[o[0]]==b[0]}">${b[1]}</button>`).join("")}</div></div></div>`).join("")}</div>`).join("");
+return h+`<div class="card"><h2>Growth areas from A1</h2><textarea id="note" aria-label="Growth areas from A1">${esc(S.note||"")}</textarea></div>`}
+function vNt(){const by={};W.forEach(w=>{w.d.forEach(x=>x[1].forEach((t,i)=>{const k=dk({date:x[0]},i);if(S.done[k])(by[S.done[k]]=by[S.done[k]]||[]).push(w.t+": "+t)}));w.l.forEach((t,i)=>{const k=lk(w,i);if(S.done[k])(by[S.done[k]]=by[S.done[k]]||[]).push(w.t+" (Hour 3): "+t)})});
+const txt=Object.keys(by).sort().map(d=>"Last Reviewed "+d+"\n"+by[d].map(x=>"- "+x).join("\n")).join("\n\n")||"Nothing ticked yet.";
+return `<div class="card"><h2>Notion update list</h2><p class="sub">Items you ticked, grouped by the date you ticked them. Use it to update Reading Status and Last Reviewed on the matching Hub rows. This page cannot write to Notion.</p><textarea id="nt" readonly aria-label="Notion update list">${esc(txt)}</textarea><div class="row" style="margin-top:8px"><button data-copy="nt">Copy list</button></div></div>
+<div class="card"><h2>Back up your progress</h2><p class="sub">Progress is saved in this browser only. Copy the text below to keep a backup; paste a backup here and load it to restore.</p><textarea id="bk" aria-label="Backup">${esc(JSON.stringify(S))}</textarea><div class="row" style="margin-top:8px"><button data-copy="bk">Copy backup</button><button data-load>Load from box</button></div></div>`}
+function draw(){nav();overall();$("#v").innerHTML={today:vToday,plan:vPlan,obj:vObj,nt:vNt}[tab]()}
+document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const D=b.dataset;
+if(D.tab){tab=D.tab}else if(D.go!==undefined){cur=days[+D.go].date}else if("jump"in D){cur=(days.find(d=>d.date>=t0)||days[days.length-1]).date}
+else if(D.day){cur=D.day;tab="today"}else if(D.snap!==undefined){snap=+D.snap}
+else if(D.r){const[k,v]=D.r.split("|");if(S.rate[snap][k]==v)delete S.rate[snap][k];else S.rate[snap][k]=v;save()}
+else if(D.copy){const t=$("#"+D.copy);t.select();try{navigator.clipboard.writeText(t.value)}catch(x){document.execCommand&&document.execCommand("copy")}return}
+else if("load"in D){try{const x=JSON.parse($("#bk").value);if(x&&x.done&&x.rate){S=x;save()}}catch(x){alert("That text is not a valid backup.")}}
+else return;draw()});
+document.addEventListener("change",e=>{const k=e.target.dataset.k;if(!k)return;if(e.target.checked)S.done[k]=ymd(new Date());else delete S.done[k];save();overall()});
+document.addEventListener("input",e=>{if(e.target.id=="note"){S.note=e.target.value;save()}});
+document.addEventListener("keydown",e=>{if(tab!="today"||/TEXTAREA|INPUT/.test(e.target.tagName))return;const i=days.findIndex(d=>d.date===cur);if(e.key=="ArrowRight"&&i<days.length-1){cur=days[i+1].date;draw()}if(e.key=="ArrowLeft"&&i>0){cur=days[i-1].date;draw()}});
+draw();
+</script></body></html>
