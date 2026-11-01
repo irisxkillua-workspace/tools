@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta name="theme-color" content="#2B1D16"/>
+<title>Coffee Compass｜新加坡咖啡店速查手冊 Singapore Café Coffee Guide</title>
+<style>
+    :root {
+      --bg-primary: #F6EEDF;
+      --bg-card: #FFFCF7;
+      --text-main: #2B1D16;
+      --text-muted: #75604F;
+      --accent-warm: #B5733A;
+      --accent-dark: #6A4430;
+      --accent-gold: #B5733A;
+      --border-color: #E3D2B5;
+      --badge-bg: #EBDCC4;
+      --shadow: 0 3px 10px rgba(43, 29, 22, 0.06);
+      --crema: #F6EEDF;
+      --latte: #D8BC98;
+      --caramel: #B5733A;
+      --roast: #6A4430;
+      --espresso: #2B1D16;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding-bottom: 50px;
+    }
+
+    /* 頂部固定搜尋與導覽 */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(246, 238, 223, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 16px 8px;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-card);
+      outline: none;
+      color: var(--text-main);
+    }
+    .search-bar:focus {
+      border-color: var(--accent-warm);
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-top: 8px;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    nav::-webkit-scrollbar { display: none; }
+
+    nav button {
+      flex: 0 0 auto;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    nav button.active {
+      background: var(--accent-dark);
+      color: #FFF;
+      border-color: var(--accent-dark);
+    }
+
+    .container {
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* 方案二：點單決策樹 (Matchmaker) */
+    .decision-box {
+      background: var(--bg-card);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+    }
+
+    .decision-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-dark);
+    }
+
+    .decision-step-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .chips-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .chip-btn {
+      padding: 6px 12px;
+      font-size: 13px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+    .chip-btn.selected {
+      background: var(--accent-warm);
+      color: #FFF;
+      border-color: var(--accent-warm);
+    }
+
+    .match-result {
+      background: #F3E5D0;
+      border-left: 3px solid var(--accent-warm);
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    /* 方案一：卡片流與手風琴 */
+    .section-header {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent-dark);
+      margin: 24px 0 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .section-header span {
+      font-size: 12px;
+      font-weight: normal;
+      color: var(--text-muted);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .card-header {
+      padding: 14px 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .card-title-group h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .card-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--badge-bg);
+      color: var(--accent-dark);
+      font-weight: 500;
+    }
+    .badge.niche {
+      background: #2B1D16;
+      color: #F6EEDF;
+    }
+
+    .chevron {
+      color: var(--text-muted);
+      font-size: 12px;
+      transition: transform 0.2s ease;
+      margin-top: 4px;
+    }
+    .card.expanded .chevron {
+      transform: rotate(180deg);
+    }
+
+    .card-body {
+      display: none;
+      padding: 0 16px 14px;
+      border-top: 1px dashed var(--border-color);
+      font-size: 13px;
+      color: #3F2D24;
+    }
+    .card.expanded .card-body {
+      display: block;
+      padding-top: 10px;
+    }
+
+    .info-row {
+      margin-bottom: 8px;
+    }
+    .info-label {
+      font-weight: 600;
+      color: var(--accent-dark);
+      display: inline-block;
+      min-width: 65px;
+    }
+
+    .glossary-tag {
+      display: inline-block;
+      background: #EFE1CB;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      margin: 2px 2px 2px 0;
+      color: var(--accent-dark);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+      display: none;
+    }
+  
+    .intro { background: #fff; border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; margin: 8px 0 18px; box-shadow: var(--shadow); }
+    .intro h1 { font-size: 21px; line-height: 1.3; color: var(--accent-dark); margin-bottom: 8px; }
+    .intro p { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+    .intro .legend { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+    .intro .legend span { font-size:11px; border-radius:6px; padding:4px 7px; background:var(--badge-bg); color:var(--accent-dark); }
+    .section-header { display:block; line-height:1.35; }
+    .section-header span { display:block; margin-top:4px; }
+    .card-header { min-height: 52px; }
+    nav button { min-height: 42px; }
+    .chip-btn { min-height: 44px; }
+    .search-bar { min-height: 44px; }
+    .info-row { line-height: 1.65; }
+    .english-example { margin: 5px 0; padding: 8px 10px; background: #F6EEDF; border-radius: 8px; }
+    @media (max-width: 420px) { .container { padding: 12px; } .intro { padding: 16px; } }
+
+    .card-body { font-size: 14px; }
+    .card-sub { font-size: 13px; }
+    .section-header span { font-size: 13px; }
+
+    /* ===== v2：烘焙漸層 Roast Gradient ===== */
+    html { -webkit-text-size-adjust: 100%; }
+    .ico { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto; }
+    button:focus-visible, input:focus-visible { outline: 2px solid var(--caramel); outline-offset: 2px; }
+
+    /* 烘焙色階：由淺到深，對應七個分區 */
+    .section-group[data-cat="origin"]    { --tone: #D8BC98; }
+    .section-group[data-cat="process"]   { --tone: #C79869; }
+    .section-group[data-cat="roast"]     { --tone: #B5733A; }
+    .section-group[data-cat="drink"]     { --tone: #905C35; }
+    .section-group[data-cat="sensory"]   { --tone: #6A4430; }
+    .section-group[data-cat="singapore"] { --tone: #4B3123; }
+    .section-group[data-cat="practical"]{ --tone: #2B1D16; }
+    .roast-strip, .decision-box::before, header::after {
+      background: linear-gradient(90deg, #D8BC98 0 25%, #B5733A 25% 50%, #6A4430 50% 75%, #2B1D16 75% 100%);
+    }
+
+    /* 頂部：safe area + 烘焙色條 */
+    header { padding-top: calc(12px + env(safe-area-inset-top)); padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); border-bottom: 0; position: sticky; }
+    header::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; }
+    .search-bar { font-size: 16px; padding: 10px 14px; background: var(--bg-card); }
+    nav { padding-bottom: 8px; }
+    nav button { display: inline-flex; align-items: center; background: var(--bg-card); }
+    nav button.active { background: var(--espresso); border-color: var(--espresso); }
+    nav button::before { content: ""; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; background: var(--tone-dot, transparent); box-shadow: 0 0 0 1px rgba(43,29,22,0.25); }
+    nav button.active::before { box-shadow: 0 0 0 1px rgba(246,238,223,0.7); }
+    nav button:nth-child(1)::before { width: 14px; border-radius: 3px; background: linear-gradient(90deg, #D8BC98 0 25%, #B5733A 25% 50%, #6A4430 50% 75%, #2B1D16 75% 100%); box-shadow: none; }
+    nav button:nth-child(2) { --tone-dot: #D8BC98; }
+    nav button:nth-child(3) { --tone-dot: #C79869; }
+    nav button:nth-child(4) { --tone-dot: #B5733A; }
+    nav button:nth-child(5) { --tone-dot: #905C35; }
+    nav button:nth-child(6) { --tone-dot: #6A4430; }
+    nav button:nth-child(7) { --tone-dot: #4B3123; }
+    nav button:nth-child(8) { --tone-dot: #2B1D16; }
+
+    .container { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+    body { padding-bottom: calc(50px + env(safe-area-inset-bottom)); }
+
+    /* 主視覺：濃縮黑底 + 咖啡豆線稿 */
+    .intro { position: relative; overflow: hidden; background-color: var(--espresso); background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 64 64%22 fill=%22none%22 stroke=%22%234A3226%22 stroke-width=%221.2%22 stroke-linecap=%22round%22%3E%3Cg transform=%22translate%2818 18%29 rotate%28-35%29%22%3E%3Cellipse rx=%226%22 ry=%229%22/%3E%3Cpath d=%22M0-8.6c-2 3 2 5.2 0 8.6s2 5.2 0 8.6%22/%3E%3C/g%3E%3Cg transform=%22translate%2848 46%29 rotate%2830%29%22%3E%3Cellipse rx=%226%22 ry=%229%22/%3E%3Cpath d=%22M0-8.6c-2 3 2 5.2 0 8.6s2 5.2 0 8.6%22/%3E%3C/g%3E%3C/svg%3E"); background-size: 64px 64px; border: 0; padding: 20px 18px 26px; box-shadow: 0 6px 18px rgba(43,29,22,0.18); }
+    .intro h1 { margin: 0 0 10px; padding-right: 92px; color: var(--crema); display: flex; flex-direction: column; gap: 4px; }
+    .intro .wm { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; font-size: 28px; font-weight: 700; letter-spacing: 0.01em; line-height: 1.1; }
+    .intro .wm-sub { font-size: 14px; font-weight: 500; color: var(--latte); letter-spacing: 0.04em; }
+    .intro p { color: #E4D3BA; font-size: 14px; line-height: 1.65; }
+    .intro .legend span { background: rgba(246,238,223,0.12); color: var(--crema); border: 0.5px solid rgba(216,188,152,0.35); }
+    .hero-cup { position: absolute; top: 14px; right: 16px; width: 74px; height: 74px; color: var(--latte); stroke-width: 1.1; }
+    .hero-bean { position: absolute; width: 22px; height: 22px; color: var(--caramel); stroke-width: 1.3; }
+    .hero-bean.b1 { top: 70px; right: 14px; transform: rotate(35deg); }
+    .hero-bean.b2 { top: 62px; right: 96px; width: 16px; height: 16px; transform: rotate(-25deg); }
+    .roast-strip { position: absolute; left: 0; right: 0; bottom: 0; height: 8px; display: flex; }
+    .roast-strip i { flex: 1; }
+
+    /* 點單小幫手 */
+    .decision-box { position: relative; overflow: hidden; padding-top: 22px; background: var(--bg-card); }
+    .decision-box::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; }
+    .decision-title { color: var(--roast); }
+    .t-ico { width: 22px; height: 22px; color: var(--caramel); }
+    .m-ico { width: 18px; height: 18px; vertical-align: -3px; margin-right: 6px; color: var(--caramel); }
+    .chip-btn { background: var(--bg-primary); }
+    .chip-btn.selected { background: var(--roast); border-color: var(--roast); color: #FFF; }
+    .match-result { background: #F3E5D0; border-left-color: var(--caramel); }
+
+    /* 分區標題 */
+    .section-group .section-header { display: flex; justify-content: flex-start; align-items: center; gap: 12px; margin: 26px 0 12px; color: var(--roast); }
+    .sec-ico { width: 42px; height: 42px; padding: 9px; border-radius: 50%; background: var(--bg-card); border: 2px solid var(--tone, var(--latte)); color: var(--roast); }
+    .section-group .sh-text { min-width: 0; }
+
+    /* 卡片：左側色條 = 該分區的烘焙色階 */
+    .card { position: relative; background: var(--bg-card); }
+    .card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--tone, var(--latte)); }
+    .card-header { padding-left: 20px; }
+    .card-body { padding-left: 20px; padding-right: 16px; }
+    .card.expanded .card-body { padding-top: 10px; }
+    .chevron { color: var(--caramel); }
+    .info-label { color: var(--roast); }
+    .glossary-tag { color: var(--roast); }
+    @media (prefers-reduced-motion: reduce) { .card, .chevron { transition: none; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+<symbol id="i-origin" viewBox="0 0 24 24"><path d="M3 19l6-10 4 6 2.5-3.5L21 19z"/><circle cx="17" cy="6" r="1.6"/></symbol>
+<symbol id="i-process" viewBox="0 0 24 24"><path d="M12 3.5s-6 6.6-6 11a6 6 0 0 0 12 0c0-4.4-6-11-6-11z"/><path d="M9.5 15a2.8 2.8 0 0 0 2.5 2.5"/></symbol>
+<symbol id="i-roast" viewBox="0 0 24 24"><path d="M12 3c.5 3.2 5 5.2 5 10a5 5 0 0 1-10 0c0-2 .9-3.3 2-4.4.2 1.4.9 2.3 1.8 2.8C10.6 8.6 11.2 5.8 12 3z"/></symbol>
+<symbol id="i-brew" viewBox="0 0 24 24"><path d="M4.5 9h11v4.5a4.5 4.5 0 0 1-4.5 4.5h-2a4.5 4.5 0 0 1-4.5-4.5V9z"/><path d="M15.5 10.5h1.2a2.3 2.3 0 0 1 0 4.6h-1.2"/><path d="M3.5 20.5h14"/><path d="M8 3.5c-.8 1 .8 2 0 3M12 3.5c-.8 1 .8 2 0 3"/></symbol>
+<symbol id="i-sense" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol>
+<symbol id="i-sg" viewBox="0 0 24 24"><path d="M4 9.5L5.5 4.5h13L20 9.5a2.2 2.2 0 0 1-4 1.2 2.2 2.2 0 0 1-4 0 2.2 2.2 0 0 1-4 0A2.2 2.2 0 0 1 4 9.5z"/><path d="M5.5 12v8h13v-8"/><path d="M10 20v-4.5h4V20"/></symbol>
+<symbol id="i-bean" viewBox="0 0 24 24"><path d="M12 3c3.6 0 6 3.6 6 9s-2.4 9-6 9-6-3.6-6-9 2.4-9 6-9z"/><path d="M12 3.5c-2.2 3 2.2 5.5 0 8.5s2.2 5.5 0 8.5"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></symbol>
+</defs>
+</svg>
+<header>
+<input class="search-bar" id="searchInput" placeholder="搜尋 Search：Kopi-O、flat white、果香 fruity、研磨 grind…" type="text"/>
+<nav id="navBar">
+<button class="active" onclick="filterCategory('all', this)">全部 All</button>
+<button onclick="filterCategory('origin', this)">產地 Origin</button>
+<button onclick="filterCategory('process', this)">處理法 Process</button>
+<button onclick="filterCategory('roast', this)">烘焙 Roast</button>
+<button onclick="filterCategory('drink', this)">萃取/飲品 Brew</button>
+<button onclick="filterCategory('sensory', this)">感官品鑑 Tasting</button>
+<button onclick="filterCategory('singapore', this)">新加坡點單 Singapore</button><button onclick="filterCategory('practical', this)">實用知識 Practical</button></nav>
+</header>
+<div class="container"><div class="intro" id="introSection">
+<svg class="ico hero-cup" aria-hidden="true"><use href="#i-brew"/></svg>
+<svg class="ico hero-bean b1" aria-hidden="true"><use href="#i-bean"/></svg><svg class="ico hero-bean b2" aria-hidden="true"><use href="#i-bean"/></svg>
+<h1><span class="wm">Coffee Compass</span><span class="wm-sub">新加坡咖啡店速查手冊</span></h1>
+<p>點單、認識一杯咖啡，或者單純找個新口味——這是消閒用的小指南，不是考試教材。新加坡常見咖啡店用語和英文點單句也收在這裡。</p>
+<p>產地、處理法和烘焙度提供的是選擇線索，不是風味保證；同一個名字，不同店家與批次也可能喝起來不一樣。</p>
+<div class="legend"><span>基本事實 Facts</span><span>常見傾向 Common tendencies</span><span>主觀品飲 Tasting notes</span></div><div class="roast-strip" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+</div>
+<!-- 方案二：互動點單決策樹 -->
+<div class="decision-box" id="decisionSection">
+<div class="decision-title"><svg class="ico t-ico" aria-hidden="true"><use href="#i-brew"/></svg>30 秒點單小幫手 Quick Order Helper</div>
+<div class="decision-step-label">第 1 步 Step 1：今天想喝哪一種？</div>
+<div class="chips-group" id="typeChips">
+<button class="chip-btn selected" onclick="selectType('filter')">手沖黑咖啡 Pour-over / Filter</button>
+<button class="chip-btn" onclick="selectType('milk')">奶咖 Milk-based</button>
+<button class="chip-btn" onclick="selectType('iced')">冰咖啡 Iced / Cold Brew</button>
+</div>
+<div class="decision-step-label">第 2 步 Step 2：偏好哪種口感或風味？</div>
+<div class="chips-group" id="flavorChips">
+<button class="chip-btn selected" onclick="selectFlavor('acid')">明亮花果 Bright / Floral / Fruity</button>
+<button class="chip-btn" onclick="selectFlavor('sweet')">甜感與可可 Sweet / Cocoa</button>
+<button class="chip-btn" onclick="selectFlavor('funky')">實驗風味 Experimental / Winey</button>
+<button class="chip-btn" onclick="selectFlavor('heavy')">圓潤醇厚 Round / Full-bodied</button>
+</div>
+<div class="match-result" id="recommendationText">
+<!-- JS 動態生成推薦 -->
+</div>
+</div>
+<!-- 方案一：內容卡片流 -->
+<div id="contentList">
+<!-- ================= 產地模組 ================= -->
+<div class="section-group" data-cat="origin">
+<div class="section-header"><svg class="ico sec-ico" aria-hidden="true"><use href="#i-origin"/></svg><div class="sh-text">產地與風土 (Origins &amp; Terroir) <span>常見風味線索 Common Notes，不是保證 Not a Guarantee</span></div></div><div class="card" data-keywords="咖啡帶 coffee belt 世界產地 origin map 非洲 africa 阿拉伯 arabian 南美 central south america 亞洲 asia 大洋洲 oceania 主要 次要特色 產地 country">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>咖啡帶速覽 Coffee Belt Snapshot <span class="badge">世界地圖索引</span></h3><div class="card-sub">先認區域，再按喜好展開產地探索</div></div><div class="chevron">▼</div></div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">非洲與阿拉伯半島 Africa &amp; Arabian Peninsula：</span>衣索比亞 Ethiopia、肯亞 Kenya、烏干達 Uganda、坦尚尼亞 Tanzania；其他特色產地可看盧安達 Rwanda、蒲隆地 Burundi、剛果民主共和國 Democratic Republic of the Congo、葉門 Yemen、馬拉威 Malawi、尚比亞 Zambia、辛巴威 Zimbabwe。</div>
+<div class="info-row"><span class="info-label">中美洲與南美洲 Central &amp; South America：</span>巴西 Brazil、哥倫比亞 Colombia、瓜地馬拉 Guatemala、宏都拉斯 Honduras；其他特色產地包括哥斯大黎加 Costa Rica、巴拿馬 Panama、墨西哥 Mexico、尼加拉瓜 Nicaragua、薩爾瓦多 El Salvador、秘魯 Peru、厄瓜多 Ecuador、玻利維亞 Bolivia、牙買加 Jamaica、多明尼加共和國 Dominican Republic、波多黎各 Puerto Rico。</div>
+<div class="info-row"><span class="info-label">亞洲與大洋洲 Asia &amp; Oceania：</span>越南 Vietnam、印尼 Indonesia、印度 India；其他特色產地包括中國雲南 Yunnan, China、巴布亞紐幾內亞 Papua New Guinea、寮國 Laos、泰國 Thailand、菲律賓 Philippines、東帝汶 Timor-Leste、馬來西亞 Malaysia、緬甸 Myanmar、斯里蘭卡 Sri Lanka。</div>
+<div class="info-row"><span class="info-label">怎麼看 How to Read：</span>「主要」與「特色」是方便速查的整理方式，綜合產量、市場能見度和精品咖啡特色，不是官方排名；供應與風味都會隨年份、產區和批次改變。</div>
+</div>
+</div><div class="card" data-keywords="風土 terroir 海拔 altitude 氣候 climate 土壤 soil 生態 ecology 微氣候 microclimate 品種 variety varietal 採收 processing roast brewing 沖煮">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>風土由什麼組成？What Shapes Terroir? <span class="badge">看懂產地線索</span></h3><div class="card-sub">不是只有國名、海拔或土壤</div></div><div class="chevron">▼</div></div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">氣候與海拔 Climate &amp; Altitude：</span>溫度、雨量、日夜溫差和成熟速度會影響生長；高海拔可能和較慢成熟、豆體密度或明亮酸質有關，但不保證更好、更酸。</div>
+<div class="info-row"><span class="info-label">土壤與生態 Soil &amp; Ecology：</span>排水、遮蔭、水分和微氣候 Microclimate 都是背景條件；不能單憑「火山土 Volcanic Soil」推斷杯中一定有礦物味 Mineral Notes。</div>
+<div class="info-row"><span class="info-label">品種與採後處理 Variety &amp; Processing：</span>遺傳特徵、農場管理、成熟度、採收、發酵和乾燥都會改變結果；同一產區也可能有不同杯型。</div>
+<div class="info-row"><span class="info-label">烘焙與沖煮 Roast &amp; Brewing：</span>烘焙度 Roast Level、研磨 Grind、水溫 Water Temperature、粉液比 Brew Ratio 和沖煮方式 Brewing Method，會影響最後喝到的風味。</div>
+</div>
+</div><div class="card" data-keywords="烏干達 uganda 羅布斯塔 robusta canephora 阿拉比卡 arabica 可可 cocoa 堅果 nuts 香料 spice 非洲 africa">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>烏干達 Uganda <span class="badge">阿拉比卡與羅布斯塔</span></h3><div class="card-sub">看物種 Species 和海拔，比只看國名更有用</div></div><div class="chevron">▼</div></div>
+<div class="card-body"><div class="info-row"><span class="info-label">咖啡類型 Coffee Types：</span>羅布斯塔 Robusta（卡內弗拉 Canephora）生產重要，也有阿拉比卡 Arabica；高地阿拉比卡可能有較鮮明果香 Fruity Notes。</div><div class="info-row"><span class="info-label">常見線索 Common Notes：</span>一些羅布斯塔批次會有可可 Cocoa、堅果 Nuts、香料 Spice 和較厚實口感 Full Body；這只是方向，不是每杯的保證。</div></div>
+</div><div class="card" data-keywords="瓜地馬拉 guatemala 安提瓜 antigua 薇薇特南果 huehuetenango 宏都拉斯 honduras 中美洲 central america 可可 cocoa 焦糖 caramel 堅果 nuts 柑橘 citrus">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>瓜地馬拉與宏都拉斯 Guatemala &amp; Honduras <span class="badge">中美洲常見豆單</span></h3><div class="card-sub">巧克力、焦糖，也可能帶柑橘或蘋果</div></div><div class="chevron">▼</div></div>
+<div class="card-body"><div class="info-row"><span class="info-label">瓜地馬拉 Guatemala：</span>安提瓜 Antigua、薇薇特南果 Huehuetenango 等產區常見可可 Cocoa、焦糖 Caramel 或烘焙香料 Roasted Spice；部分高地批次也有柑橘 Citrus 和較明亮酸質 Bright Acidity。</div><div class="info-row"><span class="info-label">宏都拉斯 Honduras：</span>部分批次讓人想到巧克力 Chocolate、堅果 Nuts、焦糖 Caramel、蘋果 Apple 或柑橘 Citrus，適合拿來探索中美洲豆款的不同面貌。</div><div class="info-row"><span class="info-label">小提醒 Note：</span>以上是常見風味聯想 Common Tasting Notes，實際表現會受品種 Variety、處理法 Process、烘焙 Roast 和沖煮 Brewing 影響。</div></div>
+</div><div class="card" data-keywords="越南 vietnam 羅布斯塔 robusta 阿拉比卡 arabica 邦美蜀 buon ma thuot 中部高原 central highlands 可可 cocoa 木質 woody 堅果 nuts">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>越南 Vietnam <span class="badge">羅布斯塔重要產地</span></h3><div class="card-sub">傳統大宗咖啡之外，也有阿拉比卡與精品批次</div></div><div class="chevron">▼</div></div>
+<div class="card-body"><div class="info-row"><span class="info-label">產區線索 Origin Clues：</span>中部高原 Central Highlands、邦美蜀 Buôn Ma Thuột。</div><div class="info-row"><span class="info-label">咖啡類型 Coffee Types：</span>以羅布斯塔 Robusta 為主，也有阿拉比卡 Arabica。部分羅布斯塔常被描述為可可 Cocoa、木質 Woody、堅果 Nuts 或風味較集中；精品阿拉比卡可能呈現柑橘 Citrus 或花果香 Floral / Fruity Notes。</div><div class="info-row"><span class="info-label">小提醒 Note：</span>越南咖啡不只一種風味；看豆種 Species、烘焙 Roast 和店家描述會更準。</div></div>
+</div><div class="card" data-keywords="印度 india 卡納塔克 karnataka 喀拉拉 kerala 馬拉巴爾 malabar monsooned malabar 季風處理 monsooning 低酸 木質 香料 穀物">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>印度 India <span class="badge">季風處理咖啡</span></h3><div class="card-sub">Monsooned Malabar 是特色之一，不是全部印度咖啡</div></div><div class="chevron">▼</div></div>
+<div class="card-body"><div class="info-row"><span class="info-label">產區線索 Origin Clues：</span>卡納塔克 Karnataka、喀拉拉 Kerala、馬拉巴爾 Malabar。</div><div class="info-row"><span class="info-label">季風處理 Monsooned：</span>生豆在受控條件下接觸潮濕季風空氣並反覆乾燥，常見描述包括柔和酸質 Mellow Acidity、木質 Woody、香料 Spicy 或穀物 Grain Notes。</div><div class="info-row"><span class="info-label">小提醒 Note：</span>印度也生產其他阿拉比卡 Arabica 和羅布斯塔 Robusta；「季風處理」是特定做法，不應當成整個國家的風味。</div></div>
+</div>
+<div class="card" data-keywords="衣索比亞 ethiopia 耶加雪菲 yirgacheffe 西達摩 sidama 古吉 guji 茉莉 柑橘 桃子 藍莓 非洲 水洗 日曬">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>衣索比亞 Ethiopia <span class="badge">非洲主流</span></h3>
+<div class="card-sub">耶加雪菲 (Yirgacheffe) · 西達馬 (Sidama) · 古吉 (Guji)</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">常見風味 Common Notes：</span>部分批次會有茉莉 Jasmine、柑橘 Citrus、桃子 Peach 或莓果 Berry 的聯想；不是每杯都一樣。</div>
+<div class="info-row"><span class="info-label">口感 Body：</span>有些水洗豆喝起來像茶 Tea-like、明亮 Bright；日曬批次也可能更果香 Fruity。</div>
+<div class="info-row"><span class="info-label">小詞卡 Quick Terms：</span><span class="glossary-tag">原生種 Heirloom（地方品種的統稱，非單一品種）</span><span class="glossary-tag">風土 Terroir</span><span class="glossary-tag">花香 Floral</span></div></div>
+</div>
+<div class="card" data-keywords="肯亞 kenya 涅里 nyeri 基里尼亞加 kirinyaga 黑醋栗 葡萄柚 黑莓 番茄葉 多汁 非洲">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>肯亞 Kenya <span class="badge">非洲主流</span></h3>
+<div class="card-sub">涅里 (Nyeri) · 基里尼亞加 (Kirinyaga)</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">常見風味 Common Notes：</span>部分批次有黑醋栗 Blackcurrant、葡萄柚 Grapefruit、莓果 Berry 或番茄葉 Tomato Leaf 的聯想；酸質 Acidity 可能明亮 juicy。</div>
+<div class="info-row"><span class="info-label">分級與品種 Grades &amp; Varieties：</span>肯亞 AA Kenya AA 主要指生豆尺寸篩網等級，不等於最高杯測品質 Cup Quality。SL28 常以耐旱 Drought Tolerance 著稱；SL34 的特性不同，別把兩者都說成抗病抗旱。</div>
+<div class="info-row"><span class="info-label">小詞卡 Quick Terms：</span><span class="glossary-tag">磷酸感 Phosphoric Acidity（感官描述）</span><span class="glossary-tag">篩網尺寸 Screen Size</span></div></div>
+</div>
+<div class="card" data-keywords="盧安達 rwanda 蒲隆地 burundi 烏干達 uganda 馬拉威 坦尚尼亞 紅色水果 紅茶 紅糖 非洲 小眾">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>盧安達 &amp; 蒲隆地 <span class="badge niche">非洲小眾精品</span></h3>
+<div class="card-sub">Rwanda &amp; Burundi · 伴隨坦尚尼亞、馬拉威、烏干達</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">常見風味 Common Notes：</span>一些批次會有紅色水果 Red Fruits、紅蘋果 Red Apple、柑橘 Citrus、紅糖 Brown Sugar 或紅茶 Black Tea 的聯想。</div>
+<div class="info-row"><span class="info-label">小提醒 Note：</span>馬鈴薯味 Potato Taste 是少數批次可能出現的瑕疵風味 Defect，不是盧安達或蒲隆地咖啡的典型風味。水洗 Washed 也會發酵 Fermentation，只是控制良好時通常較清晰。</div>
+<div class="info-row"><span class="info-label">小詞卡 Quick Terms：</span><span class="glossary-tag">瑕疵風味 Defect</span><span class="glossary-tag">水洗 Washed</span><span class="glossary-tag">乾淨度 Clean Cup</span></div></div>
+</div>
+<div class="card" data-keywords="葉門 yemen 摩卡 mocha 葡萄乾 無花果 棗 香料 發酵果香 古老品種 阿拉伯">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>葉門 Yemen <span class="badge niche">小眾古老傳奇</span></h3>
+<div class="card-sub">瑪塔莉 (Mattari) · 喜拉吉 (Hirazi)</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">常見風味 Common Notes：</span>部分批次可聯想到無花果乾 Dried Fig、葡萄乾 Raisin、棗 Date、香料 Spice 或可可 Cocoa。</div>
+<div class="info-row"><span class="info-label">喝喝看 Try It：</span>傳統乾燥方式與小批次來源各有差異；乾果與香料只是可能出現的風味，不是每杯必有。</div>
+<div class="info-row"><span class="info-label">小詞卡 Quick Terms：</span><span class="glossary-tag">乾燥果香 Dried-fruit Notes</span><span class="glossary-tag">風味聯想 Tasting Note</span></div></div>
+</div>
+<div class="card" data-keywords="哥倫比亞 colombia 薇拉 huila 納里尼奧 narino 考卡 cauca 焦糖 蘋果 柑橘 堅果 中南美洲">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>哥倫比亞 Colombia <span class="badge">美洲主流</span></h3>
+<div class="card-sub">薇拉 (Huila) · 納里尼奧 (Nariño) · 考卡 (Cauca)</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">常見風味 Common Notes：</span>不同產區與批次可能呈現焦糖 Caramel、蘋果 Apple、柑橘 Citrus、堅果 Nuts 或核果 Stone Fruit。</div>
+<div class="info-row"><span class="info-label">小提醒 Note：</span>哥倫比亞 Colombia 產區很廣，品種 Variety、海拔 Altitude、處理法 Process 與烘焙 Roast 都會改變杯中表現；單一品種名稱不是風味保證。</div>
+<div class="info-row"><span class="info-label">小詞卡 Quick Terms：</span><span class="glossary-tag">卡斯蒂優 Castillo</span><span class="glossary-tag">粉紅波旁 Pink Bourbon</span><span class="glossary-tag">批次 Lot</span></div></div>
+</div>
+<div class="card" data-keywords="巴西 brazil 喜拉朵 cerrado 南米納斯 烤花生 堅果 可可 奶油 圓潤 義式 美洲">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>巴西 Brazil <span class="badge">美洲基石</span></h3>
+<div class="card-sub">喜拉朵 (Cerrado Mineiro) · 南米納斯 (Sul de Minas)</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">常見風味 Common Notes：</span>不少巴西批次會讓人想到堅果 Nuts、可可 Cocoa、巧克力 Chocolate 或焦糖 Caramel，也常用於義式配方 Espresso Blend。</div>
+<div class="info-row"><span class="info-label">酸質與口感 Acidity &amp; Body：</span>有些豆款感覺較圓潤、酸質較柔和，但「巴西一定低酸」並不成立；批次與烘焙都會有差異。</div>
+<div class="info-row"><span class="info-label">小詞卡 Quick Terms：</span><span class="glossary-tag">黃波旁 Yellow Bourbon</span><span class="glossary-tag">半日曬 Pulped Natural</span><span class="glossary-tag">醇厚度 Body</span></div></div>
+</div>
+<div class="card" data-keywords="巴拿馬 panama 玻利維亞 厄瓜多 秘魯 藝伎 瑰夏 gesha geisha 花香 佛手柑 蜂蜜 荔枝 中美洲 精品">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>巴拿馬 Panama (藝伎/瑰夏) <span class="badge niche">頂級殿堂</span></h3>
+<div class="card-sub">波奎特 (Boquete) · 巴魯火山 (Volcán Barú)</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">常見風味 Common Notes：</span>部分瑰夏 Gesha / Geisha 批次會有茉莉 Jasmine、佛手柑 Bergamot、柑橘 Citrus 或荔枝 Lychee 的聯想。</div>
+<div class="info-row"><span class="info-label">喝喝看 Try It：</span>高價、得獎或品種名稱都不能保證每一批都驚艷；先看店家的實際風味描述與烘焙日期 Roast Date。</div>
+<div class="info-row"><span class="info-label">小詞卡 Quick Terms：</span><span class="glossary-tag">瑰夏 Gesha / Geisha</span><span class="glossary-tag">Best of Panama（巴拿馬競賽）</span><span class="glossary-tag">風味描述 Tasting Notes</span></div></div>
+</div>
+<div class="card" data-keywords="印尼 indonesia 蘇門答臘 曼特寧 爪哇 蘇拉威西 草本 雪松 泥土 濕剝 亞洲 大洋洲">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>印尼 Indonesia (蘇門答臘) <span class="badge">亞洲經典</span></h3>
+<div class="card-sub">曼特寧 (Mandheling) · 爪哇 (Java) · 蘇拉威西 (Sulawesi)</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">常見風味 Common Notes：</span>部分蘇門答臘 Sumatra 批次有草本 Herbal、木質 Woody、香料 Spicy、可可 Cocoa 或較厚實口感 Full Body 的聯想。</div>
+<div class="info-row"><span class="info-label">小提醒 Note：</span>濕刨法 Giling Basah 常見於印尼，但「低酸」「泥土味」不是每一款曼特寧 Mandheling 的固定特徵；也不必只配深焙 Dark Roast。</div>
+<div class="info-row"><span class="info-label">小詞卡 Quick Terms：</span><span class="glossary-tag">濕刨法 Giling Basah</span><span class="glossary-tag">曼特寧 Mandheling</span><span class="glossary-tag">草本 Herbal</span></div></div>
+</div>
+<div class="card" data-keywords="雲南 yunnan 中國 印度 季風 malabar 泰國 緬甸 堅果 焦糖 普洱 保山 亞洲 小眾">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>亞洲與新興小眾產區 <span class="badge niche">探索系新秀</span></h3>
+<div class="card-sub">中國雲南 (Yunnan) · 印度季風 (Monsooned) · 泰國清萊</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">雲南 Yunnan：</span>不同批次可能有堅果 Nuts、焦糖 Caramel、可可 Cocoa 或果香 Fruity；特殊發酵 Fermentation 是個別生產者與批次的做法，不代表整個產區。</div>
+<div class="info-row"><span class="info-label">印度季風咖啡 Monsooned Malabar：</span>季風熟成 Monsooning 可能帶來較柔和的酸質與穀物 Grain、木質 Woody 聯想；實際表現因批次而異。</div>
+<div class="info-row"><span class="info-label">小詞卡 Quick Terms：</span><span class="glossary-tag">卡帝姆 Catimor</span><span class="glossary-tag">季風熟成 Monsooning</span><span class="glossary-tag">批次差異 Lot Variation</span></div></div>
+</div>
+</div>
+<!-- ================= 處理法模組 ================= -->
+<div class="section-group" data-cat="process">
+<div class="section-header"><svg class="ico sec-ico" aria-hidden="true"><use href="#i-process"/></svg><div class="sh-text">生豆處理法 (Processing Methods) <span>認識標籤 Process Labels，不替風味打包票</span></div></div>
+<div class="card" data-keywords="水洗 washed 乾淨 清晰 明亮 花香 柑橘 茶感 經典">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>水洗處理法 Washed / Wet Process <span class="badge">三大經典</span></h3>
+<div class="card-sub">去除果肉 ➔ 水槽發酵去除果膠 ➔ 清洗乾燥</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">大致流程 Basic Process：</span>去除果皮果肉 Pulping，再以發酵 Fermentation 或機械方式去除果膠 Mucilage，接著清洗 Washing、乾燥 Drying。每個產地和處理站做法可不同。</div>
+<div class="info-row"><span class="info-label">常見傾向 Common Tendency：</span>控制良好時，杯中可能較清晰 Clean、容易辨認酸質 Acidity 或花果香 Floral / Fruity；水洗不是「完全沒有發酵味」。</div>
+<div class="info-row"><span class="info-label">小詞卡 Quick Terms：</span><span class="glossary-tag">水洗 Washed</span><span class="glossary-tag">果膠 Mucilage</span><span class="glossary-tag">乾淨度 Clean Cup</span></div></div>
+</div>
+<div class="card" data-keywords="日曬 natural 甜感 果香 莓果 果醬 熱帶水果 飽滿 經典">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>日曬處理法 Natural / Dry Process <span class="badge">三大經典</span></h3>
+<div class="card-sub">整顆完整咖啡漿果直接曝曬乾燥 ➔ 脫殼取出咖啡豆</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">大致流程 Basic Process：</span>完整咖啡果實 Coffee Cherry 在乾燥期間保留果皮、果肉與果膠，乾燥後再脫殼 Hulling 取出咖啡豆。</div>
+<div class="info-row"><span class="info-label">常見傾向 Common Tendency：</span>部分批次果香 Fruity、甜感 Sweetness 或口感 Body 較明顯，也可能呈現乾果 Dried Fruit 或酒香 Winey 聯想；不保證一定更甜、更厚。</div>
+<div class="info-row"><span class="info-label">小詞卡 Quick Terms：</span><span class="glossary-tag">日曬 Natural</span><span class="glossary-tag">乾燥 Drying</span><span class="glossary-tag">發酵管理 Fermentation Control</span></div></div>
+</div>
+<div class="card" data-keywords="蜜處理 honey pulped natural 蜂蜜 焦糖 圓潤 黃蜜 紅蜜 黑蜜 經典">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>蜜處理法 Honey / Pulped Natural <span class="badge">三大經典</span></h3>
+<div class="card-sub">去皮但保留黏稠果膠 (Mucilage) 進行乾燥</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">大致流程 Basic Process：</span>去除果皮後，保留部分果膠 Mucilage 讓咖啡豆乾燥。這裡的 Honey 是處理法名稱，不是一定加蜂蜜 Honey。</div>
+<div class="info-row"><span class="info-label">顏色名稱 Colour Labels：</span>黃蜜 Yellow Honey、紅蜜 Red Honey、黑蜜 Black Honey 的命名和操作標準沒有全球統一；不能只靠顏色推斷果膠量、乾燥時間或甜度。</div>
+<div class="info-row"><span class="info-label">常見傾向 Common Tendency：</span>可能同時有清晰度 Clarity、甜感 Sweetness 或較圓潤口感 Rounded Body；實際風味看批次與乾燥管理。</div></div>
+</div>
+<div class="card" data-keywords="厭氧 anaerobic 二氧化碳浸漬 carbonic maceration 熱帶水果 發酵 酒香 前衛 小眾">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>厭氧發酵 Anaerobic &amp; 二氧化碳浸漬 CM <span class="badge niche">尖端實驗</span></h3>
+<div class="card-sub">密封無氧環境發酵 · 借鑑葡萄酒釀造工藝</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">怎麼分 How They Differ：</span>厭氧發酵 Anaerobic Fermentation 是低氧或無氧條件下的發酵；二氧化碳浸漬 Carbonic Maceration 是特定的二氧化碳處理技術。兩者可能重疊，但不是同義詞。</div>
+<div class="info-row"><span class="info-label">看標籤 Check the Label：</span>可留意是否公開發酵時間 Fermentation Time、溫度 Temperature、菌種 Culture、是否加入二氧化碳 CO₂，以及是否加入水果或香料 Added Ingredients。</div>
+<div class="info-row"><span class="info-label">風味提醒 Tasting Note：</span>可能出現熱帶水果 Tropical Fruit、香料 Spice 或酒香 Winey 聯想，但不一定「風味爆發」，控制不當也可能不合口味。</div></div>
+</div>
+<div class="card" data-keywords="乳酸發酵 lactic 熱衝擊 thermal shock 共發酵 co-fermentation 水果發酵 優格 前衛 小眾">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>乳酸發酵、熱衝擊與共發酵 <span class="badge niche">前衛爭議款</span></h3>
+<div class="card-sub">Lactic · Thermal Shock · Co-fermentation</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">乳酸發酵 Lactic Fermentation：</span>以特定發酵條件促進乳酸相關風味；名稱本身不能保證有優格 Yogurt 或奶油 Creamy 口感。</div>
+<div class="info-row"><span class="info-label">熱衝擊 Thermal Shock：</span>透過溫度變化處理的製程描述；細節依生產者而異，並非固定配方。</div>
+<div class="info-row"><span class="info-label">共發酵 Co-fermentation：</span>與外加物料共同發酵；發酵後浸味 Infusion / Flavouring 又是不同工序。若加水果 Fruit 或香料 Spices，查看生產者說明，分清咖啡本身風味與外加風味。</div></div>
+</div>
+<div class="card" data-keywords="濕剝 wet-hulled giling basah 印尼 indonesia 蘇門答臘 sumatra 去果皮日曬 pulped natural 巴西 brazil 季風處理 monsooned 印度 india 處理法 regional processing">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>區域特色處理法 Regional Processing <span class="badge niche">產地線索</span></h3><div class="card-sub">有些名稱說的是流程，有些是特定地區做法</div></div><div class="chevron">▼</div></div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">濕剝 Wet-hulled / Giling Basah：</span>印尼部分產區會在生豆仍較濕時去除羊皮層 Parchment，再繼續乾燥；常見聯想有草本 Herbal、木質 Woody、香料 Spice 或較厚實口感 Full Body。</div>
+<div class="info-row"><span class="info-label">去果皮日曬 Pulped Natural：</span>去除果皮後保留部分果膠 Mucilage 乾燥，常見於巴西部分產區；和蜜處理 Honey Process 有重疊，實際流程與用語會因生產者而異。</div>
+<div class="info-row"><span class="info-label">季風處理 Monsooned：</span>印度特色加工方式，讓生豆在特定潮濕季風環境中吸濕、乾燥；不是一般水洗 Washed 或日曬 Natural 流程。</div>
+<div class="info-row"><span class="info-label">怎麼讀 How to Read：</span>這些是加工流程 Processing Methods，不等於單一發酵方式 Fermentation Method；風味仍會因批次 Lot、烘焙 Roast 和沖煮 Brewing 而不同。</div>
+</div>
+</div></div>
+<!-- ================= 烘焙模組 ================= -->
+<div class="section-group" data-cat="roast">
+<div class="section-header"><svg class="ico sec-ico" aria-hidden="true"><use href="#i-roast"/></svg><div class="sh-text">烘焙程度矩陣 (Roast Levels) <span>看看自己喜歡哪一邊 Find Your Preference</span></div></div>
+<div class="card" data-keywords="淺焙 淺烘焙 light cinnamon 花香 柑橘 果酸 茶感 手沖 冷萃">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>淺烘焙 (Light Roast) <span class="badge">產區原力</span></h3>
+<div class="card-sub">Cinnamon / New England · 乾爽無油、肉桂肉褐色</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">常見傾向 Common Tendency：</span>可能保留較鮮明的花香 Floral、果香 Fruity 或酸質 Acidity；但淺焙 Light Roast 若發展不足 Underdeveloped，也可能有青草 Grassy 或生穀物 Raw-grain 感。</div>
+<div class="info-row"><span class="info-label">沖煮小提示 Brewing Tip：</span>若喝起來偏尖銳或薄，先試稍細研磨 Finer Grind、較高水溫 Higher Water Temperature 或調整粉液比 Brew Ratio；一次改一項比較容易找到喜歡的口味。</div>
+<div class="info-row"><span class="info-label">小提醒 Note：</span>Cinnamon Roast 等烘焙名稱由烘豆商使用方式不一；看店家的實際描述比只看名稱可靠。</div></div>
+</div>
+<div class="card" data-keywords="中焙 中烘焙 medium city 平衡 焦糖 堅果 巧克力 水果 美式 手沖">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>中烘焙 (Medium Roast) <span class="badge">平衡之王</span></h3>
+<div class="card-sub">City / American · 栗褐色表面微乾</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">常見傾向 Common Tendency：</span>有些中焙 Medium Roast 會呈現焦糖 Caramel、堅果 Nuts、巧克力 Chocolate 或水果 Fruit 的平衡感；「黃金平衡」是個人喜好，不是固定標準。</div>
+<div class="info-row"><span class="info-label">點單小提示 Ordering Tip：</span>想要柔和、好入口的黑咖啡 Black Coffee，可問店員這款喝起來偏果香 Fruity 還是可可 Cocoa，再選手沖 Pour-over 或美式 Americano。</div>
+<div class="info-row"><span class="info-label">小提醒 Note：</span>City Roast、American Roast 等烘焙名稱 Roast Names 的用法會因烘豆商而異。</div></div>
+</div>
+<div class="card" data-keywords="中深焙 深焙 深烘焙 medium dark full city french italian 黑巧克力 煙燻 苦可可 厚實 奶咖">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>中深焙至深焙 (Medium-Dark / Dark) <span class="badge">濃郁厚實</span></h3>
+<div class="card-sub">Full City / French / Italian · 墨褐泛油光</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">常見傾向 Common Tendency：</span>較深烘焙 Darker Roast 常帶烘烤 Roasty、可可 Cocoa 或煙燻 Smoky 聯想，部分原有酸質 Acidity 會較不突出；不代表酸質必然消失。</div>
+<div class="info-row"><span class="info-label">點單小提示 Ordering Tip：</span>想配牛奶 Milk，可以問店員這款咖啡是否能穿過奶味；深焙不是拿鐵 Latte 或濃縮 Espresso 的唯一好選擇。</div>
+<div class="info-row"><span class="info-label">小提醒 Note：</span>French Roast、Italian Roast 等名稱不完全一致；豆表油光 Oiliness 也受烘焙與存放時間影響，不能單獨用來判定烘焙度。</div></div>
+</div>
+</div>
+<!-- ================= 萃取與飲用模組 ================= -->
+<div class="section-group" data-cat="drink">
+<div class="section-header"><svg class="ico sec-ico" aria-hidden="true"><use href="#i-brew"/></svg><div class="sh-text">萃取方式與飲品 (Brewing &amp; Drink Styles) <span>吧台點單解析 Café Menu Guide</span></div></div>
+<div class="card" data-keywords="手沖 濾泡 pour over v60 kalita chemex 滴濾 清澈 乾淨 黑咖啡">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>手沖滴濾 (Pour-over / Filter) <span class="badge">主流精品黑咖</span></h3>
+<div class="card-sub">器具：Hario V60、Kalita Wave、Chemex、三洋梯形</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">怎麼做 How It Works：</span>熱水通過咖啡粉與濾紙 Filter Paper，再靠重力滴入壺中。濾紙通常會減少部分咖啡脂質 Lipids 和細粉 Fines 進入杯中；二萜類 Diterpenes（例如 Cafestol、Kahweol）只是脂質成分的一部分。</div>
+<div class="info-row"><span class="info-label">喝喝看 Try It：</span>不同濾杯 Dripper、濾紙 Paper、研磨 Grind 和配方 Recipe 會改變清晰度 Clarity、濃度 Strength 與口感 Body；手沖不一定「香氣最聚攏」。</div>
+<div class="info-row"><span class="info-label">器具 Gear：</span><span class="glossary-tag">V60</span><span class="glossary-tag">Kalita Wave</span><span class="glossary-tag">Chemex</span><span class="glossary-tag">擾動 Agitation</span></div></div>
+</div>
+<div class="card" data-keywords="愛樂壓 聰明濾杯 虹吸壺 土耳其 aeropress siphon clever 法壓 浸泡 小眾 萃取">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>特殊沖煮器具 (Immersion &amp; Vacuum) <span class="badge niche">吧台特色器具</span></h3>
+<div class="card-sub">愛樂壓 (AeroPress) · 虹吸壺 (Siphon) · 聰明濾杯 (Clever)</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">愛樂壓 AeroPress：</span>結合浸泡 Immersion、過濾 Filtration 和手動施壓 Manual Pressure；它不是義式濃縮機 Espresso Machine 的高壓萃取。</div>
+<div class="info-row"><span class="info-label">虹吸壺 Siphon：</span>加熱造成壓力變化，讓水進入上壺；停止加熱後，壓力變化使咖啡液回流。風味與口感會隨配方而變。</div>
+<div class="info-row"><span class="info-label">聰明濾杯 Clever Dripper：</span>先浸泡 Steep，再開閥滴濾 Drain；土耳其咖啡 Turkish Coffee 則以極細研磨與水一同加熱，不經濾紙過濾。</div></div>
+</div>
+<div class="card" data-keywords="意式濃縮 espresso 美式 americano 長黑 long black crema 咖啡脂 黑咖啡">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>義式黑咖啡家族 (Espresso &amp; Black) <span class="badge">高壓萃取</span></h3>
+<div class="card-sub">Espresso · Americano · Long Black</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">義式濃縮 Espresso：</span>以高壓沖煮 Pressurised Brewing，但粉量 Dose、液重 Brew Yield、粉液比 Brew Ratio、時間 Time 和壓力 Pressure 會因店家配方而異；9 bar、25–35 ml 是傳統參考描述，不是所有濃縮的固定規格。Crema（表面咖啡泡沫）多寡也不等於品質高低。</div>
+<div class="info-row"><span class="info-label">美式 Americano：</span>通常是義式濃縮 Espresso 加熱水 Hot Water；水量可依店家或喜好調整。</div>
+<div class="info-row"><span class="info-label">長黑 Long Black：</span>通常先加熱水 Hot Water，再加入義式濃縮 Espresso，較容易留住表面泡沫 Crema；店家做法可能不同。</div></div>
+</div>
+<div class="card" data-keywords="小白 拿鐵 卡布奇諾 短笛 flat white latte cappuccino piccolo 馥芮白 奶咖 奶泡">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>義式奶咖比例圖解 (Milk-based Styles) <span class="badge">奶泡微氣泡</span></h3>
+<div class="card-sub">拿鐵 (Latte) · 馥芮白 (Flat White) · 卡布奇諾 · 短笛 (Piccolo)</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">馥芮白 Flat White：</span>義式濃縮 Espresso 加細緻微奶泡 Microfoam；杯量、濃縮份量和是否用短萃 Ristretto 因咖啡館而異，不一定是雙份短萃。</div>
+<div class="info-row"><span class="info-label">拿鐵 Latte：</span>義式濃縮 Espresso 加較多蒸奶 Steamed Milk 和薄奶泡 Milk Foam；杯量依店家而異。</div>
+<div class="info-row"><span class="info-label">卡布奇諾 Cappuccino：</span>義式濃縮 Espresso、蒸奶 Steamed Milk 和奶泡 Milk Foam 的常見組合，奶泡厚薄各店不同。</div>
+<div class="info-row"><span class="info-label">短笛拿鐵 Piccolo Latte：</span>小杯咖啡加蒸奶的常見店家風格；份量不是全球統一標準。</div></div>
+</div>
+<div class="card" data-keywords="冷萃 冰滴 cold brew ice drip 柔和 低酸 酒香 冰咖啡">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>低溫萃取系 (Cold Brew &amp; Ice Drip) <span class="badge">夏日清爽</span></h3>
+<div class="card-sub">冷萃浸泡 (Cold Brew) · 冰滴咖啡 (Ice Drip)</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">冷萃 Cold Brew：</span>咖啡粉與冷水或室溫水浸泡一段時間，再過濾；時間與濃縮液配方因店家而異。</div>
+<div class="info-row"><span class="info-label">冰滴 Ice Drip / Cold Drip：</span>水或融冰水以較慢速度滴過咖啡粉，和浸泡式冷萃 Cold Brew 不同。</div>
+<div class="info-row"><span class="info-label">風味提醒 Tasting Note：</span>一些研究中的冷萃可滴定酸度 Titratable Acidity 較低，但結果受咖啡豆 Beans、研磨 Grind、比例 Ratio 和時間 Time 影響；不能保證每杯都低酸、低苦或更甜。</div></div>
+</div>
+</div>
+<!-- ================= 感官品鑑模組 ================= -->
+<div class="section-group" data-cat="sensory">
+<div class="section-header"><svg class="ico sec-ico" aria-hidden="true"><use href="#i-sense"/></svg><div class="sh-text">感官品鑑指引 (Sensory Compass) <span>喝咖啡時留意什麼？</span></div></div>
+<div class="card" data-keywords="溫度變化 高溫 中溫 低溫 品鑑 細節 酸甜平衡 餘韻">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>溫度三階段品嚐法 (Temperature Evolution) <span class="badge">品鑑技巧</span></h3>
+<div class="card-sub">高溫初遇 ➔ 中溫黃金期 ➔ 常溫現原形</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">剛上桌 Freshly Served：</span>小心燙口，先聞香 Aroma，再感受整體入口印象。沒有必須遵守的品飲溫度 Drinking Temperature。</div>
+<div class="info-row"><span class="info-label">稍微放涼 As It Cools：</span>再喝一口，留意酸甜平衡 Acidity &amp; Sweetness、花香 Floral、果香 Fruity 或口感 Body 有沒有變化。</div>
+<div class="info-row"><span class="info-label">接近室溫 Near Room Temperature：</span>留意餘韻 Aftertaste、乾淨度 Clean Cup 或自己不喜歡的味道。酸味 Acidity、苦味 Bitterness、澀感 Astringency 都不能單獨判定咖啡好壞。</div></div>
+</div>
+<div class="card" data-keywords="口感 醇厚度 body mouthfeel 質地 茶感 奶油 絲滑 糖漿">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>觸感質地指南 (Mouthfeel &amp; Body) <span class="badge">舌面體感</span></h3>
+<div class="card-sub">咖啡不是只有味道，更有「重量與觸感」</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">茶感 Tea-like：</span>口感較輕、流動感明顯；這是感官比喻，不是加了茶。</div>
+<div class="info-row"><span class="info-label">絲滑 Silky：</span>形容口感順滑；不同人對這個詞的感受可能不同。</div>
+<div class="info-row"><span class="info-label">奶油感 Creamy：</span>形容圓潤或柔滑的口感，不代表咖啡一定含奶油 Cream。</div>
+<div class="info-row"><span class="info-label">醇厚度 Body：</span>咖啡在口中的重量感與質地；可以輕盈 Light，也可以厚實 Full。這些形容是主觀品飲 Tasting Notes。</div></div>
+</div>
+<div class="card" data-keywords="萃取率 濃度 tds extraction yield 金杯準則 物理學 知識">
+<div class="card-header" onclick="toggleCard(this)">
+<div class="card-title-group">
+<h3>濃度 vs 萃取率 (Strength vs Extraction) <span class="badge niche">吧台硬核知識</span></h3>
+<div class="card-sub">金杯準則 (Golden Cup Standard) 核心解析</div>
+</div>
+<div class="chevron">▼</div>
+</div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">濃度 TDS (Total Dissolved Solids)：</span>咖啡飲品中溶解物質的比例；濃度 Strength 和萃取率 Extraction Yield 是兩件不同的事。</div>
+<div class="info-row"><span class="info-label">萃取率 Extraction Yield：</span>咖啡粉中有多少比例的可溶物質進入飲品。18–22% 常作為滴濾咖啡 Filter Coffee 的參考範圍之一，不是每杯都要達到的目標。</div>
+<div class="info-row"><span class="info-label">粉液比 Brew Ratio：</span>咖啡粉重量與成品飲品重量的比例，會影響濃度和沖煮表現。</div>
+<div class="info-row"><span class="info-label">簡單除錯 Quick Troubleshooting：</span>尖銳酸感 Sharp Acidity、偏薄 Thin、苦味 Bitterness 或乾澀 Astringency 都可能有多種原因。先看豆子、烘焙、研磨、水質、水溫、時間和粉液比；酸不一定是萃取不足 Under-extraction，苦也不一定是過度萃取 Over-extraction。</div></div>
+</div>
+<div class="card" data-keywords="試喝挑戰 tasting flight 三杯比較 compare washed natural honey 水洗 日曬 蜜處理 香氣 aroma 酸質 acidity 甜感 sweetness 口感 body 餘韻 aftertaste">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>三杯小挑戰 Three-Cup Tasting <span class="badge">消閒探索</span></h3><div class="card-sub">不必懂術語，先找出自己喜歡哪杯</div></div><div class="chevron">▼</div></div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">玩法 How to Try：</span>請店員推薦同一產地 Origin 的水洗 Washed、日曬 Natural 和蜜處理 Honey Process；如果沒有，就選三款烘焙程度 Roast Level 相近、沖煮方式 Brewing Method 相同的咖啡。</div>
+<div class="info-row"><span class="info-label">留意 Notice：</span>先聞香 Aroma，再比較酸質 Acidity、甜感 Sweetness、口感 Body 和餘韻 Aftertaste。記下「最喜歡哪杯、為什麼」，不用硬套風味輪 Flavor Wheel。</div>
+<div class="info-row"><span class="info-label">公平比較 Fair Comparison：</span>盡量讓粉量 Dose、粉液比 Brew Ratio、烘焙程度 Roast Level 和沖煮方式 Brewing Method 接近；仍要記得咖啡豆 Beans 與店家配方 Recipe 不可能完全相同。</div>
+<div class="info-row"><span class="info-label">可以問 Ask：</span><strong>Could I try these side by side?</strong><br/>可以讓我把這幾款放在一起比較試喝嗎？（Side-by-side Tasting）</div>
+</div>
+</div></div>
+<div class="section-group" data-cat="singapore">
+<div class="section-header"><svg class="ico sec-ico" aria-hidden="true"><use href="#i-sg"/></svg><div class="sh-text">新加坡點單 Singapore Ordering <span>咖啡館英文 + 傳統咖啡店用語</span></div></div>
+<div class="card" data-keywords="新加坡 singapore 點單 ordering 英文 english 咖啡館 cafe takeaway take away dine in oat milk decaf 冰 iced 熱 hot">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>咖啡館英文點單 English Café Orders <span class="badge">拿來就用</span></h3><div class="card-sub">短句夠用，不用背咖啡術語大全</div></div><div class="chevron">▼</div></div>
+<div class="card-body">
+<div class="info-row english-example"><strong>Could I have a flat white, please?</strong><br/>可以給我一杯馥芮白 Flat White 嗎？</div>
+<div class="info-row english-example"><strong>Could I get that iced?</strong><br/>可以做冰的嗎？（冰飲 Iced）</div>
+<div class="info-row english-example"><strong>Can I have oat milk instead?</strong><br/>可以改用燕麥奶 Oat Milk 嗎？</div>
+<div class="info-row english-example"><strong>Could you make it less sweet?</strong><br/>可以少甜一點嗎？（甜度 Less Sweet）</div>
+<div class="info-row english-example"><strong>For here, please. / Takeaway, please.</strong><br/>內用 For Here／外帶 Takeaway。</div>
+<div class="info-row"><span class="info-label">再問一句 Ask：</span><strong>What beans are you using today?</strong> 今天用哪款咖啡豆？<br/><strong>Is it more fruity or chocolatey?</strong> 這款偏果香還是可可巧克力感？</div>
+</div>
+</div>
+<div class="card" data-keywords="kopi kopi-o kopi-c kosong siew dai gaO gao po peng 新加坡 singapore 傳統咖啡店 kopitiam 煉奶 淡奶 糖 咖啡">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>傳統咖啡店點單 Kopitiam Coffee <span class="badge">本地實用</span></h3><div class="card-sub">Kopi、Kopi-O、Kopi-C，再加甜度與冰熱要求</div></div><div class="chevron">▼</div></div>
+<div class="card-body">
+<div class="info-row"><span class="info-label">Kopi：</span>本地風格咖啡 Local-style Coffee，常見做法是加煉奶 Condensed Milk。</div>
+<div class="info-row"><span class="info-label">Kopi-O：</span>不加奶的黑咖啡 Black Coffee，通常加糖 Sugar；Kopi-O Kosong 就是不加糖 No Sugar。</div>
+<div class="info-row"><span class="info-label">Kopi-C：</span>通常加淡奶 Evaporated Milk 和糖 Sugar；C 常用來指淡奶。</div>
+<div class="info-row"><span class="info-label">甜度與濃淡 Sweetness &amp; Strength：</span>Kosong 不加糖 No Sugar；Siew Dai 少甜 Less Sweet；Gao 較濃 Stronger；Po 較淡 Weaker。</div>
+<div class="info-row"><span class="info-label">冰熱 Iced or Hot：</span>Peng 通常指冰飲 Iced。說法和甜度仍可能因店家而略有差異。</div>
+<div class="info-row english-example"><strong>Example: Kopi-O Kosong Peng</strong><br/>冰的黑咖啡，不加糖；可到店時再確認店家理解的做法。</div>
+<div class="info-row english-example"><strong>Example: Kopi-C Siew Dai</strong><br/>淡奶咖啡，少甜。</div>
+</div>
+</div>
+<div class="card" data-keywords="點單推薦 ordering ask barista single origin guest bean filter espresso milk menu roast flavour tasting note 新加坡 singapore">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>看不懂豆單？Ask the Barista <span class="badge niche">友善求助句</span></h3><div class="card-sub">先說喜好，產地名稱留到第二步</div></div><div class="chevron">▼</div></div>
+<div class="card-body">
+<div class="info-row english-example"><strong>I usually like smooth, chocolatey coffee. What would you recommend?</strong><br/>我平常喜歡順口、偏巧克力感的咖啡，有推薦嗎？</div>
+<div class="info-row english-example"><strong>Which one is brighter and more citrusy?</strong><br/>哪一款比較明亮、偏柑橘感？</div>
+<div class="info-row english-example"><strong>Is this a light roast or a darker roast?</strong><br/>這款是淺焙 Light Roast 還是深一點的烘焙 Darker Roast？</div>
+<div class="info-row"><span class="info-label">小訣竅 Tip：</span>先說想喝黑咖啡 Black Coffee 還是奶咖 Milk Coffee、偏明亮 Bright 還是圓潤 Round，再請店員推薦；產地 Origin 和處理法 Process 是線索，不是保證。</div>
+</div>
+</div>
+</div>
+<div class="section-group" data-cat="practical">
+<div class="section-header"><svg class="ico sec-ico" aria-hidden="true"><use href="#i-bean"/></svg><div class="sh-text">實用咖啡小知識 Practical Coffee Basics <span>看豆袋、選沖煮、喝得更懂</span></div></div>
+<div class="card" data-keywords="咖啡物種 species variety arabica robusta canephora 品種 typica bourbon caturra castillo gesha">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>物種、品種與產地 Species, Varieties &amp; Origin <span class="badge">別混為一談</span></h3><div class="card-sub">名稱可以當線索，不能直接當風味保證</div></div><div class="chevron">▼</div></div>
+<div class="card-body"><div class="info-row"><span class="info-label">物種 Species：</span>阿拉比卡 Arabica 與卡內弗拉 Canephora（常稱羅布斯塔 Robusta）是不同咖啡物種。</div><div class="info-row"><span class="info-label">品種 Variety：</span>Typica、Bourbon、Caturra、Castillo、Gesha 等是品種名稱；同一品種也會因產地、成熟度、處理法和烘焙而有不同風味。</div><div class="info-row"><span class="info-label">產地 Origin：</span>國家或地區提供背景線索，但不能單靠國名猜中每一杯的味道。</div></div>
+</div>
+<div class="card" data-keywords="研磨 grind 粗細 particle size 水質 water quality 礦物質 minerals 粉液比 brew ratio 沖煮 recipe 水溫 temperature">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>研磨、水與粉液比 Grind, Water &amp; Ratio <span class="badge">在家也用得到</span></h3><div class="card-sub">一次只改一個變數，較容易找到喜歡的杯子</div></div><div class="chevron">▼</div></div>
+<div class="card-body"><div class="info-row"><span class="info-label">研磨度 Grind Size：</span>粗細會影響水與咖啡粉接觸和流速；太細不一定更好，細粉過多或研磨不均也會影響口感。</div><div class="info-row"><span class="info-label">水質 Water Quality：</span>水中礦物質 Minerals 與緩衝能力 Buffering Capacity 會影響萃取 Extraction 和味道；若怎樣調配方都不對，水也值得留意。</div><div class="info-row"><span class="info-label">粉液比 Brew Ratio：</span>粉量與成品咖啡重量的比例。滴濾咖啡 Filter Coffee 可把約 1:15–1:17 當作起點之一，不是標準答案；店家配方或個人喜好可以不同。</div><div class="info-row"><span class="info-label">調整順序 Dial-in：</span>先記下研磨 Grind、用水量 Water、時間 Brew Time 和味道；再一次調整一項。</div></div>
+</div>
+<div class="card" data-keywords="咖啡因 caffeine decaf decaffeinated 阿拉比卡 robusta 杯量 serving size 沖煮方式 brewing method">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>咖啡因與低咖啡因 Caffeine &amp; Decaf <span class="badge">想睡也可問</span></h3><div class="card-sub">濃不等於咖啡因一定更多</div></div><div class="chevron">▼</div></div>
+<div class="card-body"><div class="info-row"><span class="info-label">咖啡因 Caffeine：</span>含量會受豆種 Species、用粉量 Dose、杯量 Serving Size 和沖煮方式 Brewing Method 影響；濃度 Strength 看起來高，不代表整杯咖啡因一定更多。</div><div class="info-row"><span class="info-label">低咖啡因 Decaf：</span>經過去咖啡因處理 Decaffeination，但通常不是零咖啡因。若對咖啡因敏感，可問店家是否有低咖啡因豆 Decaf Beans。</div><div class="info-row english-example"><strong>Do you have decaf?</strong><br/>有低咖啡因咖啡嗎？</div></div>
+</div>
+<div class="card" data-keywords="豆袋標籤 packaging label roast date tasting notes origin farm variety process altitude batch lot coffee bag 單向排氣閥">
+<div class="card-header" onclick="toggleCard(this)"><div class="card-title-group"><h3>豆袋標籤與保存 Bag Labels &amp; Storage <span class="badge">買豆速讀</span></h3><div class="card-sub">先找烘焙日期，再看這杯的故事</div></div><div class="chevron">▼</div></div>
+<div class="card-body"><div class="info-row"><span class="info-label">可以找 Look For：</span>產地 Origin、農場或合作社 Farm / Cooperative、品種 Variety、處理法 Process、海拔 Altitude、批次 Lot、烘焙日期 Roast Date 和風味描述 Tasting Notes。</div><div class="info-row"><span class="info-label">風味描述 Tasting Notes：</span>「藍莓 Blueberry」「茉莉 Jasmine」通常是感官聯想，不代表真的加了水果或花。</div><div class="info-row"><span class="info-label">保存 Storage：</span>密封、避光、遠離熱源和潮濕；開封後盡量減少接觸空氣。單向排氣閥 One-way Valve 幫助排氣，不代表包裝永遠不會氧化。新鮮度 Freshness 也不是愈新烘愈好，依豆款與沖法而異。</div></div>
+</div>
+</div>
+</div>
+<div class="empty-state" id="emptyState">找不到相關內容 No matches。試試「Vietnam 越南」、「風土 terroir」、「Giling Basah 濕剝」、「三杯比較 tasting」或「Kopi-O」。</div>
+</div>
+<script>
+    // 手風琴展開/收合
+    function toggleCard(headerElement) {
+      const card = headerElement.parentElement;
+      card.classList.toggle('expanded');
+    }
+
+    // 分類過濾 Tab
+    let currentCat = 'all';
+    function filterCategory(cat, clickedButton) {
+      currentCat = cat;
+      const navButtons = document.querySelectorAll('#navBar button');
+      navButtons.forEach(btn => btn.classList.remove('active'));
+      if (clickedButton) clickedButton.classList.add('active');
+
+      const sections = document.querySelectorAll('.section-group');
+      const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+
+      sections.forEach(sec => {
+        if (cat === 'all' || sec.getAttribute('data-cat') === cat) {
+          sec.style.display = 'block';
+        } else {
+          sec.style.display = 'none';
+        }
+      });
+
+      // 只有「全部」才顯示主視覺與點單小幫手，其他分類隱藏以節省版面
+      document.getElementById('introSection').style.display = (cat === 'all') ? '' : 'none';
+      window.scrollTo(0, 0);
+      applySearch();
+    }
+
+    // 搜尋功能
+    const searchInput = document.getElementById('searchInput');
+    const emptyState = document.getElementById('emptyState');
+
+    searchInput.addEventListener('input', applySearch);
+
+    function applySearch() {
+      const query = searchInput.value.trim().toLowerCase();
+      const cards = document.querySelectorAll('.card');
+      const decisionSec = document.getElementById('decisionSection');
+      let visibleCount = 0;
+
+      if (query !== "" || currentCat !== 'all') {
+        decisionSec.style.display = 'none'; // 搜尋或選了分類時隱藏點單小幫手，專注查卡片
+      } else {
+        decisionSec.style.display = 'block';
+      }
+
+      cards.forEach(card => {
+        const textContent = (card.getAttribute('data-keywords') + ' ' + card.innerText).toLowerCase();
+        const parentSec = card.closest('.section-group');
+
+        // 檢查該 card 的父區塊在 Tab 切換下是否應該顯示
+        const isSecActive = parentSec.style.display !== 'none';
+
+        if (textContent.includes(query) && isSecActive) {
+          card.style.display = 'block';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    // ================= 方案二：決策樹邏輯 =================
+    let currentType = 'filter';
+    let currentFlavor = 'acid';
+
+    const recommendations = {
+      'filter_acid': { title: '淺焙 Light Roast · 水洗 Washed 手沖 Pour-over', desc: '可找花香 Floral、柑橘 Citrus 或茶感 Tea-like 的風味描述；不保證每個產地都如此。' },
+      'filter_sweet': { title: '中焙 Medium Roast · 焦糖 Caramel / 可可 Cocoa 風味', desc: '想喝柔和一點，可問店員哪款偏堅果 Nuts、巧克力 Chocolate 或焦糖 Caramel。' },
+      'filter_funky': { title: '實驗處理 Experimental Process · 手沖 Pour-over', desc: '先問店員發酵 Fermentation 或外加風味 Added Flavour 的細節；特殊處理不代表一定更好喝。' },
+      'filter_heavy': { title: '圓潤醇厚 Round / Full-bodied · 手沖或浸泡 Immersion', desc: '可以找可可 Cocoa、堅果 Nuts 或草本 Herbal 的杯測描述；產地只是線索。' },
+      'milk_acid': { title: '單品濃縮 Single-origin Espresso · 馥芮白 Flat White', desc: '想保留些果香 Fruity，可問店員哪款咖啡搭奶 Milk 後仍喝得到明亮風味。' },
+      'milk_sweet': { title: '中焙 Medium Roast · 拿鐵 Latte 或卡布奇諾 Cappuccino', desc: '牛奶 Milk 常會帶出咖啡的甜感 Sweetness；杯量和奶泡 Milk Foam 依店家而異。' },
+      'milk_funky': { title: '實驗處理 Experimental Process · 小杯奶咖 Small Milk Coffee', desc: '發酵風味 Fermented Notes 加奶可能很有個性；可以先問店員能否試試小杯。' },
+      'milk_heavy': { title: '可可 Cocoa / 烘烤 Roasty 風味 · 奶咖 Milk Coffee', desc: '想要咖啡味突出，可問店員推薦哪款豆；深焙 Dark Roast 不是唯一選擇。' },
+      'iced_acid': { title: '冰手沖 Iced Pour-over / Flash Chilled Coffee', desc: '適合想喝清爽花果香 Floral / Fruity 的人；店家配方會影響冰後的濃度和味道。' },
+      'iced_sweet': { title: '冷萃 Cold Brew 或冰美式 Iced Americano', desc: '想要較圓潤或好入口，可以問店員今日哪款冰咖啡較符合你的喜好。' },
+      'iced_funky': { title: '實驗風味 Experimental Notes · 冰咖啡 Iced Coffee', desc: '可以找熱帶水果 Tropical Fruit 或酒香 Winey 聯想；冷萃不保證低酸或低苦。' },
+      'iced_heavy': { title: '冰拿鐵 Iced Latte 或冰美式 Iced Americano', desc: '偏好可可 Cocoa、堅果 Nuts 或烘烤 Roasty 風味，可問店員豆款與甜度。' }
+    };
+
+    function selectType(type) {
+      currentType = type;
+      updateChips('typeChips', type);
+      renderRecommendation();
+    }
+
+    function selectFlavor(flavor) {
+      currentFlavor = flavor;
+      updateChips('flavorChips', flavor);
+      renderRecommendation();
+    }
+
+    function updateChips(containerId, value) {
+      const buttons = document.querySelectorAll(`#${containerId} .chip-btn`);
+      buttons.forEach(btn => {
+        if (btn.getAttribute('onclick').includes(value)) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+    }
+
+    function renderRecommendation() {
+      const key = `${currentType}_${currentFlavor}`;
+      const rec = recommendations[key] || { title: '店員推薦特調', desc: '不妨直接詢問咖啡師今日最得意的單品豆！' };
+      const container = document.getElementById('recommendationText');
+      container.innerHTML = `
+        <div style="font-weight:700; color:var(--accent-dark); margin-bottom:2px;"><svg class="ico m-ico" aria-hidden="true"><use href="#i-target"/></svg>點單推薦：${rec.title}</div>
+        <div style="color:var(--text-muted); font-size:12px;">${rec.desc}</div>
+      `;
+    }
+
+    // 初始化點單決策
+    renderRecommendation();
+  </script>
+</body>
+</html>
