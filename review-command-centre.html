@@ -39,134 +39,119 @@ nav button[aria-pressed=true]{background:var(--acc);color:#fff;border-color:var(
 textarea{width:100%;min-height:120px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px;font:13px/1.45 ui-monospace,Menlo,monospace}
 </style></head><body><main>
 <h1>Review Command Centre</h1>
-<p class="sub">EDF5000 and EDF5001 review plan · Nov 1, 2026 – Jan 31, 2027</p>
+<p class="sub">EDF5000 and EDF5001 review plan · restarted Nov 16, 2026 · ends Feb 14, 2027</p>
 <div class="bar" aria-hidden="true"><i id="ov"></i></div><p class="sub" id="ovt"></p>
 <nav id="nav"></nav><div id="v"></div>
 <noscript>This page needs JavaScript.</noscript>
 </main>
 <script>
-const CU="Catch-up: overflow reading, longer recordings, Layer 2 synthesis review";
+const BF="Buffer: catch up on unfinished items or optional readings, or rest";
+const b=d=>[d,[BF],"c"],r=(d,n)=>[d,[],"r",n],pz=d=>[d,[],"r","Plan paused · restarts Mon 16 Nov"];
 const W=[
 {id:"w0",t:"Orientation",m:"Review setup",d:[
-["2026-11-01",["Re-read the EDF5000 Unit Schedule and tutor comments", "Skim EDF5000 Learning objectives as a self-rating checklist"]]],
-l:["Identify key growth areas from A1 to target in Phase 1", "Rate each objective in the Objectives tab (Nov 1 snapshot)"]},
-{id:"w1",t:"Week 1 · EDF5000",m:"EDF5000 Module 1: Cultural competence & “normal” development (Mon–Thu) · EDF5000 Module 2: Lifespan theories & prenatal (Fri)",d:[
-["2026-11-02",["Read Walters (1980) and Mayes et al. (2016)", "Lecture 01 and slides (Hub: Lecture 1 consol)"]],
-["2026-11-03",["Read Amodio (2014) and Marcelin et al. (2019)", "Hub video: What is normal from a counselling perspective"]],
-["2026-11-04",["Read Nassar & Singh (2020) and Singh, Appling & Trepal (2020)", "Lecture 02"]],
-["2026-11-05",["Tutorial 01 v2 (SG transcript)", "Read the M1 Module Synthesis (Layer 2)", "Re-read your submitted M1 forum response"]],
-["2026-11-06",["Layer 1 summaries: Stages of Life; Theories of Human Development, then skim the chapters", "Lecture 03 and slides"]],
-["2026-11-07",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"],
-["2026-11-08",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"]],
-l:["AI Lab: guided reflection on unconscious bias (MSJCC)", "AI Lab: role-play cultural identity conflict with Komiko (26, Case Bank)", "Outline an alternative A1 Part 1 response (“normal development” help/hinder) for an unattempted stage"]},
-{id:"w2",t:"Week 2 · EDF5000",m:"EDF5000 Module 2: Lifespan theories & prenatal (Mon–Wed) · EDF5000 Module 3: Infancy & early childhood (Thu–Fri)",d:[
-["2026-11-09",["Cognitive & Intellectual Development Theories; Prenatal Development & Heredity (summaries first)", "Lecture 04"]],
-["2026-11-10",["Tutorial 02 v2 (SG transcript)", "Hub video: Theories of development"]],
-["2026-11-11",["Read the M2 Deep Synthesis (Layer 2)"]],
-["2026-11-12",["Read Infancy & Toddlerhood Physical/Cognitive and Emotional/Social (summaries first)", "Lecture 05 and slides"]],
-["2026-11-13",["Read Early Childhood Physical/Cognitive and Emotional/Social (summaries first)", "Lecture 06"]],
-["2026-11-14",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"],
-["2026-11-15",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"]],
-l:["Build a cross-theoretical comparison table (Erikson, Piaget, Vygotsky, Bandura, Bronfenbrenner)", "AI Lab: Clinical Detective case formulation (AI gives symptoms; you map them to developmental crises)"]},
-{id:"w3",t:"Week 3 · EDF5000",m:"EDF5000 Module 3: Infancy & early childhood (Mon–Tue) · EDF5000 Module 4: Middle childhood & adolescence (Wed) · Nov 19–22: wedding, no study",d:[
-["2026-11-16",["Tutorial 03 v2 (SG transcript)", "Hub video: Lifespan Development – Early Childhood", "Hub article: Inequality in early childhood", "Optional (not in Hub): Walker (2011)"]],
-["2026-11-17",["Read the M3 Deep Synthesis (Layer 2)"]],
-["2026-11-18",["Read Middle Childhood Physical/Cognitive (Ch. 9) and Emotional/Social (Ch. 10)", "Lecture 07"]],
-["2026-11-19",[],"r","No study · Wedding"],
-["2026-11-20",[],"r","No study · Wedding"],
-["2026-11-21",[],"r","No study · Wedding"],
-["2026-11-22",[],"r","No study · Wedding"]],
-l:["AI Lab: role-play psychoeducation with anxious new parents on infant attachment and co-regulation", "Moodle task “Reflection on childhood” (EDF5000-M3)"]},
-{id:"w4",t:"Week 4 · EDF5000",m:"EDF5000 Module 4: Middle childhood & adolescence (Mon–Thu) · EDF5000 Module 5: Young & middle adulthood (Fri)",d:[
-["2026-11-23",["Read Adolescent Physical/Cognitive (Ch. 11) and Emotional/Identity/Social (Ch. 12)", "Lecture 08", "Hub video summaries (M4)"]],
-["2026-11-24",["Hub article: Encouraging teenagers in counselling", "Hub articles: Engaging young people in therapy; Late adolescence / young adulthood", "Optional (not in Hub): Bradford (2018); SAHRC article"]],
-["2026-11-25",["Tutorial 04 v2 (SG transcript; A2 walkthrough)"]],
-["2026-11-26",["Read the M4 Layer 2 Module Synthesis"]],
-["2026-11-27",["Read Young Adulthood Physical/Cognitive and Social/Emotional/Career (summaries first)", "Lecture 09"]],
-["2026-11-28",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"],
-["2026-11-29",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"]],
-l:["Outline the A2 case-report structure for Sarah (21, Case Bank) from the Tutorial 4v2 walkthrough; hold the full 5P until M5", "AI Lab: therapeutic alliance with a guarded, mandated adolescent", "Optional: alliance role-play with Mei-Lin (13, Case Bank) before her synthesis case on Dec 11"]},
-{id:"w5",t:"Week 5 · EDF5000",m:"EDF5000 Module 5: Young & middle adulthood (Mon–Fri)",d:[
-["2026-11-30",["Read Gogtay et al. (2004) and Neves et al. (2019)", "Hub website: Early and Middle Adulthood (Boundless Psychology)"]],
-["2026-12-01",["Read Middle Adulthood Physical/Cognitive and Social/Emotional, Family, Career and Spiritual (summaries first)", "Lecture 10"]],
-["2026-12-02",["Alignment of Key Issues with Theoretical Frameworks (Week 10 notes)", "Read Counseling LGBTQ Adults Throughout the Life Span", "Hub video: Lifespan Development – Young and Middle Adulthood"]],
-["2026-12-03",["Tutorial 05 v2 (SG transcript)", "Review the 5P Framework Guide"]],
-["2026-12-04",["Read the M5 Layer 2 Deep Synthesis"]],
-["2026-12-05",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"],
-["2026-12-06",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"]],
-l:["Midlife Reflection Task (EDF5000-M5-Reflection)", "Draft a 5P for Jim (58) or Sasha (60); AI Lab: midlife generativity vs. stagnation role-play", "Full 5P formulation for Sarah (21, Case Bank) with the 5P Drill skill"]},
-{id:"w6",t:"Week 6 · EDF5000",m:"EDF5000 Module 6: Later adulthood & ageing (Mon–Thu) · EDF5000 integration (Fri)",d:[
-["2026-12-07",["Read Old Age Physical/Cognitive and Later Adulthood Relationships/Psychosocial (summaries first)", "Lecture 11"]],
-["2026-12-08",["Read Fullen (2019) and Rantanen (2019)", "Lecture 12 (Hub transcript) with its slides"]],
-["2026-12-09",["Tutorial 06 v2 (SG transcript)", "Hub M6 videos: Erikson psychosocial theorists; Why Some Old People Act Half Their Age; Mental Illness in the Elderly; The Reality of Retirement; Levitin on Successful Aging"]],
-["2026-12-10",["Hub M6 articles: Harvard Health memory and ageing; Ageing activism", "Read the M6 Layer 2 synthesis; compare its Helen 5Ps case with your Colin or Janet formulation"]],
-["2026-12-11",["Read the EDF5000 M1–M6 cross-module synthesis (Layer 2.5); work through its Mei-Lin case and critical-thinking questions", "Re-rate EDF5000 Learning objectives (Dec 11 snapshot)"]],
-["2026-12-12",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"],
-["2026-12-13",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"]],
-l:["EDF5000 M6 Reflection", "Draft a 5P for Colin (75) or Janet (~70; pairs with the LGBTQ guide); AI Lab: gerontological role-play on autonomy, physical decline and identity"]},
-{id:"w7",t:"Week 7 · EDF5001",m:"EDF5001 Module 1: Change, assessment & evaluation (Mon–Fri)",d:[
-["2026-12-14",["Read Conducting an Interview Assessment (Ch. 7)", "Lecture 01 and slides"]],
-["2026-12-15",["Read Assessing & Conceptualizing Client Problems (Ch. 6)", "Lecture 02 (slides or transcript)"]],
-["2026-12-16",["Read Influencing Responses (Ch. 5)", "Fill out the Client Information Form and Evaluation Session Template for a mock client"]],
-["2026-12-17",["Tutorial 01 v2 (SG transcript)", "Hub video: First counselling session / treatment fit", "Hub articles: Characteristics of strong mental health; Beyond Blue treatments for depression"]],
-["2026-12-18",["Practise scoring DASS-21 and K10", "Read the EDF5001 M1 deep synthesis", "Optional (not in Hub): Lovibond (1995)"]],
-["2026-12-19",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"],
-["2026-12-20",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"]],
-l:["AI Lab: initial assessment interview with Karen (24, Case Bank); debrief DASS-21/K10 in non-stigmatising language; negotiate SMART goals"]},
-{id:"w8",t:"Week 8 · EDF5001",m:"EDF5001 Module 2: Mood-related issues (Mon–Wed) · Dec 24: Christmas Eve, no study · Dec 25: Christmas Day, no study",d:[
-["2026-12-21",["Read Counselling Those Troubled by Depression", "Lecture 03 (slides or transcript)", "Hub video: Science of depression"]],
-["2026-12-22",["Read Constructing, Contextualizing and Evaluating Treatment Goals (Ch. 8)", "Lecture 04 (slides or transcript)"]],
-["2026-12-23",["Read Cognitive Change Strategies (Ch. 11)", "Tutorial 02 v2 (SG transcript)"]],
-["2026-12-24",[],"r","Rest day · Christmas Eve"],
-["2026-12-25",[],"r","Rest day · Christmas Day"],
-["2026-12-26",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"],
-["2026-12-27",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"]],
+["2026-11-01",["Re-read the EDF5000 Unit Schedule and tutor comments","Skim EDF5000 Learning objectives as a self-rating checklist"]]],
+l:["Identify key growth areas from A1 to target in Phase 1","Rate each objective in the Objectives tab (Nov 1 snapshot)"]},
+{id:"w1",t:"Done before the restart · EDF5000",m:"EDF5000 Module 1 (Nov 2 done) · Nov 3–15: plan paused",d:[
+["2026-11-02",["Read Walters (1980) and Mayes et al. (2016)","Lecture 01 and slides (Hub: Lecture 1 consol)"]],
+pz("2026-11-03"),pz("2026-11-04"),pz("2026-11-05"),pz("2026-11-06"),pz("2026-11-07"),pz("2026-11-08"),pz("2026-11-09"),pz("2026-11-10"),pz("2026-11-11"),pz("2026-11-12"),pz("2026-11-13"),pz("2026-11-14"),pz("2026-11-15")],
 l:[]},
-{id:"w9",t:"Week 9 · EDF5001",m:"EDF5001 Module 2: Mood-related issues (Mon) · EDF5001 Module 3: Anxiety-related issues (Tue–Wed) · Dec 31: New Year's Eve, no study · Jan 1: New Year's Day, no study",d:[
-["2026-12-28",["Complete the Activity Planner (with the Fun Activities Catalogue) and ATQ-B", "Read the EDF5001 M2 synthesis (Mood-Related Issues)"]],
-["2026-12-29",["Read Exposure Therapy for Anxiety, Fear and Trauma", "Lecture 05 and slides"]],
-["2026-12-30",["Read Making Decisions", "Lecture 06 (slides or transcript)"]],
-["2026-12-31",[],"r","Rest day · New Year's Eve"],
-["2027-01-01",[],"r","Rest day · New Year's Day"],
-["2027-01-02",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"],
-["2027-01-03",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"]],
+{id:"w2",t:"Week 1 · EDF5000",m:"EDF5000 Module 1: Cultural competence & “normal” development (Mon–Wed) · Nov 19–22: registration, no study",d:[
+["2026-11-16",["Read Amodio (2014) and Marcelin et al. (2019)","Hub video: What is normal from a counselling perspective"]],
+["2026-11-17",["Read Nassar & Singh (2020) and Singh, Appling & Trepal (2020)","Lecture 02"]],
+["2026-11-18",["Tutorial 01 v2 (SG transcript)","Read the M1 Module Synthesis (Layer 2)","Re-read your submitted M1 forum response"]],
+r("2026-11-19","No study · Registration"),r("2026-11-20","No study · Registration"),r("2026-11-21","No study · Registration"),r("2026-11-22","No study · Registration")],
+l:["AI Lab: guided reflection on unconscious bias (MSJCC)","AI Lab: role-play cultural identity conflict with Komiko (26, Case Bank)","Outline an alternative A1 Part 1 response (“normal development” help/hinder) for an unattempted stage"]},
+{id:"w3",t:"Week 2 · EDF5000",m:"EDF5000 Module 2: Lifespan theories & prenatal (Mon–Thu) · EDF5000 Module 3: Infancy & early childhood (Fri)",d:[
+["2026-11-23",["Layer 1 summaries: Stages of Life; Theories of Human Development, then skim the chapters","Lecture 03 and slides"]],
+["2026-11-24",["Cognitive & Intellectual Development Theories; Prenatal Development & Heredity (summaries first)","Lecture 04"]],
+["2026-11-25",["Tutorial 02 v2 (SG transcript)","Hub video: Theories of development"]],
+["2026-11-26",["Read the M2 Deep Synthesis (Layer 2)"]],
+["2026-11-27",["Read Infancy & Toddlerhood Physical/Cognitive and Emotional/Social (summaries first)","Lecture 05 and slides"]],
+b("2026-11-28"),b("2026-11-29")],
+l:["Build a cross-theoretical comparison table (Erikson, Piaget, Vygotsky, Bandura, Bronfenbrenner)","AI Lab: Clinical Detective case formulation (AI gives symptoms; you map them to developmental crises)"]},
+{id:"w4",t:"Week 3 · EDF5000",m:"EDF5000 Module 3: Infancy & early childhood (Mon–Wed) · EDF5000 Module 4: Middle childhood & adolescence (Thu–Fri)",d:[
+["2026-11-30",["Read Early Childhood Physical/Cognitive and Emotional/Social (summaries first)","Lecture 06"]],
+["2026-12-01",["Tutorial 03 v2 (SG transcript)","Hub video: Lifespan Development – Early Childhood","Hub article: Inequality in early childhood","Optional (not in Hub): Walker (2011)"]],
+["2026-12-02",["Read the M3 Deep Synthesis (Layer 2)"]],
+["2026-12-03",["Read Middle Childhood Physical/Cognitive (Ch. 9) and Emotional/Social (Ch. 10)","Lecture 07"]],
+["2026-12-04",["Read Adolescent Physical/Cognitive (Ch. 11) and Emotional/Identity/Social (Ch. 12)","Lecture 08","Hub video summaries (M4)"]],
+b("2026-12-05"),b("2026-12-06")],
+l:["AI Lab: role-play psychoeducation with anxious new parents on infant attachment and co-regulation","Moodle task “Reflection on childhood” (EDF5000-M3)"]},
+{id:"w5",t:"Week 4 · EDF5000",m:"EDF5000 Module 4: Middle childhood & adolescence (Mon–Wed) · EDF5000 Module 5: Young & middle adulthood (Thu–Fri)",d:[
+["2026-12-07",["Hub article: Encouraging teenagers in counselling","Hub articles: Engaging young people in therapy; Late adolescence / young adulthood","Optional (not in Hub): Bradford (2018); SAHRC article"]],
+["2026-12-08",["Tutorial 04 v2 (SG transcript; A2 walkthrough)"]],
+["2026-12-09",["Read the M4 Layer 2 Module Synthesis"]],
+["2026-12-10",["Read Young Adulthood Physical/Cognitive and Social/Emotional/Career (summaries first)","Lecture 09"]],
+["2026-12-11",["Read Gogtay et al. (2004) and Neves et al. (2019)","Hub website: Early and Middle Adulthood (Boundless Psychology)"]],
+b("2026-12-12"),b("2026-12-13")],
+l:["Outline the A2 case-report structure for Sarah (21, Case Bank) from the Tutorial 4v2 walkthrough; hold the full 5P until M5","AI Lab: therapeutic alliance with a guarded, mandated adolescent","Optional: alliance role-play with Mei-Lin (13, Case Bank) before her synthesis case on Dec 28"]},
+{id:"w6",t:"Week 5 · EDF5000",m:"EDF5000 Module 5: Young & middle adulthood (Mon–Thu) · EDF5000 Module 6: Later adulthood & ageing (Fri)",d:[
+["2026-12-14",["Read Middle Adulthood Physical/Cognitive and Social/Emotional, Family, Career and Spiritual (summaries first)","Lecture 10"]],
+["2026-12-15",["Alignment of Key Issues with Theoretical Frameworks (Week 10 notes)","Read Counseling LGBTQ Adults Throughout the Life Span","Hub video: Lifespan Development – Young and Middle Adulthood"]],
+["2026-12-16",["Tutorial 05 v2 (SG transcript)","Review the 5P Framework Guide"]],
+["2026-12-17",["Read the M5 Layer 2 Deep Synthesis"]],
+["2026-12-18",["Read Old Age Physical/Cognitive and Later Adulthood Relationships/Psychosocial (summaries first)","Lecture 11"]],
+b("2026-12-19"),b("2026-12-20")],
+l:["Midlife Reflection Task (EDF5000-M5-Reflection)","Draft a 5P for Jim (58) or Sasha (60); AI Lab: midlife generativity vs. stagnation role-play","Full 5P formulation for Sarah (21, Case Bank) with the 5P Drill skill"]},
+{id:"w7",t:"Week 6 · EDF5000",m:"EDF5000 Module 6: Later adulthood & ageing (Mon–Wed) · Dec 24: Christmas Eve, no study · Dec 25: Christmas Day, no study",d:[
+["2026-12-21",["Read Fullen (2019) and Rantanen (2019)","Lecture 12 (Hub transcript) with its slides"]],
+["2026-12-22",["Tutorial 06 v2 (SG transcript)","Hub M6 videos: Erikson psychosocial theorists; Why Some Old People Act Half Their Age; Mental Illness in the Elderly; The Reality of Retirement; Levitin on Successful Aging"]],
+["2026-12-23",["Hub M6 articles: Harvard Health memory and ageing; Ageing activism","Read the M6 Layer 2 synthesis; compare its Helen 5Ps case with your Colin or Janet formulation"]],
+r("2026-12-24","Rest day · Christmas Eve"),r("2026-12-25","Rest day · Christmas Day"),
+b("2026-12-26"),b("2026-12-27")],
+l:["EDF5000 M6 Reflection","Draft a 5P for Colin (75) or Janet (~70; pairs with the LGBTQ guide); AI Lab: gerontological role-play on autonomy, physical decline and identity"]},
+{id:"w8",t:"Week 7 · EDF5000 / EDF5001",m:"EDF5000 integration (Mon) · EDF5001 Module 1: Change, assessment & evaluation (Tue–Wed) · Dec 31: New Year's Eve, no study · Jan 1: New Year's Day, no study",d:[
+["2026-12-28",["Read the EDF5000 M1–M6 cross-module synthesis (Layer 2.5); work through its Mei-Lin case and critical-thinking questions","Re-rate EDF5000 Learning objectives (Dec 28 snapshot)"]],
+["2026-12-29",["Read Conducting an Interview Assessment (Ch. 7)","Lecture 01 and slides"]],
+["2026-12-30",["Read Assessing & Conceptualizing Client Problems (Ch. 6)","Lecture 02 (slides or transcript)"]],
+r("2026-12-31","Rest day · New Year's Eve"),r("2027-01-01","Rest day · New Year's Day"),
+b("2027-01-02"),b("2027-01-03")],
+l:["Mei-Lin multi-module case with the cross-module synthesis; compare with your Dec 9 alliance role-play if you did it"]},
+{id:"w9",t:"Week 8 · EDF5001",m:"EDF5001 Module 1: Change, assessment & evaluation (Mon–Wed) · EDF5001 Module 2: Mood-related issues (Thu–Fri)",d:[
+["2027-01-04",["Read Influencing Responses (Ch. 5)","Fill out the Client Information Form and Evaluation Session Template for a mock client"]],
+["2027-01-05",["Tutorial 01 v2 (SG transcript)","Hub video: First counselling session / treatment fit","Hub articles: Characteristics of strong mental health; Beyond Blue treatments for depression"]],
+["2027-01-06",["Practise scoring DASS-21 and K10","Read the EDF5001 M1 deep synthesis","Optional (not in Hub): Lovibond (1995)"]],
+["2027-01-07",["Read Counselling Those Troubled by Depression","Lecture 03 (slides or transcript)","Hub video: Science of depression"]],
+["2027-01-08",["Read Constructing, Contextualizing and Evaluating Treatment Goals (Ch. 8)","Lecture 04 (slides or transcript)"]],
+b("2027-01-09"),b("2027-01-10")],
+l:["AI Lab: initial assessment interview with Karen (24, Case Bank); debrief DASS-21/K10 in non-stigmatising language; negotiate SMART goals"]},
+{id:"w10",t:"Week 9 · EDF5001",m:"EDF5001 Module 2: Mood-related issues (Mon–Tue) · EDF5001 Module 3: Anxiety-related issues (Wed–Fri)",d:[
+["2027-01-11",["Read Cognitive Change Strategies (Ch. 11)","Tutorial 02 v2 (SG transcript)"]],
+["2027-01-12",["Complete the Activity Planner (with the Fun Activities Catalogue) and ATQ-B","Read the EDF5001 M2 synthesis (Mood-Related Issues)"]],
+["2027-01-13",["Read Exposure Therapy for Anxiety, Fear and Trauma","Lecture 05 and slides"]],
+["2027-01-14",["Read Making Decisions","Lecture 06 (slides or transcript)"]],
+["2027-01-15",["Tutorial 03 v2 (SG transcript)","Complete the PDSS-SR and Worry Diary"]],
+b("2027-01-16"),b("2027-01-17")],
 l:["AI Lab: cognitive restructuring and behavioural activation with Karen (24, Case Bank)"]},
-{id:"w10",t:"Week 10 · EDF5001",m:"EDF5001 Module 3: Anxiety-related issues (Mon–Tue) · EDF5001 Module 4: Relational issues & anger (Wed–Fri)",d:[
-["2027-01-04",["Tutorial 03 v2 (SG transcript)", "Complete the PDSS-SR and Worry Diary"]],
-["2027-01-05",["Read the EDF5001 M3 Layer 2 Deep Synthesis"]],
-["2027-01-06",["Read Counselling Those Troubled by Anger", "Lecture 07 (transcript in the AI meeting block on its Hub page)"]],
-["2027-01-07",["Read Dealing with Difficult Relationships", "Lecture 08 (Notion transcript)", "Optional (not in Hub): Fritz & Helgeson (1998); Speed et al. (2018); Yoshinaga & Cooper (2025)"]],
-["2027-01-08",["Tutorial 04 v2 (SG transcript)", "Hub videos: Experience of coping with relationship issues and attending counselling; Signs of passive-aggressive behaviour", "Complete and score the Rathus Assertiveness Schedule (RAS)"]],
-["2027-01-09",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"],
-["2027-01-10",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"]],
-l:["Practice 400-word reflection on the Tutorial 2 or 3 case", "Revisit the M3 forum “Personal Storytelling – Bianca’s experience of anxiety”", "AI Lab: co-design a graded in-vivo exposure hierarchy with Rina (28, Case Bank)", "AI Lab: assertiveness and boundary-setting with Komiko (26, Case Bank), as a skills drill"]},
-{id:"w11",t:"Week 11 · EDF5001",m:"EDF5001 Module 4: Relational issues & anger (Mon) · EDF5001 Module 5: Stress management (Tue–Fri)",d:[
-["2027-01-11",["Read the EDF5001 M4 Layer 2 Deep Synthesis", "Hub website: Universal Declaration of Human Rights"]],
-["2027-01-12",["Read Cognitive Stress Management", "Lecture 09 (slides or transcript)", "Hub video: How stress affects your brain", "Complete and score the Perceived Stress Scale (PSS-10)", "Optional (not in Hub): Cohen et al. (1983)"]],
-["2027-01-13",["Read Self-Calming Approaches to Stress Management", "Hub guides: Calming Breathing; Progressive Muscle Relaxation"]],
-["2027-01-14",["Read Working Together to Change Behaviour", "Lecture 10 (slides or transcript)", "Hub guides: Imagery Exercise; Meditation Exercise"]],
-["2027-01-15",["Tutorial 05 v2 (SG transcript)", "Hub extras: Military Sleep Method guide; Rosebush video; Headspace and Smiling Mind pages"]],
-["2027-01-16",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"],
-["2027-01-17",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"]],
-l:["M4 Moodle counselling session reflection", "Part A style reflection on the M4 tutorial case", "AI Lab: anger de-escalation practice with Rebecca (20, Case Bank)", "Rehearse aloud: Calming Breathing, PMR, Imagery and Meditation scripts (covers the M5 Moodle Mindfulness Meditation Exercise)"]},
-{id:"w12",t:"Week 12 · EDF5001",m:"EDF5001 Module 5: Stress management (Mon) · EDF5001 Module 6: Life transitions (Tue–Thu) · Jan 22–24: travel, no study",d:[
-["2027-01-18",["Read the EDF5001 M5 Layer 2 Deep Synthesis"]],
-["2027-01-19",["Read Negotiating Life Transitions", "Lecture 11 and slides", "Optional (not in Hub): Svob et al. (2014)"]],
-["2027-01-20",["Lecture 12 (slides or transcript)", "Tutorial 06 v2 (SG transcript)"]],
-["2027-01-21",["Read the EDF5001 M6 Layer 2 Deep Synthesis"]],
-["2027-01-22",[],"r","No study · Travel"],
-["2027-01-23",[],"r","No study · Travel"],
-["2027-01-24",[],"r","No study · Travel"]],
-l:["AI Lab: walk Sakura (25, Case Bank) through somatic relaxation and Solution-Focused agency", "Life Transitions Sheet for Ganesh (20, Case Bank)", "EDF5001 M6 Reflection", "AI Lab: role-play Sessions 1 and 2 with Ganesh (20, Case Bank)"]},
-{id:"w13",t:"Week 13 · EDF5001 / Capstone",m:"EDF5001 integration (Thu) · Cross-unit capstone (Fri) · Jan 25–27: travel, no study",d:[
-["2027-01-25",[],"r","No study · Travel"],
-["2027-01-26",[],"r","No study · Travel"],
-["2027-01-27",[],"r","No study · Travel"],
-["2027-01-28",["Read the EDF5001 M1–M6 module synthesis", "Re-rate EDF5001 Learning objectives"]],
-["2027-01-29",["Fill the Case Lab Capstone matrix on the Grand Synthesis 9-row Cross-Domain Integration Matrix", "Re-rate both Learning objectives pages against Nov 1 (Jan 29 snapshot)"]],
-["2027-01-30",["Buffer: catch up on unfinished items or optional readings, or rest", "Optional: second capstone case (Priya or Mr Teo)", "Optional (not in Hub): Rogers (1957); Rennie (1994); Suarez-Delucchi (2022); Journal Literature Digest"],"c"],
-["2027-01-31",["Buffer: catch up on unfinished items or optional readings, or rest"],"c"]],
-l:["Capstone AI simulation: one 2-session role-play with Priya (17) or Mr Teo (76) in Combined mode, before reading their illustrative dialogues; save the debrief"]}];
+{id:"w11",t:"Week 10 · EDF5001",m:"EDF5001 Module 3: Anxiety-related issues (Mon) · EDF5001 Module 4: Relational issues & anger (Tue–Thu) · Jan 22–24: wedding, no study",d:[
+["2027-01-18",["Read the EDF5001 M3 Layer 2 Deep Synthesis"]],
+["2027-01-19",["Read Counselling Those Troubled by Anger","Lecture 07 (transcript in the AI meeting block on its Hub page)"]],
+["2027-01-20",["Read Dealing with Difficult Relationships","Lecture 08 (Notion transcript)","Optional (not in Hub): Fritz & Helgeson (1998); Speed et al. (2018); Yoshinaga & Cooper (2025)"]],
+["2027-01-21",["Tutorial 04 v2 (SG transcript)","Hub videos: Experience of coping with relationship issues and attending counselling; Signs of passive-aggressive behaviour","Complete and score the Rathus Assertiveness Schedule (RAS)"]],
+r("2027-01-22","No study · Wedding"),r("2027-01-23","No study · Wedding"),r("2027-01-24","No study · Wedding")],
+l:["Practice 400-word reflection on the Tutorial 2 or 3 case","Revisit the M3 forum “Personal Storytelling – Bianca’s experience of anxiety”","AI Lab: co-design a graded in-vivo exposure hierarchy with Rina (28, Case Bank)","AI Lab: assertiveness and boundary-setting with Komiko (26, Case Bank), as a skills drill"]},
+{id:"w12",t:"Week 11 · EDF5001",m:"Jan 25–27: wedding, no study · EDF5001 Module 4: Relational issues & anger (Thu) · EDF5001 Module 5: Stress management (Fri)",d:[
+r("2027-01-25","No study · Wedding"),r("2027-01-26","No study · Wedding"),r("2027-01-27","No study · Wedding"),
+["2027-01-28",["Read the EDF5001 M4 Layer 2 Deep Synthesis","Hub website: Universal Declaration of Human Rights"]],
+["2027-01-29",["Read Cognitive Stress Management","Lecture 09 (slides or transcript)","Hub video: How stress affects your brain","Complete and score the Perceived Stress Scale (PSS-10)","Optional (not in Hub): Cohen et al. (1983)"]],
+b("2027-01-30"),b("2027-01-31")],
+l:["M4 Moodle counselling session reflection","Part A style reflection on the M4 tutorial case","AI Lab: anger de-escalation practice with Rebecca (20, Case Bank)"]},
+{id:"w13",t:"Week 12 · EDF5001",m:"EDF5001 Module 5: Stress management (Mon–Thu) · EDF5001 Module 6: Life transitions (Fri)",d:[
+["2027-02-01",["Read Self-Calming Approaches to Stress Management","Hub guides: Calming Breathing; Progressive Muscle Relaxation"]],
+["2027-02-02",["Read Working Together to Change Behaviour","Lecture 10 (slides or transcript)","Hub guides: Imagery Exercise; Meditation Exercise"]],
+["2027-02-03",["Tutorial 05 v2 (SG transcript)","Hub extras: Military Sleep Method guide; Rosebush video; Headspace and Smiling Mind pages"]],
+["2027-02-04",["Read the EDF5001 M5 Layer 2 Deep Synthesis"]],
+["2027-02-05",["Read Negotiating Life Transitions","Lecture 11 and slides","Optional (not in Hub): Svob et al. (2014)"]],
+b("2027-02-06"),b("2027-02-07")],
+l:["Rehearse aloud: Calming Breathing, PMR, Imagery and Meditation scripts (covers the M5 Moodle Mindfulness Meditation Exercise)","AI Lab: walk Sakura (25, Case Bank) through somatic relaxation and Solution-Focused agency"]},
+{id:"w14",t:"Week 13 · EDF5001 / Capstone",m:"EDF5001 Module 6: Life transitions (Mon–Tue) · EDF5001 integration (Wed) · Cross-unit capstone (Thu) · Feb 12–14: buffer",d:[
+["2027-02-08",["Lecture 12 (slides or transcript)","Tutorial 06 v2 (SG transcript)"]],
+["2027-02-09",["Read the EDF5001 M6 Layer 2 Deep Synthesis"]],
+["2027-02-10",["Read the EDF5001 M1–M6 module synthesis","Re-rate EDF5001 Learning objectives"]],
+["2027-02-11",["Fill the Case Lab Capstone matrix on the Grand Synthesis 9-row Cross-Domain Integration Matrix","Re-rate both Learning objectives pages against Nov 1 (Feb 11 snapshot)"]],
+["2027-02-12",[BF,"Optional: second capstone case (Priya or Mr Teo)","Optional (not in Hub): Rogers (1957); Rennie (1994); Suarez-Delucchi (2022); Journal Literature Digest"],"c"],
+b("2027-02-13"),b("2027-02-14")],
+l:["Life Transitions Sheet for Ganesh (20, Case Bank)","EDF5001 M6 Reflection","AI Lab: role-play Sessions 1 and 2 with Ganesh (20, Case Bank)","Capstone AI simulation: one 2-session role-play with Priya (17) or Mr Teo (76) in Combined mode, before reading their illustrative dialogues; save the debrief"]}];
 const O=[
 ["EDF5000 unit outcomes",[
 ["a1","Identify key physical and psychosocial stages of development"],["a2","Describe and differentiate major developmental theories and frameworks across the lifespan"],["a3","Apply the fundamental principles of lifespan development to current issues and problems"],["a4","Evaluate, integrate and apply relevant evidence-based research to assess client presentation"],["a5","Design evidence-based counselling intervention strategies informed by relevant lifespan research"]]],
@@ -186,7 +171,7 @@ const O=[
 ["d4","M4 Relational issues","Passive, assertive and aggressive styles · value of each in context · measures of assertiveness · techniques for relationship issues · symptoms of sexual dysfunction"],
 ["d5","M5 Stress management and coping","Fight or flight · assessment for stress · counselling techniques for stress · coping skills · when referral is required"],
 ["d6","M6 Life transitions & adaptation","Life milestones and transitions (developmental, migratory, career) · impact on mental health · supporting people through transitions"]]]];
-const SN=["Nov 1 (start)","Dec 11 (EDF5000)","Jan 29 (final)"];
+const SN=["Nov 1 (start)","Dec 28 (EDF5000)","Feb 11 (final)"];
 const days=[];W.forEach(w=>w.d.forEach(x=>days.push({date:x[0],t:x[1],ty:x[2]||"",no:x[3]||"",w})));
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
@@ -211,7 +196,7 @@ return h}
 function vPlan(){return W.map(w=>{const a=wTasks(w),n=a.filter(k=>S.done[k]).length;
 const ch=w.d.map(x=>{const c=x[1].map((_,i)=>S.done[dk({date:x[0]},i)]).filter(Boolean).length,f=x[1].length&&c==x[1].length;
 return `<button class="chip ${x[2]=="r"?"r":f?"f":c?"p":x[2]=="c"?"cu":""}" data-day="${x[0]}" title="${fmt(x[0])}">${new Date(x[0]+"T00:00:00").toLocaleDateString("en-AU",{day:"numeric",month:"short"})}</button>`}).join("");
-return `<div class="card"><div class="row"><b>${esc(w.t)}</b><span class="sp"></span><span class="sub" style="margin:0">${n}/${a.length}</span></div><p class="sub" style="margin:2px 0 8px">${esc(w.m)}</p><div class="bar"><i style="width:${100*n/a.length}%"></i></div><div class="chips">${ch}</div></div>`}).join("")}
+return `<div class="card"><div class="row"><b>${esc(w.t)}</b><span class="sp"></span><span class="sub" style="margin:0">${n}/${a.length}</span></div><p class="sub" style="margin:2px 0 8px">${esc(w.m)}</p><div class="bar"><i style="width:${a.length?100*n/a.length:0}%"></i></div><div class="chips">${ch}</div></div>`}).join("")}
 function vObj(){const r=S.rate[snap];let cnt={c:0,s:0,n:0};O.forEach(g=>g[1].forEach(o=>{if(r[o[0]])cnt[r[o[0]]]++}));
 let h=`<div class="row">${SN.map((s,i)=>`<button data-snap="${i}" aria-pressed="${snap==i}" style="${snap==i?"background:var(--accbg);border-color:var(--acc)":""}">${s}</button>`).join("")}</div>
 <p class="sub" style="margin-top:10px">Rating snapshot: ${SN[snap]} · Confident ${cnt.c} · Shaky ${cnt.s} · Not covered ${cnt.n}. The three dots after each title show your ratings across snapshots.</p>`;
