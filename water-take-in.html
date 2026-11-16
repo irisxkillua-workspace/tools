@@ -109,13 +109,14 @@ input:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid 
       </div>
       <div class="field">
         <label class="switch"><span>依清醒時數微調水量</span><input type="checkbox" id="adjust"></label>
-        <p class="hint">預設關閉，使用固定目標。開啟後，清醒少於 16 小時會按比例減少基礎水量，運動的 +600 ml 不會縮減。</p>
+        <p class="hint">預設關閉，使用固定目標。開啟後，以清醒 16 小時為基準按比例增減基礎水量（0.5–1.25 倍），運動的 +600 ml 不會縮放。</p>
       </div>
       <div class="field">
         <label class="switch"><span>今日有運動（+600 ml）</span><input type="checkbox" id="ex"></label>
         <div class="selrow" style="margin-top:8px;margin-left:0">
           <label for="ex_time" style="font-weight:600">運動時段</label>
           <select id="ex_time" class="sel" disabled>
+            <option value="dawn">清晨 (約 06:30–08:00)</option>
             <option value="morning">晨間 (約 08:30–10:00)</option>
             <option value="afternoon">午後 (約 14:30–16:00)</option>
             <option value="evening" selected>傍晚 (約 17:30–19:00)</option>
@@ -248,6 +249,7 @@ input:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid 
   };
   var SOUP = {clear:{label:"清湯", vol:250, eff:250}, thick:{label:"濃湯", vol:300, eff:210}};
   var EX = {
+    dawn:      {pre:6*60+30,    post:8*60,      label:"清晨運動"},
     morning:   {pre:8*60,       post:9*60+30,   label:"晨間運動"},
     afternoon: {pre:14*60+30,   post:16*60,     label:"午後運動"},
     evening:   {pre:17*60+30,   post:19*60,     label:"傍晚運動"},
@@ -360,12 +362,15 @@ input:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid 
     // ---- 目標水量：基礎 2,200 ml 可按清醒時數縮減，運動 +600 ml 不縮減 ----
     var base=2200, exExtra=s.ex?600:0;
     var target=base+exExtra;
-    if(s.adjust && awake<16){
-      var f=Math.max(0.5, awake/16);
+    if(s.adjust){
+      var f=Math.min(1.25,Math.max(0.5,awake/16));
       target=Math.round(base*f/50)*50+exExtra;
-      warns.push("今日清醒約 "+awake.toFixed(1)+" 小時，基礎水量按比例由 2,200 ml 微調至 "+nf(target-exExtra)+" ml"+(s.ex?"，運動 +600 ml 維持不變":"")+"。");
-    } else if(!s.adjust && awake<13){
+      var baseAdj=target-exExtra;
+      if(baseAdj!==base) warns.push("今日清醒約 "+awake.toFixed(1)+" 小時，基礎水量按比例由 2,200 ml "+(baseAdj>base?"增加":"微調")+"至 "+nf(baseAdj)+" ml"+(s.ex?"，運動 +600 ml 維持不變":"")+"。");
+    } else if(awake<13){
       warns.push("今日清醒只有約 "+awake.toFixed(1)+" 小時，仍按固定目標計算；若覺得每次份量偏大，可開啟「依清醒時數微調水量」。");
+    } else if(awake>=17.5){
+      warns.push("今日清醒約 "+awake.toFixed(1)+" 小時，比平常長，仍按固定目標計算；如想增加水量，可開啟「依清醒時數微調水量」。");
     }
 
     var eff=0;
@@ -416,12 +421,12 @@ input:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid 
     var extraN=0;
     while(extraN<6){
       var ks=Object.keys(map).sort(function(a,b2){ return map[a].time-map[b2].time; });
-      if(target/ks.length<=260) break;
       var bg=0,bi=-1;
       for(var i=0;i<ks.length-1;i++){
         var gap=map[ks[i+1]].time-map[ks[i]].time;
         if(gap>bg){ bg=gap; bi=i; }
       }
+      if(target/ks.length<=260 && bg<=150) break;
       if(bg<100) break;
       var tm=Math.round((map[ks[bi]].time+map[ks[bi+1]].time)/2/5)*5;
       map["x"+(extraN++)]={time:tm,title:"補水時段",tip:"平均分配在前後時段之間，小口慢飲。",items:[]};
