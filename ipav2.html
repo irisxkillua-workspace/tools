@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IPA 音素練習簿（廣東話母語者）</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;500;700&family=Noto+Serif:wght@400;700&display=swap">
+<style>
+:root{--bg:#f2f5f7;--card:#fff;--ink:#16232b;--mute:#5c6b75;--line:#cfd8de;--acc:#2447c9;--accbg:#e4eaff;--no:#c2410c;--ok:#15803d;--bad:#b91c1c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a20;--card:#17262e;--ink:#e6eef2;--mute:#9fb0ba;--line:#2e434e;--acc:#8fa8ff;--accbg:#22305f;--no:#fb923c;--ok:#4ade80;--bad:#f87171}}
+:root[data-theme="dark"]{--bg:#0f1a20;--card:#17262e;--ink:#e6eef2;--mute:#9fb0ba;--line:#2e434e;--acc:#8fa8ff;--accbg:#22305f;--no:#fb923c;--ok:#4ade80;--bad:#f87171}
+*{box-sizing:border-box}
+html{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Noto Sans HK",system-ui,sans-serif}
+.w{max-width:860px;margin:0 auto;padding:18px 14px 40px}
+h1{font-size:1.45rem;margin:.2em 0 .1em}
+.sub{color:var(--mute);margin:0 0 14px;font-size:.92rem}
+.ipa{font-family:"Noto Serif","Gentium Plus","Charis SIL",serif}
+.tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
+button{font:inherit;color:inherit;cursor:pointer}
+.tab,.chip{border:1px solid var(--line);background:var(--card);padding:7px 14px;border-radius:999px;transition:background 0.2s, color 0.2s}
+.tab[aria-selected=true],.chip[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tab[aria-selected=true],:root:not([data-theme="light"]) .chip[aria-pressed=true]{color:#0f1a20}}
+:root[data-theme="dark"] .tab[aria-selected=true],:root[data-theme="dark"] .chip[aria-pressed=true]{color:#0f1a20}
+button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 10px;padding:6px 0}
+select,input[type="checkbox"]{font:inherit}
+select{padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);max-width:100%}
+.chk-label{display:inline-flex;align-items:center;gap:5px;font-size:.88rem;cursor:pointer;user-select:none;background:var(--card);border:1px solid var(--line);padding:5px 10px;border-radius:8px}
+.chk-label input{cursor:pointer}
+.legend{font-size:.85rem;color:var(--mute);display:flex;gap:14px;flex-wrap:wrap;margin:4px 0 12px}
+.sw{display:inline-block;width:1.1em;height:1.1em;border-radius:5px;border:2px solid var(--acc);vertical-align:-.2em;margin-right:4px}
+.sw.v{background:var(--acc)}
+h2{font-size:1.05rem;margin:18px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px}
+.t{position:relative;border:2px solid var(--acc);border-radius:12px;background:var(--card);padding:8px 4px 6px;text-align:center}
+.t.v{background:var(--acc);color:#fff}
+.t.v b,.t.v small{color:inherit}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .t.v{color:#0f1a20}}
+:root[data-theme="dark"] .t.v{color:#0f1a20}
+.t b{display:block;font-size:1.9rem;line-height:1.2;font-weight:400}
+.t small{font-size:.74rem;opacity:.85}
+.t i{position:absolute;top:2px;right:5px;font-style:normal;font-size:.68rem;font-weight:700;background:var(--no);color:#fff;border-radius:6px;padding:0 4px}
+.t i.p{background:transparent;color:var(--no);border:1px solid var(--no)}
+.t[aria-current=true]{box-shadow:0 0 0 3px var(--no)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:14px}
+.big{font-size:3rem;line-height:1.1}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tag{font-size:.8rem;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--mute);display:inline-flex;align-items:center;gap:4px}
+.tag.n{border-color:var(--no);color:var(--no)}
+.tag.stat{background:var(--accbg);color:var(--acc);border-color:var(--acc);font-weight:500}
+.wd{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:5px 10px;background:var(--bg);margin:3px 6px 3px 0}
+.wd span{font-size:.85rem;color:var(--mute)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.opt{border:2px solid var(--line);border-radius:12px;background:var(--card);padding:14px 8px;font-size:1.3rem;text-align:center}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--card))}
+.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,var(--card))}
+.opt small{display:block;font-size:.85rem;color:var(--mute)}
+.go{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:8px 16px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .go{color:#0f1a20}}
+:root[data-theme="dark"] .go{color:#0f1a20}
+.fb{min-height:3.2em;margin:6px 0}
+.sc{color:var(--mute);font-size:.9rem}
+.prob h3{margin:.1em 0 .4em;font-size:1.05rem}.prob ul{margin:.3em 0;padding-left:1.2em}.prob li{margin:.25em 0}.tw{overflow-x:auto}.prob table{border-collapse:collapse;width:100%;font-size:.92rem;margin:.4em 0}.prob td,.prob th{border:1px solid var(--line);padding:5px 8px;text-align:left}.prob th{background:var(--bg)}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>IPA 音素練習簿</h1>
+<p class="sub">為廣東話母語者而設，內容根據 The Sounds of English（初階）。</p>
+
+<div class="tabs" role="tablist">
+<button class="tab" role="tab" aria-selected="true" data-p="chart">音素總表</button>
+<button class="tab" role="tab" aria-selected="false" data-p="quiz">練習</button>
+<button class="tab" role="tab" aria-selected="false" data-p="prob">整體困難</button>
+<button class="tab" role="tab" aria-selected="false" data-p="vc">母音染色</button>
+</div>
+
+<div class="bar">
+  <span>口音：</span>
+  <select id="acc" aria-label="口音">
+    <option value="en-US">美式 (en-US)</option>
+    <option value="en-GB">英式 (en-GB)</option>
+  </select>
+  <select id="voice" aria-label="系統語音" title="語音合成選項"></select>
+  <select id="spd" aria-label="發音速度">
+    <option value="1.0" selected>正常 1.0x</option>
+    <option value="0.8">慢速 0.8x</option>
+  </select>
+  <label class="chk-label">
+    <input type="checkbox" id="humanAudio" checked>
+    <span>優先真人發音</span>
+  </label>
+  <button class="chip" id="btnTest">試聽對比 🔊</button>
+  <span class="tag stat" id="astat">🎙️ 語音就緒</span>
+</div>
+
+<section id="chart">
+<div class="bar" id="flt"></div>
+<div class="legend"><span><span class="sw v"></span>濁音（聲帶預先震動）</span><span><span class="sw"></span>清音／母音以外</span><span><b style="color:var(--no)">冇</b> 廣東話冇呢個音</span><span><b style="color:var(--no)">近</b> 有但有分別</span></div>
+<div id="tiles"></div>
+<div class="card" id="det"><span class="sub">撳一個音素，睇例字同廣東話提示。</span></div>
+</section>
+
+<section id="prob" class="prob" hidden>
+<p class="sub">根據課程 2.7–2.9 嘅課堂筆記整理：廣東話母語者三大整體困難。</p>
+<div class="card"><h3>困難一：濁子音（2.7）</h3>
+<ul><li>英文嘅爆破音、塞擦音、摩擦音各有濁／清配對；廣東話呢三類<b>全部冇濁音</b>。鼻音同近音本身就係濁音，廣東話同樣有，所以唔係問題。</li>
+<li><b>最優先分清五對</b>（濁音要練到聲帶有震動）：</li></ul>
+<div class="tw"><table><tr><th>濁</th><th>清</th><th>易犯錯誤</th></tr>
+<tr><td class="ipa">/b/ /d/ /g/</td><td class="ipa">/p/ /t/ /k/</td><td>當成廣東話不噴氣清音</td></tr>
+<tr><td class="ipa">/v/</td><td class="ipa">/f/</td><td>van → fan</td></tr>
+<tr><td class="ipa">/z/</td><td class="ipa">/s/</td><td>zoo → sue</td></tr></table></div>
+<ul><li>廣東話有 /f/ 同 /s/，所以最易忽略 /v/ 同 /z/。</li>
+<li>全部要練嘅濁音：<span class="ipa">/b/ /d/ /g/ /dʒ/ /v/ /ð/ /z/ /ʒ/</span>。</li>
+<li><b>練習方法</b>：先發「啊～」感受聲帶震動，再接子音：啊～b、啊～v。</li></ul></div>
+<div class="card"><h3>困難二：爆破音嘅重疊（2.8）</h3>
+<ul><li>英文同廣東話都係喺雙唇、齒齦、軟顎三個位置各有一對 stop，但英文分「濁／清」，廣東話三對<b>全部係清音</b>，只分「不噴氣」同「噴氣」。呢種「有重疊但唔完全重疊」嘅關係，令人自然發錯。</li></ul>
+<div class="tw"><table><tr><th>位置</th><th>英文</th><th>廣東話近似</th></tr>
+<tr><td>音節頭：清 /p t k/</td><td>噴氣（pay、town、cat）</td><td>清噴氣</td></tr>
+<tr><td>音節頭：濁 /b d g/</td><td>不噴氣</td><td>清不噴氣（「吧」「打」「架」頭音）</td></tr>
+<tr><td>s 後面嘅清音</td><td>不噴氣（spy、stone、sky）</td><td>—</td></tr>
+<tr><td>音節尾：清／濁</td><td>兩者都唔噴氣</td><td>—</td></tr></table></div>
+<ul><li><b>陷阱</b>：音節頭用廣東話不噴氣音發 /b d g/，英語者仍聽得明（剛好都不噴氣），所以錯誤唔易察覺。</li>
+<li><b>音節尾</b>唔可以靠噴氣分清濁，一定要靠聲帶震動：cab/cap、mad/mat、bag/back。</li>
+<li><b>輔助提示</b>：音節尾係清音時，前面嘅母音會略短（cap 嘅母音短過 cab）。</li></ul></div>
+<div class="card"><h3>困難三：舌齒音同齒齦後音（2.9）</h3>
+<ul><li><b>舌齒音（dental）</b>：只有一對摩擦音 <span class="ipa">/ð/</span>（濁，that）同 <span class="ipa">/θ/</span>（清，thing）。舌尖碰門牙，氣流由細孔流出。</li>
+<li><b>齒齦後音（postalveolar）</b>：五個——<span class="ipa">/dʒ/</span>（jump）、<span class="ipa">/tʃ/</span>（check）、<span class="ipa">/ʒ/</span>（visual）、<span class="ipa">/ʃ/</span>（she）、<span class="ipa">/r/</span>（rotor）。</li>
+<li>廣東話冇呢兩個位置嘅子音，所以七個音對你都唔自然，唔好漏咗任何一個。<span class="ipa">/ð/</span> 仲係濁音，難度更高。</li>
+<li>就算單獨發得啱，放入英文音節仍可能出錯，因為子音喺音節入面出現嘅位置規律同廣東話唔同；呢部分會喺進階課程講。</li></ul></div>
+<div class="card"><h3>母音困難：廣東話有，放入英文音節都可能出錯（3.3、3.6）</h3>
+<ul><li>六個英廣共有單母音：<span class="ipa">/ɪ/</span>（bit，亦）、<span class="ipa">/i/</span>（feet，熱）、<span class="ipa">/ʊ/</span>（book，六）、<span class="ipa">/u/</span>（moose，沒）、<span class="ipa">/ɔ/</span>（北美 thought，梳）、<span class="ipa">/ɛ/</span>（bed，些）。</li>
+<li><b>單獨發得出 ≠ 放入英文音節都發得啱</b>，原因有兩個：（一）英文同廣東話嘅音節組成規律唔同；（二）近音 /l/ /r/ /j/ /w/ 會「染色」鄰近母音（vowel coloring）。</li></ul>
+<div class="tw"><table><tr><th>例字</th><th>常見錯誤</th><th>原因</th></tr>
+<tr><td>bit / beat</td><td>將 bit 發成 beat</td><td>廣東話「t」結尾只配長母音（熱），冇「短 /ɪ/ + t」嘅組合</td></tr>
+<tr><td>cure / huge</td><td>當成「於」嘅圓唇前母音，或當成「要」嘅雙母音</td><td>/j/ 修飾 /ʊ/、/u/，母音本質仍係 /ʊ/、/u/，只係被拉前</td></tr>
+<tr><td>ill / feel</td><td>尾音發成「遙」嘅 /u/ 收音</td><td>/l/ 要舌尖碰齒齦，並令母音拉後、帶少少捲舌音色</td></tr>
+<tr><td>well</td><td>用「丟」嘅雙母音代替</td><td>well 係單母音 /ɛ/ 加 /l/ 修飾，唔係雙母音</td></tr>
+<tr><td>tweet / twitter</td><td>/w/ 後面接 /ɪ/、/i/ 唔自然</td><td>廣東話「瓜」有 /w/ 修飾，但唔會出現喺 /ɪ/、/i/ 前</td></tr></table></div>
+<ul><li>/r/ 對母音嘅修飾，要等進階課程講到廣東話冇嘅母音時再一併處理。</li>
+<li><b>課程總結（3.6）</b>：母音係音節核心，發音準唔準好大程度取決於母音。學習者自然會用廣東話已有嘅母音代替英文相似嘅音，所以要有意識咁分辨每個母音，再慢慢練習。進階課程會講音節、字、詞組、句子，以及拼寫同發音嘅關係。</li>
+<li><b>重點練習</b>：bit/beat、book/cure、boot/huge、ill/feel/well、tweet/twitter。</li></ul></div>
+</section>
+
+<section id="vc" hidden>
+<p class="sub">近音 /l/ /j/ /w/ 會「染色」鄰近母音（vowel coloring）。呢度練習分辨同處理呢類音節，題目根據課程 3.3。</p>
+<div class="card"><div class="sc" id="vs">答啱 0 / 0</div>
+<div id="vq" style="text-align:center;margin:8px 0"></div>
+<div class="opts" id="vo"></div>
+<div class="fb" id="vfb"></div>
+<button class="go" id="vnx" hidden>下一題</button></div>
+</section>
+
+<section id="quiz" hidden>
+<div class="bar" id="qm"></div>
+<div class="bar"><span class="sc">集中練習：</span><span class="bar" id="qf" style="margin:0"></span></div>
+<div class="card">
+<div class="sc" id="score"></div>
+<div id="q" style="text-align:center;margin:8px 0"></div>
+<div class="opts" id="o"></div>
+<div class="fb" id="fb"></div>
+<button class="go" id="nx" hidden>下一題</button>
+</div>
+</section>
+</div>
+
+<script>
+// Accent-specific IPA Override Table for key vocabulary
+const IPA_ACCENT_MAP = {
+  "nurse": { "en-US": "nɜrs", "en-GB": "nɜːs" },
+  "water": { "en-US": "wɔtər", "en-GB": "ˈwɔːtə" },
+  "her": { "en-US": "hɜr", "en-GB": "hɜː" },
+  "bird": { "en-US": "bɜrd", "en-GB": "bɜːd" },
+  "thought": { "en-US": "θɔt", "en-GB": "θɔːt" },
+  "long": { "en-US": "lɔŋ", "en-GB": "lɒŋ" },
+  "want": { "en-US": "wɑnt", "en-GB": "wɒnt" },
+  "spa": { "en-US": "spɑ", "en-GB": "spɑː" },
+  "go": { "en-US": "goʊ", "en-GB": "gəʊ" },
+  "hold": { "en-US": "hoʊld", "en-GB": "həʊld" },
+  "cure": { "en-US": "kjʊr", "en-GB": "kjʊə" },
+  "new": { "en-US": "nu", "en-GB": "njuː" },
+  "rope": { "en-US": "roʊp", "en-GB": "rəʊp" },
+  "robe": { "en-US": "roʊb", "en-GB": "rəʊb" },
+  "joke": { "en-US": "dʒoʊk", "en-GB": "dʒəʊk" },
+  "choke": { "en-US": "tʃoʊk", "en-GB": "tʃəʊk" },
+  "feet": { "en-US": "fit", "en-GB": "fiːt" },
+  "bead": { "en-US": "bid", "en-GB": "biːd" },
+  "boot": { "en-US": "but", "en-GB": "buːt" },
+  "food": { "en-US": "fud", "en-GB": "fuːd" },
+  "leave": { "en-US": "liv", "en-GB": "liːv" },
+  "leaf": { "en-US": "lif", "en-GB": "liːf" },
+  "seize": { "en-US": "siz", "en-GB": "siːz" },
+  "teeth": { "en-US": "tiθ", "en-GB": "tiːθ" }
+};
+
+function getWordIpa(word, fallbackIpa) {
+  const acc = document.getElementById("acc").value;
+  const key = word.toLowerCase().trim();
+  if (IPA_ACCENT_MAP[key] && IPA_ACCENT_MAP[key][acc]) {
+    return IPA_ACCENT_MAP[key][acc];
+  }
+  return fallbackIpa;
+}
+
+const D=`m~鼻音~1~y~may:meɪ,lamb:læm,smile:smaɪl~廣東話都有（媽、林）。留意英文有子音群，例如 smile、dreamt /drɛmt/。
+n~鼻音~1~p~nurse:nɜrs,man:mæn~港式廣東話已用 /l/ 取代頭音 /n/（如「你」），所以容易將 n 開頭嘅字發成 l。
+ŋ~鼻音~1~y~sing:sɪŋ,jungle:ˈdʒʌŋgəl~英文只在音節尾出現；廣東話頭尾都有（我、形），冇問題。
+p~爆破音~0~p~pan:pæn,spy:spaɪ,cap:kæp~清音有兩個版本：音節頭噴氣 [pʰ]（pay，似「怕」），其他位置不噴氣 [p]（spy，似「爸」）。
+b~爆破音~1~n~boy:bɔɪ,cab:kæb~廣東話冇濁爆破音。容易將不噴氣 /p/ 當成 /b/，令 cab 同 cap 都發成 /p/。
+t~爆破音~0~p~toy:tɔɪ,stay:steɪ,cat:kæt~音節頭噴氣 [tʰ]（似「太」），其他位置不噴氣 [t]（似「大」）。
+d~爆破音~1~n~dog:dɔg,mad:mæd~廣東話冇 /d/，容易將 mad 同 mat 都發成 /t/。
+k~爆破音~0~p~come:kʌm,sky:skaɪ,back:bæk~音節頭噴氣 [kʰ]（似「卡」），其他位置不噴氣 [k]（似「加」）。
+g~爆破音~1~n~get:gɛt,bag:bæg~廣東話冇 /g/，容易將 bag 同 back 都發成 /k/。
+tʃ~塞擦音~0~n~check:tʃɛk,such:sʌtʃ~廣東話有相近嘅「查」(tsʰ)，但發音位置唔同，要分辨。
+dʒ~塞擦音~1~n~judge:dʒʌdʒ~廣東話冇濁塞擦音；「炸」(ts) 相近但係清音、位置唔同。
+f~摩擦音~0~y~fan:fæn,leaf:lif~廣東話有（花）。重點係唔好用 /f/ 代替 /v/。
+v~摩擦音~1~n~van:væn,leave:liv~廣東話冇濁摩擦音，容易將 van 同 fan 都發成 /f/。
+θ~摩擦音~0~n~thin:θɪn,teeth:tiθ~廣東話冇舌尖碰門牙嘅音，要針對練習。唔好用 /f/ 代替（thin 唔係 fin）。
+ð~摩擦音~1~n~that:ðæt~同 /θ/ 位置一樣，仲要有聲帶預震。/ð/ 同 /θ/ 唔會用嚟分辨字，發錯唔會直接影響溝通。
+s~摩擦音~0~y~sue:su,house:haʊs~廣東話有（思）。字尾 -s 會按前一個音變 /s/ 或 /z/：caps /kæps/、cabs /kæbz/。
+z~摩擦音~1~n~zoo:zu,seize:siz~廣東話冇濁摩擦音，容易將 zoo 同 sue 都發成 /s/。
+ʃ~摩擦音~0~n~she:ʃi,fish:fɪʃ~廣東話冇齒齦後摩擦音，要針對練習。
+ʒ~摩擦音~1~n~visual:ˈvɪʒəwəl~位置同 /ʃ/ 一樣，但要加聲帶預震；唔會用嚟分辨字。
+h~摩擦音~0~y~how:haʊ~冇特別要留意（好）。
+l~近音~1~p~late:leɪt,towel:taʊəl,flash:flæʃ~廣東話 /l/ 只在音節頭。英文母音後嘅 /l/（towel）同子音群（flash）要針對練習。
+r~近音~1~n~race:reɪs,fresh:frɛʃ~廣東話冇捲舌近音，容易用 /l/ 代替；但 race/lace、fresh/flesh 係會分辨字義。
+j~近音~1~p~you:ju,cute:kjut~廣東話 /j/ 只在音節頭。英文 /jʊ/ /ju/ 唔好用「於」「搖」嘅母音代替。
+w~近音~1~y~way:weɪ,quite:kwaɪt~廣東話有（話）。英文 /w/ 令後面母音圓唇；廣東話有「掛」類半子音群，所以唔太難。
+i~單母音~2~y~feet:fit,bead:bid~/ɪ/ 嘅長版本，口形相同。廣東話有（熱），但同 /ɪ/ 唔會在相同尾音前出現，所以 bit/beat 容易混淆。
+ɪ~單母音~2~y~fit:fɪt,king:kɪŋ~廣東話短 /ɪ/ 只在 /k/ /ŋ/ 前出現（亦、敬）。留意 fit、bib 呢類後面接其他子音嘅字，唔好發成長 /i/。
+ʊ~單母音~2~y~look:lʊk,good:gʊd~短母音（六）。留意 good 呢類後面接廣東話冇嘅尾音。
+u~單母音~2~y~boot:but,food:fud~長母音（夫、闊）。後面係清子音時會「剪短」（foot /fut/ 比 food /fud/ 短）。
+ɛ~單母音~2~p~bed:bɛd,bet:bɛt~廣東話只有長版（些 /ɛ:/）。英文係短母音，唔好將 bed 拉長。
+ə~單母音~2~n~above:əbʌv,water:wɔtər~非重音音節最常見嘅母音（schwa）；廣東話冇非重音音節。可由 a、e 等多個字母代表。
+ɜ~單母音~2~n~her:hɜr,bird:bɜrd~北美一定帶 /r/，英式為長 /ɜ:/。唔好用「長」嘅母音（圓唇）代替，her 亦唔係「靴」。
+ʌ~單母音~2~n~cut:kʌt,gun:gʌn~廣東話有相近嘅「吉」嘅母音，常被代替；唔會影響溝通，但唔夠準確。
+ɔ~單母音~2~p~thought:θɔt,long:lɔŋ~廣東話有（梳，長版 /ɔ:/）。北美為短 /ɔ/，英式為長 /ɔ:/。留意 thought 嘅 /ɔt/ 呢類組合。
+ɒ~單母音~2~n~want:wɒnt,long:lɒŋ~英式口音。同 /ɔ/ 非常近，口形大啲、唇冇咁圓；可以當同一個音。
+æ~單母音~2~n~cat:kæt,fan:fæn~廣東話冇，容易用 /ɛ/（些）代替。bad /bæd/ 同 bed /bɛd/ 係兩個字，/æ/ 口腔空間更大。
+ɑ~單母音~2~n~spa:spɑ~廣東話有相近嘅「沙」嘅母音，常被代替；唔影響溝通，但要同「沙」分開練習。
+oʊ~雙母音~2~n~go:goʊ,hold:hoʊld~廣東話有 /ou/（高），分別好細：英文舌頭較前、口腔較大、較短。留意後面接子音（hold）。
+eɪ~雙母音~2~n~face:feɪs,made:meɪd~廣東話有 /ei/（你），口形基本相同但較長。留意後面接子音（made）。
+aɪ~雙母音~2~n~die:daɪ,sight:saɪt~廣東話有 /a:i/（街），兩個母音都較長。sight 同 side 嘅長短差別尤其明顯。
+ɔɪ~雙母音~2~n~boy:bɔɪ,choice:tʃɔɪs~廣東話 /ɔ:y/（愛）末端嘴唇圓，英文 /ɔɪ/ 唔圓。
+aʊ~雙母音~2~n~house:haʊs,how:haʊ~廣東話 /a:u/（教）較長；「夠」/ɐu/ 似被剪短嘅 house，唔好用嚟代替。`
+.split("\n").map(l=>{const a=l.split("~");return{s:a[0],g:a[1],v:+a[2],c:a[3],w:a[4].split(",").map(x=>x.split(":")),t:a[5]}});
+
+const P=`bit:bɪt|beat:bit|短 /ɪ/ 對長 /i/，口形相同、長度唔同。
+bad:bæd|bed:bɛd|/æ/ 口腔空間較大；/ɛ/ 係短母音。
+van:væn|fan:fæn|/v/ 要有聲帶預震。
+leave:liv|leaf:lif|字尾 /v/ 同 /f/，留意聲帶預震。
+zoo:zu|sue:su|/z/ 濁、/s/ 清。
+race:reɪs|lace:leɪs|/r/ 捲舌近音，/l/ 舌尖貼上顎。
+fresh:frɛʃ|flesh:flɛʃ|子音群入面都要分 /r/ 同 /l/。
+cab:kæb|cap:kæp|字尾 /b/ 有聲帶預震，/p/ 冇。
+mad:mæd|mat:mæt|字尾 /d/ 濁，/t/ 清。
+bag:bæg|back:bæk|字尾 /g/ 濁，/k/ 清。
+thin:θɪn|fin:fɪn|/θ/ 舌尖碰門牙，唔好用 /f/ 代替。
+sight:saɪt|side:saɪd|清子音前，/aɪ/ 會被「剪短」（vowel clipping）。
+foot:fut|food:fud|清子音前，/u/ 會被「剪短」。
+vine:vaɪn|fine:faɪn|字首 /v/ 要有聲帶預震，唔好發成 /f/。
+very:vɛri|ferry:fɛri|/v/ 濁、/f/ 清；重點係預先震動聲帶。
+save:seɪv|safe:seɪf|字尾 /v/ 濁、/f/ 清；留意 /eɪ/ 後面接子音。
+three:θri|free:fri|/θ/ 舌尖碰門牙，唔好用 /f/ 代替。
+thank:θæŋk|sank:sæŋk|/θ/ 同 /s/ 都係清音，但 /θ/ 舌尖要輕碰門牙。
+mouth:maʊθ|mouse:maʊs|字尾 /θ/ 對 /s/，舌位唔同。
+man:mæn|men:mɛn|/æ/ 口腔空間較大；/ɛ/ 較細。
+pan:pæn|pen:pɛn|/æ/ 口腔空間較大；/ɛ/ 較細。
+sat:sæt|set:sɛt|/æ/ 口腔空間較大；/ɛ/ 較細。
+right:raɪt|light:laɪt|字首 /r/ 捲舌、/l/ 舌尖貼上顎，唔好都發成 /l/。
+read:rid|lead:lid|字首 /r/ 同 /l/ 會分辨字義。
+grass:græs|glass:glæs|子音群入面都要分 /r/ 同 /l/。
+rice:raɪs|rise:raɪz|字尾 /s/ 清、/z/ 濁；/aɪ/ 喺清子音前會被剪短。
+peace:pis|peas:piz|字尾 /s/ 清、/z/ 濁，留意聲帶預震。
+price:praɪs|prize:praɪz|字尾 /s/ 清、/z/ 濁；/aɪ/ 喺清子音前會被剪短。
+ship:ʃɪp|sheep:ʃip|短 /ɪ/ 對長 /i/，口形相同、長度唔同。
+sit:sɪt|seat:sit|短 /ɪ/ 對長 /i/；廣東話冇 /ɪ/ 接 /t/ 嘅字。
+fill:fɪl|feel:fil|短 /ɪ/ 對長 /i/；字尾 /l/ 要舌尖貼上顎。
+pitch:pɪtʃ|peach:pitʃ|短 /ɪ/ 對長 /i/，後面接 /tʃ/。
+rope:roʊp|robe:roʊb|字尾 /p/ 清、/b/ 濁。
+pick:pɪk|pig:pɪg|字尾 /k/ 清、/g/ 濁。
+led:lɛd|let:lɛt|字尾 /d/ 濁、/t/ 清。
+cup:kʌp|cub:kʌb|字尾 /p/ 清、/b/ 濁。
+seat:sit|seed:sid|清子音前 /i/ 會被「剪短」，seed 嘅 /i/ 較長。
+right:raɪt|ride:raɪd|清子音前 /aɪ/ 會被「剪短」，ride 較長。
+height:haɪt|hide:haɪd|清子音前 /aɪ/ 會被「剪短」，hide 較長。
+ship:ʃɪp|chip:tʃɪp|/ʃ/ 持續出氣；/tʃ/ 先塞住再擦出嚟。
+cheap:tʃip|jeep:dʒip|/tʃ/ 清、/dʒ/ 濁。
+joke:dʒoʊk|choke:tʃoʊk|/dʒ/ 濁、/tʃ/ 清。
+new:nu|loo:lu|港式廣東話習慣用 /l/ 取代 /n/，要分開。
+night:naɪt|light:laɪt|港式廣東話習慣用 /l/ 取代 /n/，要分開。
+nine:naɪn|line:laɪn|港式廣東話習慣用 /l/ 取代 /n/，要分開。`
+.split("\n").map(l=>{const a=l.split("|");return{a:a[0].split(":"),b:a[1].split(":"),n:a[2]}});
+
+const $=id=>document.getElementById(id);
+
+// Audio & Voice Engine Variables
+const audioCache = new Map();
+let currentAudio = null;
+let speechResolve = null;   // 取消語音時用嚟放行等緊嘅 Promise
+const sharedAudio = new Audio();   // iOS：只有「已喺手勢內播放過」嘅同一個元素，之後先可以程式播放
+sharedAudio.setAttribute("playsinline", "");
+sharedAudio.preload = "auto";
+const SILENT_WAV = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+let allVoices = [];
+
+function setStatus(text, isError=false) {
+  const st = $("astat");
+  if (!st) return;
+  st.textContent = text;
+  if (isError) {
+    st.style.background = "color-mix(in srgb,var(--bad) 20%,var(--card))";
+    st.style.color = "var(--bad)";
+  } else {
+    st.style.background = "var(--accbg)";
+    st.style.color = "var(--acc)";
+  }
+}
+
+const accLabel = a => a === "en-US" ? "美式" : "英式";
+let playToken = 0;   // 每次新播放 +1，舊播放自動作廢
+let cmpId = 0;       // 試聽對比嘅取消標記
+
+const garbageList = [
+  "albert", "bad news", "bahh", "bells", "boing", "bubbles", "cellos",
+  "fred", "good news", "jester", "junior", "kathy", "organ", "ralph",
+  "superstar", "trinoids", "whisper", "wobble", "zarvox", "eddy", "flo",
+  "grandma", "grandpa", "reed", "rocko", "sandy", "shelley"
+];
+const priorityUS = [
+  "google us english", "microsoft aria online", "microsoft jenny online", "microsoft guy online",
+  "ava", "samantha", "allison", "alex", "microsoft zira", "microsoft david"
+];
+const priorityGB = [
+  "google uk english female", "google uk english male",
+  "microsoft sonia online", "microsoft ryan online", "microsoft libby online",
+  "serena", "daniel", "kate", "arthur", "martha", "microsoft hazel", "microsoft george"
+];
+
+// 指定口音嘅可用語音（已過濾同排序）
+function voicesFor(acc) {
+  const list = allVoices.filter(v => {
+    const lang = v.lang.replace('_', '-').toLowerCase();
+    const name = v.name.toLowerCase();
+    if (!lang.startsWith(acc.toLowerCase())) return false;
+    return !garbageList.some(g => name.includes(g));
+  });
+  const prio = acc === "en-US" ? priorityUS : priorityGB;
+  const score = v => {
+    const n = v.name.toLowerCase();
+    const i = prio.findIndex(p => n.includes(p));
+    return i < 0 ? 999 : i;
+  };
+  return list.sort((a, b) => score(a) - score(b));
+}
+
+function populateVoices() {
+  if (!window.speechSynthesis) return;
+  allVoices = speechSynthesis.getVoices();
+  const acc = $("acc").value;
+  const vSelect = $("voice");
+  vSelect.innerHTML = "";
+  const filtered = voicesFor(acc);
+
+  if (filtered.length === 0) {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "系統預設語音";
+    vSelect.appendChild(opt);
+    return;
+  }
+
+  let savedVoice = null;
+  try { savedVoice = localStorage.getItem("ipa_voice_" + acc); } catch (e) {}
+  filtered.forEach(v => {
+    const opt = document.createElement("option");
+    opt.value = v.name;
+    opt.textContent = `${v.name} (${v.lang})`;
+    if (savedVoice && v.name === savedVoice) opt.selected = true;
+    vSelect.appendChild(opt);
+  });
+  if (!vSelect.value) vSelect.selectedIndex = 0;
+}
+
+if (window.speechSynthesis) {
+  speechSynthesis.onvoiceschanged = populateVoices;
+}
+
+function getSelectedVoice() {
+  const name = $("voice").value;
+  if (!name) return null;
+  return allVoices.find(v => v.name === name) || null;
+}
+
+// 指定口音要用邊個語音：同下拉選單同一口音就用已揀嘅，否則用該口音已儲存／最佳語音
+function voiceForAcc(acc) {
+  if (acc === $("acc").value) {
+    const v = getSelectedVoice();
+    if (v) return v;
+  }
+  const list = voicesFor(acc);
+  let saved = null;
+  try { saved = localStorage.getItem("ipa_voice_" + acc); } catch (e) {}
+  return list.find(v => v.name === saved) || list[0] || null;
+}
+
+$("voice").onchange = () => {
+  const acc = $("acc").value;
+  const name = $("voice").value;
+  if (name) { try { localStorage.setItem("ipa_voice_" + acc, name); } catch (e) {} }
+};
+
+function stopAll() {
+  if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (e) {} }
+  if (speechResolve) { const r = speechResolve; speechResolve = null; r(); }
+  if (currentAudio) { try { currentAudio.pause(); } catch (e) {} currentAudio = null; }
+}
+
+// 取得真人錄音網址（有快取）；冇就回 null
+async function getHumanUrl(acc, cleanWord) {
+  const key = `${acc}:${cleanWord}`;
+  if (audioCache.has(key)) return audioCache.get(key);
+  let audioUrl = null;
+  try {
+    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(cleanWord)}`);
+    if (res.ok) {
+      const data = await res.json();
+      const isUS = a => /[-_/]us[-_./]/.test(a);
+      const isGB = a => /[-_/](uk|gb)[-_./]/.test(a);
+      if (Array.isArray(data)) {
+        outer:
+        for (const entry of data) {
+          for (const p of (entry.phonetics || [])) {
+            if (!p.audio) continue;
+            const a = p.audio.toLowerCase();
+            if (acc === "en-US" ? (isUS(a) && !isGB(a)) : (isGB(a) && !isUS(a))) {
+              audioUrl = p.audio;
+              break outer;
+            }
+          }
+        }
+      }
+    }
+  } catch (e) { audioUrl = null; }
+  audioCache.set(key, audioUrl);
+  return audioUrl;
+}
+
+// 播放錄音（用共用 audio 元素），播完先 resolve；成功回 true，失敗回 false
+function playUrl(url, speed, acc) {
+  return new Promise(resolve => {
+    const a = sharedAudio;
+    a.onended = a.onerror = a.onpause = a.onplaying = null;
+    try { a.pause(); } catch (e) {}
+    a.src = url;
+    a.defaultPlaybackRate = speed;
+    a.playbackRate = speed;
+    if ("preservesPitch" in a) a.preservesPitch = true;
+    currentAudio = a;
+    setStatus(`🎙️ 真人發音（${accLabel(acc)}・Dictionary API）`);
+    let settled = false, t;
+    const fin = v => {
+      if (settled) return;
+      settled = true; clearTimeout(t);
+      a.onended = a.onerror = a.onpause = a.onplaying = null;
+      resolve(v);
+    };
+    t = setTimeout(() => fin(false), 6000);                // 6 秒都未開始播 = 失敗
+    a.onplaying = () => { clearTimeout(t); a.playbackRate = speed; };
+    a.onended = () => { if (currentAudio === a) currentAudio = null; fin(true); };
+    a.onerror = () => fin(false);
+    a.onpause = () => { if (!a.ended) fin(true); };        // 被取消：放行，由 token 判斷棄用
+    const p = a.play();
+    if (p && p.catch) p.catch(() => fin(false));
+  });
+}
+
+// 系統語音，講完先 resolve
+function speakP(word, speed, acc, note, token) {
+  return new Promise(resolve => {
+    if (!window.speechSynthesis) { setStatus("呢個瀏覽器唔支援語音合成", true); resolve(); return; }
+    let t, done = false, started = false;
+    const fin = () => { if (!done) { done = true; clearTimeout(t); if (speechResolve === fin) speechResolve = null; resolve(); } };
+    speechResolve = fin;
+    t = setTimeout(fin, 9000);
+    const run = () => {
+      if (token !== undefined && token !== playToken) { fin(); return; }
+      const u = new SpeechSynthesisUtterance(word);
+      u.rate = speed;
+      const v = voiceForAcc(acc);
+      if (v) { u.voice = v; u.lang = v.lang; } else { u.lang = acc; }
+      setStatus(`🔊 系統語音（${accLabel(acc)}）${v ? "：" + v.name : ""}${note ? "・" + note : ""}`);
+      u.onstart = () => { started = true; };
+      u.onend = fin;
+      u.onerror = fin;
+      try { speechSynthesis.resume(); } catch (e) {}       // iOS 有時會卡喺 paused
+      speechSynthesis.speak(u);
+      setTimeout(() => {
+        if (!started && !done) setStatus("⚠️ 冇聲？請檢查 iPhone 靜音掣同音量，再撳一次", true);
+      }, 2500);
+    };
+    // iOS：cancel() 之後即刻 speak() 會失效，要等一陣
+    if (speechSynthesis.speaking || speechSynthesis.pending) {
+      try { speechSynthesis.cancel(); } catch (e) {}
+      setTimeout(run, 120);
+    } else run();
+  });
+}
+
+// 播放一個字。回傳 "human" / "speech"；被新播放取代就回 null
+async function say(word, opts = {}) {
+  const acc = opts.acc || $("acc").value;
+  const cleanWord = word.toLowerCase().trim();
+  const speed = parseFloat($("spd").value) || 1.0;
+  const token = ++playToken;
+  if (!opts.cmp) cmpId++;           // 手動播放會中斷進行中嘅試聽對比
+  stopAll();
+  setStatus(`載入發音中…（${accLabel(acc)}）`);
+
+  let note = "";
+  if ($("humanAudio").checked) {
+    const url = await getHumanUrl(acc, cleanWord);
+    if (token !== playToken) return null;
+    if (url) {
+      const ok = await playUrl(url, speed, acc);
+      if (token !== playToken) return null;
+      if (ok) return "human";
+      note = "錄音播放失敗";
+    } else {
+      note = "冇真人錄音／離線";
+    }
+  }
+  if (token !== playToken) return null;
+  await speakP(word, speed, acc, note, token);
+  return token === playToken ? "speech" : null;
+}
+
+// iOS / Safari：第一次撳／觸碰時解鎖音頻同語音，之後非即時嘅播放（例如對比第二段）先會響
+let audioUnlocked = false;
+function unlockAudio() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+  try {
+    sharedAudio.src = SILENT_WAV;
+    const p = sharedAudio.play();
+    if (p && p.then) p.then(() => { if (sharedAudio.src.startsWith("data:")) sharedAudio.pause(); })
+                      .catch(() => { audioUnlocked = false; });
+  } catch (e) { audioUnlocked = false; }
+  try {
+    if (window.speechSynthesis) {
+      const u = new SpeechSynthesisUtterance(" ");
+      u.volume = 0;
+      speechSynthesis.speak(u);
+      speechSynthesis.getVoices();
+    }
+  } catch (e) {}
+  setTimeout(populateVoices, 300);
+  setTimeout(populateVoices, 1200);   // iOS 語音清單會遲啲先載入
+}
+["pointerup", "touchend", "click", "keydown"].forEach(ev =>
+  document.addEventListener(ev, unlockAudio, { capture: true, passive: true }));
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// 試聽對比：同一個字，先美式、停一停、再英式
+let cmpRunning = false;
+$("btnTest").onclick = async () => {
+  const btn = $("btnTest");
+  if (cmpRunning) {                 // 再撳一次 = 停止
+    cmpId++; playToken++; stopAll();
+    return;
+  }
+  const id = ++cmpId;
+  const word = "water";
+  const results = [];
+  cmpRunning = true;
+  btn.textContent = "停止 ⏹";
+  try {
+    for (const acc of ["en-US", "en-GB"]) {
+      if (id !== cmpId) break;
+      const src = await say(word, { acc, cmp: true });
+      if (id !== cmpId || src === null) break;
+      results.push(`${accLabel(acc)}：${src === "human" ? "真人發音" : "系統語音"}`);
+      if (acc === "en-US") await sleep(800);
+    }
+    if (results.length === 2 && id === cmpId) setStatus(`✅ 對比完成（${word}）｜${results.join("｜")}`);
+    else if (id !== cmpId) setStatus("已停止試聽對比");
+  } finally {
+    cmpRunning = false;
+    btn.textContent = "試聽對比 🔊";
+  }
+};
+
+$("acc").onchange = () => {
+  populateVoices();
+  if (sel) {
+    const curObj = D.find(d => d.s === sel);
+    if (curObj) show(curObj);
+  }
+  drawT();
+  if (!document.getElementById("quiz").hidden) {
+    if (cur) {
+      if (mode === "mc") mcQ(cur.p, cur.t);
+      else renderQuizQ();
+    }
+  }
+};
+
+document.querySelectorAll(".tab").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === b));
+  ["chart", "quiz", "prob", "vc"].forEach(id => $(id).hidden = id !== b.dataset.p);
+});
+
+let flt="all", sel=null;
+const F=[["all","全部"],["n","廣東話冇"],["p","有但有分別"]];
+
+function drawF(){
+  $("flt").innerHTML="";
+  F.forEach(([k,t])=>{
+    const b=document.createElement("button");
+    b.className="chip";
+    b.textContent=t;
+    b.setAttribute("aria-pressed",flt===k);
+    b.onclick=()=>{flt=k;drawF();drawT()};
+    $("flt").append(b)
+  });
+}
+
+function drawT(){
+  const box=$("tiles");
+  box.innerHTML="";
+  [...new Set(D.map(d=>d.g))].forEach(g=>{
+    const l=D.filter(d=>d.g===g&&(flt==="all"||d.c===flt));
+    if(!l.length)return;
+    const h=document.createElement("h2");
+    h.textContent=g;
+    const gr=document.createElement("div");
+    gr.className="grid";
+    l.forEach(d=>{
+      const b=document.createElement("button");
+      b.className="t"+(d.v===1?" v":"");
+      b.setAttribute("aria-current",sel===d.s);
+      b.setAttribute("aria-label","音素 "+d.s);
+      b.innerHTML=(d.c!=="y"?`<i class="${d.c}">${d.c==="n"?"冇":"近"}</i>`:"")+`<b class="ipa">${d.s}</b><small>${d.w[0][0]}</small>`;
+      b.onclick=()=>{
+        sel=d.s;
+        say(d.w[0][0]);
+        show(d);
+        drawT();
+      };
+      gr.append(b);
+    });
+    box.append(h,gr);
+  });
+}
+
+function show(d){
+  const cn={y:"廣東話有",p:"有，但有分別",n:"廣東話冇"}[d.c];
+  const vo=d.v===1?"濁音":d.v===0?"清音":"母音（全部都係濁）";
+  $("det").innerHTML=`<div class="row"><span class="big ipa">/${d.s}/</span><span class="tag">${d.g}</span><span class="tag">${vo}</span><span class="tag ${d.c==="n"?"n":""}">${cn}</span></div><p>${d.t}</p><div></div>`;
+  const c=$("det").lastChild;
+  d.w.forEach(([w,i])=>{
+    const dynIpa = getWordIpa(w, i);
+    const b=document.createElement("button");
+    b.className="wd";
+    b.innerHTML=`🔊 ${w} <span class="ipa">/${dynIpa}/</span>`;
+    b.onclick=()=>say(w);
+    c.append(b);
+  });
+}
+
+let mode="listen",cur=null,ok=0,tot=0,done=false,foc="all";
+const FO={"v/f":[2,3].map(i=>P[i]),"θ/f":[10].map(i=>P[i]),"æ/ɛ":[1].map(i=>P[i]),"r/l":[5,6].map(i=>P[i]),"z/s":[4].map(i=>P[i]),"ɪ/i":[0].map(i=>P[i]),"尾音濁/清":[7,8,9].map(i=>P[i]),"剪短母音":[11,12].map(i=>P[i])};
+Object.entries({"v/f":[13,14,15],"θ/f":[16,17,18],"æ/ɛ":[19,20,21],"r/l":[22,23,24],"z/s":[25,26,27],"ɪ/i":[28,29,30,31],"尾音濁/清":[32,33,34,35],"剪短母音":[36,37,38],"ʃ/tʃ/dʒ":[39,40,41],"n/l":[42,43,44]}).forEach(([k,v])=>FO[k]=(FO[k]||[]).concat(v.map(i=>P[i])));
+
+function drawFo(){
+  $("qf").innerHTML="";
+  ["all",...Object.keys(FO)].forEach(k=>{
+    const b=document.createElement("button");
+    b.className="chip";
+    b.textContent=k==="all"?"全部":k;
+    b.setAttribute("aria-pressed",foc===k);
+    b.onclick=()=>{foc=k;ok=0;tot=0;drawFo();nextQ()};
+    $("qf").append(b);
+  });
+}
+
+function mcQ(p,t){
+  const w=[p.a,p.b][t];
+  const targetIpa = getWordIpa(w[0], w[1]);
+  const otherIpa = getWordIpa([p.a,p.b][1-t][0], [p.a,p.b][1-t][1]);
+  const all=[...new Set(D.flatMap(d=>d.w.map(x=>getWordIpa(x[0], x[1]))))].filter(x=>x!==targetIpa && x!==otherIpa);
+  
+  const op=[targetIpa, otherIpa];
+  while(op.length<4) op.push(all.splice(Math.floor(Math.random()*all.length),1)[0]);
+  op.sort(()=>Math.random()-.5);
+  
+  cur={p,t,w,targetIpa};
+  $("q").innerHTML=`<div class="big">${w[0]}</div><button class="go" id="pl">🔊 聽發音</button><p class="sc">邊個係正確嘅 IPA？</p>`;
+  $("pl").onclick=()=>say(w[0]);
+  $("o").innerHTML="";
+  op.forEach(i=>{
+    const b=document.createElement("button");
+    b.className="opt ipa";
+    b.textContent="/"+i+"/";
+    b.dataset.i=i;
+    b.onclick=()=>pickMc(i,b);
+    $("o").append(b);
+  });
+  sc();
+}
+
+function pickMc(i,b){
+  if(done)return;
+  done=true;
+  tot++;
+  const good=i===cur.targetIpa;
+  if(good)ok++;
+  b.classList.add(good?"ok":"bad");
+  [...$("o").children].forEach(x=>{
+    if(x.dataset.i===cur.targetIpa) x.classList.add("ok");
+  });
+  $("fb").textContent=(good?"啱！":`唔啱，應該係 /${cur.targetIpa}/。`)+"同「"+[cur.p.a,cur.p.b][1-cur.t][0]+"」比較："+cur.p.n;
+  $("nx").hidden=false;
+  sc();
+}
+
+function drawM(){
+  $("qm").innerHTML="";
+  [["listen","聽音揀字"],["ipa","睇 IPA 揀字"],["mc","字配 IPA（四揀一）"]].forEach(([k,t])=>{
+    const b=document.createElement("button");
+    b.className="chip";
+    b.textContent=t;
+    b.setAttribute("aria-pressed",mode===k);
+    b.onclick=()=>{mode=k;drawM();nextQ()};
+    $("qm").append(b);
+  });
+}
+
+function renderQuizQ() {
+  const p = cur.p, t = cur.t;
+  const w = [p.a, p.b][t];
+  const dynIpa = getWordIpa(w[0], w[1]);
+  $("q").innerHTML = mode==="listen"?`<button class="go" id="pl">🔊 再聽一次</button><p class="sc">聽到邊個字？</p>`:`<div class="big ipa">/${dynIpa}/</div><p class="sc">呢個 IPA 係邊個字？</p>`;
+  if(mode==="listen") {
+    $("pl").onclick=()=>say(w[0]);
+    say(w[0]);
+  }
+  $("o").innerHTML="";
+  const ord=Math.random()<.5?[0,1]:[1,0];
+  ord.forEach(i=>{
+    const item=[p.a,p.b][i];
+    const b=document.createElement("button");
+    b.className="opt";
+    b.textContent=item[0];
+    b.onclick=()=>pick(i,b);
+    $("o").append(b);
+  });
+  sc();
+}
+
+function nextQ(){
+  const pool=FO[foc]||P, p=pool[Math.floor(Math.random()*pool.length)], t=Math.random()<.5?0:1;
+  cur={p,t};
+  done=false;
+  $("fb").textContent="";
+  $("nx").hidden=true;
+  if(mode==="mc") return mcQ(p,t);
+  renderQuizQ();
+}
+
+function sc(){$("score").textContent=`答啱 ${ok} / ${tot}`}
+
+function pick(i,b){
+  if(done)return;
+  done=true;
+  tot++;
+  const good=i===cur.t;
+  if(good)ok++;
+  b.classList.add(good?"ok":"bad");
+  [...$("o").children].forEach(x=>{
+    const w=P_find(x.textContent);
+    const dynIpa = getWordIpa(w[0], w[1]);
+    x.innerHTML=`${w[0]}<small class="ipa">/${dynIpa}/</small>`;
+    if(w[0]===[cur.p.a,cur.p.b][cur.t][0]) x.classList.add("ok");
+  });
+  $("fb").textContent=(good?"啱！":"唔啱。")+cur.p.n;
+  $("nx").hidden=false;
+  sc();
+}
+
+function P_find(w){return w===cur.p.a[0]?cur.p.a:cur.p.b}
+$("nx").onclick=nextQ;
+
+const VC=[
+{w:"ill",ipa:"ɪl",q:"尾音 /l/ 應該點收？",o:["舌尖碰齒齦，帶少少捲舌音色","收成「遙」嘅 /u/ 尾音"],why:"/l/ 要舌尖碰齒齦，並把 /ɪ/ 拉後；唔好收成 /u/。"},
+{w:"feel",ipa:"fil",q:"尾音 /l/ 應該點收？",o:["舌尖碰齒齦，帶少少捲舌音色","收成「遙」嘅 /u/ 尾音"],why:"/l/ 要舌尖碰齒齦，並把 /i/ 拉後；唔好收成 /u/。"},
+{w:"well",ipa:"wɛl",q:"well 嘅母音係邊種？",o:["單母音 /ɛ/，受 /l/ 修飾","似「丟」嘅雙母音"],why:"well 係單母音 /ɛ/ 加 /l/ 修飾，唔係雙母音。"},
+{w:"cure",ipa:"kjʊr",q:"/j/ 對後面嘅母音做咩？",o:["把 /ʊ/ 拉前，但母音本質仍係 /ʊ/","變成廣東話「於」嘅圓唇前母音","變成「要」嘅雙母音"],why:"cure 嘅母音仍係 /ʊ/，只係被 /j/ 拉前；唔好當成「於」或「要」。"},
+{w:"huge",ipa:"hjudʒ",q:"huge 嘅母音係？",o:["/u/，被 /j/ 拉前","廣東話「於」嘅圓唇前母音"],why:"huge 嘅母音本質係 /u/，前面嘅 /j/ 令它聽落似唔同嘅音。"},
+{w:"tweet",ipa:"twit",q:"點處理 /w/ 後面嘅 /i/？",o:["先圓唇發 /w/，再滑入 /i/","跳過 /w/，直接讀成 /ti/"],why:"廣東話「瓜」有 /w/ 修飾，但唔會出現喺 /ɪ/、/i/ 前，所以 tweet、twitter 要特別練。"},
+{w:"bit",ipa:"bɪt",q:"要發 bit（唔係 beat），母音應該？",o:["短 /ɪ/，唔好拉成長 /i/","拉長成 /i/，廣東話「熱」嘅母音"],why:"廣東話「t」結尾只配長母音（熱），所以自然把 bit 發成 beat。"}];
+
+let vq=null,vdone=false,vok=0,vtot=0,vorder=[];
+function vNext(){
+  if(!vorder.length) vorder=VC.map((_,i)=>i).sort(()=>Math.random()-.5);
+  const q=VC[vorder.pop()];
+  vq=q;
+  vdone=false;
+  $("vfb").textContent="";
+  $("vnx").hidden=true;
+  const dynIpa = getWordIpa(q.w, q.ipa);
+  $("vq").innerHTML=`<div class="big">${q.w}</div><div class="ipa sc">/${dynIpa}/</div><button class="go" id="vpl">🔊 聽發音</button><p>${q.q}</p>`;
+  $("vpl").onclick=()=>say(q.w);
+  $("vo").innerHTML="";
+  q.o.map((t,i)=>[t,i]).sort(()=>Math.random()-.5).forEach(([t,i])=>{
+    const b=document.createElement("button");
+    b.className="opt";
+    b.style.fontSize="1rem";
+    b.textContent=t;
+    b.dataset.i=i;
+    b.onclick=()=>{
+      if(vdone)return;
+      vdone=true;
+      vtot++;
+      const g=i===0;
+      if(g)vok++;
+      b.classList.add(g?"ok":"bad");
+      [...$("vo").children].forEach(x=>{if(x.dataset.i==="0")x.classList.add("ok")});
+      $("vfb").textContent=(g?"啱！":"唔啱。")+q.why;
+      $("vnx").hidden=false;
+      $("vs").textContent=`答啱 ${vok} / ${vtot}`;
+    };
+    $("vo").append(b);
+  });
+}
+$("vnx").onclick=vNext;
+
+// Initial Setup
+populateVoices();
+drawF();
+drawT();
+drawM();
+drawFo();
+nextQ();
+vNext();
+</script>
+</body>
+</html>
