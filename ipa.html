@@ -301,6 +301,41 @@ const $=id=>document.getElementById(id);
 // Audio & Voice Engine Variables
 const audioCache = new Map();
 let currentAudio = null;
+let speechResolve = null;   // 取消語音時用嚟放行等緊嘅 Promise
+const sharedAudio = new Audio();   // iOS：只有「已喺手勢內播放過」嘅同一個元素，之後先可以程式播放
+sharedAudio.setAttribute("playsinline", "");
+sharedAudio.preload = "auto";
+let lastAudioErr = "";
+function makeSilentWav(sec) {
+  const sr = 8000, n = Math.floor(sr * sec), buf = new ArrayBuffer(44 + n), v = new DataView(buf);
+  const w = (o, t) => { for (let k = 0; k < t.length; k++) v.setUint8(o + k, t.charCodeAt(k)); };
+  w(0, "RIFF"); v.setUint32(4, 36 + n, true); w(8, "WAVEfmt "); v.setUint32(16, 16, true);
+  v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, sr, true); v.setUint32(28, sr, true);
+  v.setUint16(32, 1, true); v.setUint16(34, 8, true); w(36, "data"); v.setUint32(40, n, true);
+  new Uint8Array(buf, 44).fill(128);
+  return URL.createObjectURL(new Blob([buf], { type: "audio/wav" }));
+}
+const SILENT_WAV = makeSilentWav(0.5);
+// iOS 靜音掣開住時，要有「播放中嘅 media 元素」先會令網頁音頻（包括系統語音）出聲
+const keepAlive = new Audio(SILENT_WAV);
+keepAlive.loop = true;
+keepAlive.setAttribute("playsinline", "");
+const blobCache = new Map();
+// 將真人錄音先下載成 Blob 再播：iOS Safari 對唔支援 Range 請求嘅音檔會播唔到
+async function getPlayableUrl(url) {
+  if (blobCache.has(url)) return blobCache.get(url);
+  let out = url;
+  try {
+    const r = await fetch(url);
+    if (r.ok) {
+      const b = await r.blob();
+      const type = b.type && b.type.startsWith("audio") ? b.type : "audio/mpeg";
+      out = URL.createObjectURL(new Blob([b], { type }));
+    }
+  } catch (e) {}
+  blobCache.set(url, out);
+  return out;
+}
 let allVoices = [];
 
 function setStatus(text, isError=false) {
@@ -344,6 +379,11 @@ function voicesFor(acc) {
     if (!lang.startsWith(acc.toLowerCase())) return false;
     return !garbageList.some(g => name.includes(g));
   });
+  const seen = new Set();
+  for (let k = list.length - 1; k >= 0; k--) {          // 同名同語言只留一個
+    const key = list[k].name + "|" + list[k].lang;
+    if (seen.has(key)) list.splice(k, 1); else seen.add(key);
+  }
   const prio = acc === "en-US" ? priorityUS : priorityGB;
   const score = v => {
     const n = v.name.toLowerCase();
@@ -410,8 +450,9 @@ $("voice").onchange = () => {
 };
 
 function stopAll() {
-  if (window.speechSynthesis) speechSynthesis.cancel();
-  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (e) {} }
+  if (speechResolve) { const r = speechResolve; speechResolve = null; r(); }
+  if (currentAudio) { try { currentAudio.pause(); } catch (e) {} currentAudio = null; }
 }
 
 // 取得真人錄音網址（有快取）；冇就回 null
@@ -444,37 +485,65 @@ async function getHumanUrl(acc, cleanWord) {
   return audioUrl;
 }
 
-// 播放錄音，播完先 resolve；成功回 true，失敗回 false
+// 播放錄音（用共用 audio 元素），播完先 resolve；成功回 true，失敗回 false
 function playUrl(url, speed, acc) {
   return new Promise(resolve => {
-    const audio = new Audio(url);
-    audio.playbackRate = speed;
-    currentAudio = audio;
+    const a = sharedAudio;
+    a.onended = a.onerror = a.onpause = a.onplaying = null;
+    try { a.pause(); } catch (e) {}
+    a.src = url;
+    a.defaultPlaybackRate = speed;
+    a.playbackRate = speed;
+    if ("preservesPitch" in a) a.preservesPitch = true;
+    currentAudio = a;
     setStatus(`🎙️ 真人發音（${accLabel(acc)}・Dictionary API）`);
-    audio.onended = () => { if (currentAudio === audio) currentAudio = null; resolve(true); };
-    audio.onerror = () => resolve(false);
-    audio.play().catch(() => resolve(false));
+    let settled = false, t;
+    const fin = v => {
+      if (settled) return;
+      settled = true; clearTimeout(t);
+      a.onended = a.onerror = a.onpause = a.onplaying = null;
+      resolve(v);
+    };
+    t = setTimeout(() => { lastAudioErr = "逾時"; fin(false); }, 8000);   // 8 秒都未開始播 = 失敗
+    a.onplaying = () => { clearTimeout(t); a.playbackRate = speed; };
+    a.onended = () => { if (currentAudio === a) currentAudio = null; fin(true); };
+    a.onerror = () => { lastAudioErr = "媒體錯誤" + (a.error ? a.error.code : ""); fin(false); };
+    a.onpause = () => { if (!a.ended) fin(true); };        // 被取消：放行，由 token 判斷棄用
+    const p = a.play();
+    if (p && p.catch) p.catch(e => { lastAudioErr = (e && e.name) || "play失敗"; fin(false); });
   });
 }
 
-// 系統語音，講完先 resolve（有 8 秒保險，避免個別瀏覽器唔觸發 onend）
-function speakP(word, speed, acc, note) {
+// 系統語音，講完先 resolve
+function speakP(word, speed, acc, note, token) {
   return new Promise(resolve => {
-    if (!window.speechSynthesis) { setStatus("瀏覽器唔支援語音合成", true); resolve(); return; }
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(word);
-    u.rate = speed;
-    const v = voiceForAcc(acc);
-    if (v) { u.voice = v; u.lang = v.lang; }
-    else { u.lang = acc; }
-    setStatus(`🔊 系統語音（${accLabel(acc)}）${v ? "：" + v.name : ""}${note ? "・" + note : ""}`);
-    let t;
-    let done = false;
-    const fin = () => { if (!done) { done = true; clearTimeout(t); resolve(); } };
-    t = setTimeout(fin, 8000);
-    u.onend = fin;
-    u.onerror = fin;
-    speechSynthesis.speak(u);
+    if (!window.speechSynthesis) { setStatus("呢個瀏覽器唔支援語音合成", true); resolve(); return; }
+    let t, done = false, started = false;
+    const fin = () => { if (!done) { done = true; clearTimeout(t); try { keepAlive.pause(); } catch (e) {} if (speechResolve === fin) speechResolve = null; resolve(); } };
+    speechResolve = fin;
+    t = setTimeout(fin, 9000);
+    const run = () => {
+      if (token !== undefined && token !== playToken) { fin(); return; }
+      const u = new SpeechSynthesisUtterance(word);
+      u.rate = speed;
+      const v = voiceForAcc(acc);
+      if (v) { u.voice = v; u.lang = v.lang; } else { u.lang = acc; }
+      setStatus(`🔊 系統語音（${accLabel(acc)}）${v ? "：" + v.name : ""}${note ? "・" + note : ""}`);
+      u.onstart = () => { started = true; };
+      u.onend = fin;
+      u.onerror = fin;
+      try { speechSynthesis.resume(); } catch (e) {}       // iOS 有時會卡喺 paused
+      try { const kp = keepAlive.play(); if (kp && kp.catch) kp.catch(() => {}); } catch (e) {}
+      speechSynthesis.speak(u);
+      setTimeout(() => {
+        if (!started && !done) setStatus("⚠️ 冇聲？請檢查 iPhone 靜音掣同音量，再撳一次", true);
+      }, 2500);
+    };
+    // iOS：cancel() 之後即刻 speak() 會失效，要等一陣
+    if (speechSynthesis.speaking || speechSynthesis.pending) {
+      try { speechSynthesis.cancel(); } catch (e) {}
+      setTimeout(run, 120);
+    } else run();
   });
 }
 
@@ -493,18 +562,48 @@ async function say(word, opts = {}) {
     const url = await getHumanUrl(acc, cleanWord);
     if (token !== playToken) return null;
     if (url) {
-      const ok = await playUrl(url, speed, acc);
+      const playable = await getPlayableUrl(url);
+      if (token !== playToken) return null;
+      let ok = await playUrl(playable, speed, acc);
+      if (!ok && playable !== url && token === playToken) ok = await playUrl(url, speed, acc);
       if (token !== playToken) return null;
       if (ok) return "human";
-      note = "錄音播放失敗";
+      note = "真人錄音未能載入，已改用系統語音" + (lastAudioErr ? "（" + lastAudioErr + "）" : "");
     } else {
-      note = "冇真人錄音／離線";
+      note = "冇真人錄音，已改用系統語音";
     }
   }
   if (token !== playToken) return null;
-  await speakP(word, speed, acc, note);
+  await speakP(word, speed, acc, note, token);
   return token === playToken ? "speech" : null;
 }
+
+// iOS / Safari：第一次撳／觸碰時解鎖音頻同語音，之後非即時嘅播放（例如對比第二段）先會響
+let audioUnlocked = false;
+function unlockAudio() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+  try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}   // Safari 16.4+：靜音掣開住都出聲
+  try { const kp = keepAlive.play(); if (kp && kp.then) kp.then(() => keepAlive.pause()).catch(() => {}); } catch (e) {}
+  try {
+    sharedAudio.src = SILENT_WAV;
+    const p = sharedAudio.play();
+    if (p && p.then) p.then(() => { if (sharedAudio.src === SILENT_WAV) sharedAudio.pause(); })
+                      .catch(() => { audioUnlocked = false; });
+  } catch (e) { audioUnlocked = false; }
+  try {
+    if (window.speechSynthesis) {
+      const u = new SpeechSynthesisUtterance(" ");
+      u.volume = 0;
+      speechSynthesis.speak(u);
+      speechSynthesis.getVoices();
+    }
+  } catch (e) {}
+  setTimeout(populateVoices, 300);
+  setTimeout(populateVoices, 1200);   // iOS 語音清單會遲啲先載入
+}
+["pointerup", "touchend", "click", "keydown"].forEach(ev =>
+  document.addEventListener(ev, unlockAudio, { capture: true, passive: true }));
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
