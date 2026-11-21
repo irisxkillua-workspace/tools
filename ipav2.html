@@ -305,7 +305,37 @@ let speechResolve = null;   // 取消語音時用嚟放行等緊嘅 Promise
 const sharedAudio = new Audio();   // iOS：只有「已喺手勢內播放過」嘅同一個元素，之後先可以程式播放
 sharedAudio.setAttribute("playsinline", "");
 sharedAudio.preload = "auto";
-const SILENT_WAV = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+let lastAudioErr = "";
+function makeSilentWav(sec) {
+  const sr = 8000, n = Math.floor(sr * sec), buf = new ArrayBuffer(44 + n), v = new DataView(buf);
+  const w = (o, t) => { for (let k = 0; k < t.length; k++) v.setUint8(o + k, t.charCodeAt(k)); };
+  w(0, "RIFF"); v.setUint32(4, 36 + n, true); w(8, "WAVEfmt "); v.setUint32(16, 16, true);
+  v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, sr, true); v.setUint32(28, sr, true);
+  v.setUint16(32, 1, true); v.setUint16(34, 8, true); w(36, "data"); v.setUint32(40, n, true);
+  new Uint8Array(buf, 44).fill(128);
+  return URL.createObjectURL(new Blob([buf], { type: "audio/wav" }));
+}
+const SILENT_WAV = makeSilentWav(0.5);
+// iOS 靜音掣開住時，要有「播放中嘅 media 元素」先會令網頁音頻（包括系統語音）出聲
+const keepAlive = new Audio(SILENT_WAV);
+keepAlive.loop = true;
+keepAlive.setAttribute("playsinline", "");
+const blobCache = new Map();
+// 將真人錄音先下載成 Blob 再播：iOS Safari 對唔支援 Range 請求嘅音檔會播唔到
+async function getPlayableUrl(url) {
+  if (blobCache.has(url)) return blobCache.get(url);
+  let out = url;
+  try {
+    const r = await fetch(url);
+    if (r.ok) {
+      const b = await r.blob();
+      const type = b.type && b.type.startsWith("audio") ? b.type : "audio/mpeg";
+      out = URL.createObjectURL(new Blob([b], { type }));
+    }
+  } catch (e) {}
+  blobCache.set(url, out);
+  return out;
+}
 let allVoices = [];
 
 function setStatus(text, isError=false) {
@@ -469,13 +499,13 @@ function playUrl(url, speed, acc) {
       a.onended = a.onerror = a.onpause = a.onplaying = null;
       resolve(v);
     };
-    t = setTimeout(() => fin(false), 6000);                // 6 秒都未開始播 = 失敗
+    t = setTimeout(() => { lastAudioErr = "逾時"; fin(false); }, 8000);   // 8 秒都未開始播 = 失敗
     a.onplaying = () => { clearTimeout(t); a.playbackRate = speed; };
     a.onended = () => { if (currentAudio === a) currentAudio = null; fin(true); };
-    a.onerror = () => fin(false);
+    a.onerror = () => { lastAudioErr = "媒體錯誤" + (a.error ? a.error.code : ""); fin(false); };
     a.onpause = () => { if (!a.ended) fin(true); };        // 被取消：放行，由 token 判斷棄用
     const p = a.play();
-    if (p && p.catch) p.catch(() => fin(false));
+    if (p && p.catch) p.catch(e => { lastAudioErr = (e && e.name) || "play失敗"; fin(false); });
   });
 }
 
@@ -484,7 +514,7 @@ function speakP(word, speed, acc, note, token) {
   return new Promise(resolve => {
     if (!window.speechSynthesis) { setStatus("呢個瀏覽器唔支援語音合成", true); resolve(); return; }
     let t, done = false, started = false;
-    const fin = () => { if (!done) { done = true; clearTimeout(t); if (speechResolve === fin) speechResolve = null; resolve(); } };
+    const fin = () => { if (!done) { done = true; clearTimeout(t); try { keepAlive.pause(); } catch (e) {} if (speechResolve === fin) speechResolve = null; resolve(); } };
     speechResolve = fin;
     t = setTimeout(fin, 9000);
     const run = () => {
@@ -498,6 +528,7 @@ function speakP(word, speed, acc, note, token) {
       u.onend = fin;
       u.onerror = fin;
       try { speechSynthesis.resume(); } catch (e) {}       // iOS 有時會卡喺 paused
+      try { const kp = keepAlive.play(); if (kp && kp.catch) kp.catch(() => {}); } catch (e) {}
       speechSynthesis.speak(u);
       setTimeout(() => {
         if (!started && !done) setStatus("⚠️ 冇聲？請檢查 iPhone 靜音掣同音量，再撳一次", true);
@@ -526,10 +557,12 @@ async function say(word, opts = {}) {
     const url = await getHumanUrl(acc, cleanWord);
     if (token !== playToken) return null;
     if (url) {
-      const ok = await playUrl(url, speed, acc);
+      const playable = await getPlayableUrl(url);
+      if (token !== playToken) return null;
+      const ok = await playUrl(playable, speed, acc);
       if (token !== playToken) return null;
       if (ok) return "human";
-      note = "錄音播放失敗";
+      note = "錄音播放失敗（" + lastAudioErr + "）";
     } else {
       note = "冇真人錄音／離線";
     }
@@ -544,10 +577,12 @@ let audioUnlocked = false;
 function unlockAudio() {
   if (audioUnlocked) return;
   audioUnlocked = true;
+  try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}   // Safari 16.4+：靜音掣開住都出聲
+  try { const kp = keepAlive.play(); if (kp && kp.then) kp.then(() => keepAlive.pause()).catch(() => {}); } catch (e) {}
   try {
     sharedAudio.src = SILENT_WAV;
     const p = sharedAudio.play();
-    if (p && p.then) p.then(() => { if (sharedAudio.src.startsWith("data:")) sharedAudio.pause(); })
+    if (p && p.then) p.then(() => { if (sharedAudio.src === SILENT_WAV) sharedAudio.pause(); })
                       .catch(() => { audioUnlocked = false; });
   } catch (e) { audioUnlocked = false; }
   try {
