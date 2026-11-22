@@ -1,765 +1,576 @@
 <!DOCTYPE html>
-<html lang="zh-TW" class="h-full">
+<html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>日常護膚指南 | 日系雜誌療癒風</title>
-    
-    <!-- iOS PWA Capabilities -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="護膚指南">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%236B8E78'><rect width='100' height='100' rx='25'/><path d='M50 22 C35 38 25 50 25 64 A25 25 0 0 0 75 64 C75 50 65 38 50 22 Z' fill='%23FAF7F2'/></svg>">
-
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts for Traditional Chinese Serif Aesthetics -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        oat: {
-                            base: '#FAF7F2',
-                            card: '#FFFDF9',
-                            border: '#E6DFD3',
-                            hover: '#F3EDE2'
-                        },
-                        cocoa: {
-                            DEFAULT: '#3E362E',
-                            light: '#5C5247',
-                            muted: '#7D7266'
-                        },
-                        sage: {
-                            DEFAULT: '#6B8E78',
-                            dark: '#557461',
-                            light: '#EBF1ED',
-                            border: '#C3D4C9'
-                        },
-                        terracotta: {
-                            DEFAULT: '#C87D65',
-                            light: '#F8EFEA',
-                            border: '#ECCDC3'
-                        }
-                    },
-                    fontFamily: {
-                        serif: ['"Noto Serif TC"', 'Georgia', 'serif'],
-                        sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'sans-serif']
-                    }
-                }
-            }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SINGAPORE SKINCARE ROUTINE - 護膚保養指南</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Noto Serif TC & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            oat: '#FAF7F2',
+            cocoa: '#3E362E',
+            'cocoa-light': '#6E6459',
+            sage: '#6B8E78',
+            'sage-dark': '#557260',
+            'sage-light': '#EBF2EE',
+            card: '#FFFFFF',
+            cardborder: '#EFEAE1',
+            badge: '#F3EFE7'
+          },
+          fontFamily: {
+            serif: ['"Noto Serif TC"', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif']
+          }
         }
-    </script>
-
-    <style>
-        /* Base Reset & Custom Touch Styles */
-        body {
-            background-color: #FAF7F2;
-            color: #3E362E;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-            font-feature-settings: "palt";
-        }
-        
-        /* Smooth Accordion Transitions */
-        .accordion-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .accordion-content.expanded {
-            grid-template-rows: 1fr;
-        }
-        .accordion-inner {
-            overflow: hidden;
-        }
-
-        /* Checkbox Ripple & Animation */
-        .custom-checkbox {
-            transition: all 0.2s ease;
-        }
-        .custom-checkbox.checked {
-            background-color: #6B8E78;
-            border-color: #6B8E78;
-        }
-        .custom-checkbox.checked svg {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* Hide Scrollbars smoothly */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* Bottom Sheet Drawer Animation */
-        #mask-drawer-backdrop {
-            transition: opacity 0.3s ease;
-        }
-        #mask-drawer-panel {
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #3E362E;
+      font-family: "Noto Serif TC", serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .custom-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Smooth transitions for interactive elements */
+    .transition-all-200 {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
 </head>
-<body class="h-full flex flex-col font-sans antialiased selection:bg-sage/20 selection:text-sage-dark min-h-screen pb-24">
+<body class="min-h-screen py-8 px-4 sm:px-6 flex flex-col items-center">
 
-    <!-- Safe Area Header Gap for iOS Notch -->
-    <div class="pt-safe sticky top-0 z-30 bg-oat-base/90 backdrop-blur-md border-b border-oat-border/60">
-        <!-- Header Title Bar -->
-        <header class="px-5 pt-4 pb-3 flex justify-between items-end max-w-md mx-auto">
-            <div>
-                <span class="text-xs tracking-widest text-cocoa-muted font-serif block mb-0.5">SINGAPORE SKINCARE ROUTINE</span>
-                <h1 class="text-2xl font-bold font-serif text-cocoa tracking-wide">護膚保養指南</h1>
-            </div>
-            <div class="text-right">
-                <span id="current-date-text" class="text-xs font-serif text-cocoa-muted block">-- 月 -- 日</span>
-                <button onclick="resetTodayChecklist()" class="text-[11px] text-sage hover:text-sage-dark underline underline-offset-2 transition-colors mt-0.5">
-                    重置今日進度
-                </button>
-            </div>
-        </header>
+  <main class="w-full max-w-lg mx-auto space-y-6 pb-24">
 
-        <!-- Horizontal Scrollable Day Selector -->
-        <nav class="px-4 py-2.5 max-w-md mx-auto overflow-x-auto no-scrollbar flex space-x-2">
-            <!-- Dynamic Buttons generated by JS -->
-            <div id="day-buttons-container" class="flex space-x-2 w-full justify-between min-w-full"></div>
-        </nav>
-    </div>
-
-    <!-- Main Scrollable Content Container -->
-    <main class="flex-1 max-w-md w-full mx-auto px-5 pt-4 space-y-5">
-
-        <!-- Evening Focus / Night Task Badge Card -->
-        <section class="bg-oat-card rounded-2xl p-4 border border-oat-border shadow-sm transition-all duration-300">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                    <span class="w-2 h-2 rounded-full bg-sage"></span>
-                    <span id="theme-badge" class="font-serif font-bold text-sm text-cocoa tracking-wide">【載入中】</span>
-                </div>
-                <span id="climate-tag" class="text-[11px] bg-oat-base text-cocoa-muted px-2.5 py-1 rounded-full border border-oat-border">
-                    41歲 混合肌 ‧ 新加坡
-                </span>
-            </div>
-            <p id="theme-desc" class="text-xs text-cocoa-muted mt-2 leading-relaxed">
-                正在根據你的居住環境與皮膚狀況調整保養頻率...
-            </p>
-        </section>
-
-        <!-- AM / PM Segmented Toggle Control -->
-        <section class="bg-oat-border/40 p-1 rounded-2xl flex relative">
-            <button id="toggle-am" onclick="switchTimeOfDay('am')" 
-                    class="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-1.5 z-10">
-                <span class="text-base">☀️</span>
-                <span class="font-serif tracking-wide">早上流程</span>
-            </button>
-            <button id="toggle-pm" onclick="switchTimeOfDay('pm')" 
-                    class="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-1.5 z-10">
-                <span class="text-base">🌙</span>
-                <span class="font-serif tracking-wide">晚上流程</span>
-            </button>
-        </section>
-
-        <!-- Dynamic Mask Alert Banner (Shown if mask helper active in PM) -->
-        <div id="mask-active-banner" class="hidden bg-sage-light border border-sage-border rounded-2xl p-3.5 text-xs text-cocoa leading-relaxed animate-fade-in flex items-start space-x-2.5">
-            <span class="text-base flex-shrink-0">🌿</span>
-            <div class="flex-1">
-                <div class="font-bold text-sage-dark font-serif text-sm mb-0.5" id="mask-banner-title">今晚敷面膜調整中</div>
-                <div id="mask-banner-desc" class="text-cocoa-muted">已自動為你暫停衝突的高濃度成分，並更新流程順序。</div>
-            </div>
-            <button onclick="clearMaskSelection()" class="text-cocoa-muted hover:text-cocoa text-xs underline flex-shrink-0">取消</button>
-        </div>
-
-        <!-- Routine Step Cards List -->
-        <div id="steps-container" class="space-y-3.5">
-            <!-- Step cards rendered via JS -->
-        </div>
-
-        <!-- Singapore Climate Care Advice Footer Box -->
-        <section class="bg-oat-card/70 border border-oat-border rounded-2xl p-4 text-xs text-cocoa-muted space-y-2 mt-6">
-            <div class="font-serif font-bold text-cocoa flex items-center space-x-1.5">
-                <svg class="w-4 h-4 text-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <span>新加坡保養黃金法則</span>
-            </div>
-            <p class="leading-relaxed">
-                在高溫高濕環境與冷氣房內交替，請保持**「早C抗氧化、晚A重修護、T字分區刷酸」**的節奏。補水精華要在微濕臉時擦，擦完面膜建議以清水潑洗多餘膠體以防止搓泥。
-            </p>
-        </section>
-    </main>
-
-    <!-- Floating Bottom Sheet Trigger Button: 面膜小幫手 -->
-    <div id="floating-helper-container" class="fixed bottom-6 left-0 right-0 z-20 px-5 max-w-md mx-auto pointer-events-none">
-        <button onclick="openMaskDrawer()" 
-                class="pointer-events-auto w-full bg-sage hover:bg-sage-dark text-white font-serif py-3.5 px-5 rounded-full shadow-lg shadow-sage/30 flex items-center justify-center space-x-2 transition-all duration-300 active:scale-95">
-            <span class="text-base">🌿</span>
-            <span class="tracking-widest font-medium text-sm">面膜小幫手</span>
-            <span id="current-mask-badge" class="bg-white/20 text-xs px-2 py-0.5 rounded-full font-sans ml-1 hidden">已設定</span>
+    <!-- Header Section -->
+    <header class="text-center space-y-2 pt-2">
+      <div class="text-[11px] tracking-[0.25em] text-cocoa-light uppercase font-sans font-medium">
+        SINGAPORE SKINCARE ROUTINE
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-cocoa">
+        護膚保養指南
+      </h1>
+      <div class="flex items-center justify-center gap-3 pt-1 text-xs text-cocoa-light font-sans">
+        <span id="current-date-display">11 月 21 日 (週六)</span>
+        <span class="text-cardborder">•</span>
+        <button onclick="resetTodayProgress()" class="text-sage underline underline-offset-4 hover:text-sage-dark transition-colors font-medium">
+          重置今日進度
         </button>
-    </div>
+      </div>
+    </header>
 
-    <!-- Mask Drawer Bottom Sheet Modal -->
-    <div id="mask-drawer" class="fixed inset-0 z-50 pointer-events-none">
-        <!-- Backdrop -->
-        <div id="mask-drawer-backdrop" onclick="closeMaskDrawer()" 
-             class="absolute inset-0 bg-cocoa/40 opacity-0 pointer-events-none backdrop-blur-sm"></div>
+    <!-- 7-Day Selector Pills -->
+    <nav class="flex justify-between items-center bg-card p-1.5 rounded-2xl border border-cardborder shadow-sm custom-scrollbar overflow-x-auto gap-1">
+      <button onclick="switchDay(1)" id="day-btn-1" class="day-btn flex-1 min-w-[42px] py-2 rounded-xl text-xs sm:text-sm font-medium text-cocoa-light transition-all flex flex-col items-center gap-1">
+        <span>週一</span>
+        <span class="dot w-1 h-1 rounded-full bg-transparent"></span>
+      </button>
+      <button onclick="switchDay(2)" id="day-btn-2" class="day-btn flex-1 min-w-[42px] py-2 rounded-xl text-xs sm:text-sm font-medium text-cocoa-light transition-all flex flex-col items-center gap-1">
+        <span>週二</span>
+        <span class="dot w-1 h-1 rounded-full bg-transparent"></span>
+      </button>
+      <button onclick="switchDay(3)" id="day-btn-3" class="day-btn flex-1 min-w-[42px] py-2 rounded-xl text-xs sm:text-sm font-medium text-cocoa-light transition-all flex flex-col items-center gap-1">
+        <span>週三</span>
+        <span class="dot w-1 h-1 rounded-full bg-transparent"></span>
+      </button>
+      <button onclick="switchDay(4)" id="day-btn-4" class="day-btn flex-1 min-w-[42px] py-2 rounded-xl text-xs sm:text-sm font-medium text-cocoa-light transition-all flex flex-col items-center gap-1">
+        <span>週四</span>
+        <span class="dot w-1 h-1 rounded-full bg-transparent"></span>
+      </button>
+      <button onclick="switchDay(5)" id="day-btn-5" class="day-btn flex-1 min-w-[42px] py-2 rounded-xl text-xs sm:text-sm font-medium text-cocoa-light transition-all flex flex-col items-center gap-1">
+        <span>週五</span>
+        <span class="dot w-1 h-1 rounded-full bg-transparent"></span>
+      </button>
+      <button onclick="switchDay(6)" id="day-btn-6" class="day-btn flex-1 min-w-[42px] py-2 rounded-xl text-xs sm:text-sm font-medium text-cocoa-light transition-all flex flex-col items-center gap-1">
+        <span>週六</span>
+        <span class="dot w-1 h-1 rounded-full bg-transparent"></span>
+      </button>
+      <button onclick="switchDay(0)" id="day-btn-0" class="day-btn flex-1 min-w-[42px] py-2 rounded-xl text-xs sm:text-sm font-medium text-cocoa-light transition-all flex flex-col items-center gap-1">
+        <span>週日</span>
+        <span class="dot w-1 h-1 rounded-full bg-transparent"></span>
+      </button>
+    </nav>
 
-        <!-- Sliding Panel -->
-        <div id="mask-drawer-panel" 
-             class="absolute bottom-0 left-0 right-0 max-w-md mx-auto bg-oat-card border-t border-oat-border rounded-t-3xl p-6 shadow-2xl transform translate-y-full pointer-events-auto max-h-[85vh] overflow-y-auto">
-            
-            <div class="w-12 h-1 bg-oat-border rounded-full mx-auto mb-5"></div>
-
-            <div class="flex justify-between items-start mb-4">
-                <div>
-                    <h3 class="font-serif font-bold text-xl text-cocoa">面膜智慧小幫手</h3>
-                    <p class="text-xs text-cocoa-muted mt-1">選擇你今晚想敷的面膜類型，系統將自動調整保養順序與避雷防線。</p>
-                </div>
-                <button onclick="closeMaskDrawer()" class="text-cocoa-muted hover:text-cocoa p-1">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Mask Options List -->
-            <div class="space-y-3 my-4">
-                <button onclick="selectMaskOption('none')" 
-                        class="mask-opt-btn w-full text-left p-4 rounded-2xl border border-oat-border bg-oat-base hover:border-sage transition-all flex items-start space-x-3">
-                    <span class="text-xl">🍃</span>
-                    <div class="flex-1">
-                        <div class="font-bold text-sm text-cocoa font-serif">今晚不敷面膜</div>
-                        <div class="text-xs text-cocoa-muted mt-0.5">恢復當天原定保養課表步驟。</div>
-                    </div>
-                </button>
-
-                <button onclick="selectMaskOption('hydrating')" 
-                        class="mask-opt-btn w-full text-left p-4 rounded-2xl border border-oat-border bg-oat-base hover:border-sage transition-all flex items-start space-x-3">
-                    <span class="text-xl">💧</span>
-                    <div class="flex-1">
-                        <div class="font-bold text-sm text-cocoa font-serif">純補水 / 舒緩修護面膜</div>
-                        <div class="text-xs text-cocoa-muted mt-0.5">含玻尿酸、B5、積雪草等。適合週日修護夜或冷氣房乾燥時。</div>
-                    </div>
-                </button>
-
-                <button onclick="selectMaskOption('clay')" 
-                        class="mask-opt-btn w-full text-left p-4 rounded-2xl border border-oat-border bg-oat-base hover:border-sage transition-all flex items-start space-x-3">
-                    <span class="text-xl">🌋</span>
-                    <div class="flex-1">
-                        <div class="font-bold text-sm text-cocoa font-serif">清潔泥膜 / 深層淨化面膜</div>
-                        <div class="text-xs text-cocoa-muted mt-0.5">含高嶺土、火山泥。將自動取消當晚水楊酸與 A 醇，避免過度剝脫。</div>
-                    </div>
-                </button>
-
-                <button onclick="selectMaskOption('active')" 
-                        class="mask-opt-btn w-full text-left p-4 rounded-2xl border border-oat-border bg-oat-base hover:border-sage transition-all flex items-start space-x-3">
-                    <span class="text-xl">✨</span>
-                    <div class="flex-1">
-                        <div class="font-bold text-sm text-cocoa font-serif">美白 / 抗老 / 機能型片狀面膜</div>
-                        <div class="text-xs text-cocoa-muted mt-0.5">活性成分濃度高。將自動暫停 A 醇與酸類，直接補水＋乳液鎖水。</div>
-                    </div>
-                </button>
-            </div>
-
-            <div class="pt-2">
-                <button onclick="closeMaskDrawer()" class="w-full py-3 bg-oat-border/40 hover:bg-oat-border/60 text-cocoa font-medium text-xs rounded-xl transition-colors">
-                    關閉選單
-                </button>
-            </div>
+    <!-- Daily Focus Theme Card -->
+    <section class="bg-card rounded-2xl p-4 sm:p-5 border border-cardborder shadow-sm space-y-2">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-sage inline-block"></span>
+          <h2 id="focus-title" class="font-bold text-base sm:text-lg text-cocoa">
+            【純粹補水修護日】
+          </h2>
         </div>
+        <span class="text-xs text-cocoa-light bg-badge px-2.5 py-1 rounded-full font-sans border border-cardborder">
+          41歲 混合肌 · 新加坡
+        </span>
+      </div>
+      <p id="focus-desc" class="text-xs sm:text-sm text-cocoa-light leading-relaxed pl-4 border-l-2 border-sage/30">
+        完全停用酸類與所有 A 醇！讓皮膚在冷氣房徹底休息修護屏障。
+      </p>
+    </section>
+
+    <!-- Morning / Evening Segmented Toggle -->
+    <div class="bg-[#F0ECE4] p-1 rounded-2xl flex relative shadow-inner">
+      <button onclick="switchTime('morning')" id="tab-morning" class="flex-1 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2 z-10 text-cocoa">
+        <span>☀️</span> 早上流程
+      </button>
+      <button onclick="switchTime('evening')" id="tab-evening" class="flex-1 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2 z-10 text-cocoa-light">
+        <span>🌙</span> 晚上流程
+      </button>
+      <!-- Active Sliding Pill Indicator -->
+      <div id="tab-indicator" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-card rounded-xl shadow-sm transition-transform duration-300 ease-out"></div>
     </div>
 
-    <!-- Application Script Logic -->
-    <script>
-        // Weekly Routine Data Master Configuration
-        const ROUTINE_DATA = {
-            1: { // Monday 週一
-                name: "週一",
-                badge: "【疏通控油夜】",
-                badgeColor: "sage",
-                desc: "整理一週累積的毛孔油脂，T字部位水楊酸局部疏通，搭配煙醯胺穩固屏障。",
-                am: [
-                    { id: "m1_1", num: 1, name: "純補水打底", summary: "微濕臉擦上，充水角質層", detail: "【建議新增產品】使用單純的玻尿酸或 B5 保濕精華。洗臉後趁臉部帶有微濕水氣時立刻擦上，能把水分鎖進角質層，同時緩衝後續高濃度維C的刺痛感。", timer: 0 },
-                    { id: "m1_2", num: 2, name: "Timeless 20% 維他命C", summary: "全臉抗氧化，對抗新加坡紫外線", detail: "高濃度左旋維他命 C。建議在微濕水氣或乾爽臉部第一步吸收。開封後請存放在冰箱冷藏，若變為琥珀深色即已氧化失效。", timer: 0 },
-                    { id: "m1_3", num: 3, name: "Timeless Q10 精華", summary: "協同維C抗老，清爽防禦", detail: "輔酶 Q10 與維他命 C 是絕佳搭檔，能在新加坡濕熱環境下提供強效抗氧化，質地水潤不負擔。", timer: 0 },
-                    { id: "m1_4", num: 4, name: "清爽型防曬 Sunscreen", summary: "SPF50/PA++++ 徹底防護", detail: "新加坡白天紫外線強烈，防曬是抗老最關鍵一步。前置已有精華保濕，若防曬有保濕感可省略日間乳液。", timer: 0 }
-                ],
-                pm: [
-                    { id: "p1_1", num: 1, name: "Paula’s Choice 2% 水楊酸", summary: "僅擦 T 字與下巴，局部疏通", detail: "避開較乾的兩頰！擦完後請等待 5 分鐘，讓酸類發揮疏通毛孔作用並恢復皮膚 pH 值。 tonight 絕不可疊擦 A 醇！", timer: 300 },
-                    { id: "p1_2", num: 2, name: "純補水打底", summary: "補充深層水分", detail: "水楊酸吸收後，補充玻尿酸或 B5 精華，為剛疏通的角質層迅速補充水分。", timer: 0 },
-                    { id: "p1_3", num: 3, name: "Advanced Clinicals 5% 煙醯胺", summary: "收斂毛孔，抑制出油", detail: "5% 煙醯胺可有效調控夜間皮脂分泌，同時修護皮膚屏障。", timer: 0 },
-                    { id: "p1_4", num: 4, name: "Neutrogena A醇眼霜", summary: "輕點眼周與魚尾紋", detail: "水楊酸只擦 T 字，眼周仍可安心使用這款溫和 A 醇眼霜。避開上眼皮與眼睛內部。", timer: 0 },
-                    { id: "p1_5", num: 5, name: "CeraVe PM 乳液", summary: "全臉鎖水修護", detail: "含神經醯胺與煙醯胺，無油配方完美適合新加坡冷氣房。兩頰若感覺乾燥可稍微厚敷。", timer: 0 }
-                ]
-            },
-            2: { // Tuesday 週二
-                name: "週二",
-                badge: "【A醇抗老夜】",
-                badgeColor: "sage",
-                desc: "胜肽搭配 0.3% A 醇協同刺激膠原蛋白，提升肌膚緊緻度。",
-                am: [
-                    { id: "m2_1", num: 1, name: "純補水打底", summary: "微濕臉擦上，充水角質層", detail: "使用單純玻尿酸或 B5 精華，在擦維 C 前先讓角質層喝飽水。", timer: 0 },
-                    { id: "m2_2", num: 2, name: "Timeless 20% 維他命C", summary: "全臉抗氧化", detail: "白天強效抗氧化，預防光老化與色素沉澱。", timer: 0 },
-                    { id: "m2_3", num: 3, name: "Advanced Clinicals 5% 煙醯胺", summary: "日間控油，交替使用", detail: "今天早上改用煙醯胺控油，與 Q10 隔天交替，避免新加坡早上疊擦過多層精華導致防曬搓泥。", timer: 0 },
-                    { id: "m2_4", num: 4, name: "清爽型防曬 Sunscreen", summary: "SPF50/PA++++ 徹底防護", detail: "塗抹足量防曬，保護剛接受 A 醇抗老更新的肌膚。", timer: 0 }
-                ],
-                pm: [
-                    { id: "p2_1", num: 1, name: "純補水打底", summary: "打底緩衝刺激", detail: "洗臉後第一步擦純補水精華，幫肌膚打底，能降低後續 0.3% A 醇的刺激脫皮風險。", timer: 0 },
-                    { id: "p2_2", num: 2, name: "Asterwood 三重胜肽精華", summary: "胜肽協同抗老", detail: "含 Matrixyl 3000 與 Argireline 撫紋胜肽，與 A 醇是黃金抗老拍檔。", timer: 0 },
-                    { id: "p2_3", num: 3, name: "Cosrx 0.3% A醇", summary: "全臉抗老更新", detail: "取豆大份量均勻塗抹全臉（避開眼周與唇周）。今晚無酸類干擾，A醇發揮最佳效果。", timer: 0 },
-                    { id: "p2_4", num: 4, name: "Neutrogena A醇眼霜", summary: "眼周專屬撫紋", detail: "點擦眼下與眼尾魚尾紋處，輕柔拍開至吸收。", timer: 0 },
-                    { id: "p2_5", num: 5, name: "CeraVe PM 乳液", summary: "修護鎖水，舒緩乾燥", detail: "補足神經醯胺修護屏障，冷氣房睡覺時鎖住全夜水分。", timer: 0 }
-                ]
-            },
-            3: { // Wednesday 週三
-                name: "週三",
-                badge: "【A醇抗老夜】",
-                badgeColor: "sage",
-                desc: "連續第二晚 A 醇更新，維持細胞代謝節奏。",
-                am: [
-                    { id: "m3_1", num: 1, name: "純補水打底", summary: "角質層抓水", detail: "玻尿酸/B5 精華為日間肌膚充水。", timer: 0 },
-                    { id: "m3_2", num: 2, name: "Timeless 20% 維他命C", summary: "強效抗氧化", detail: "滴 3-4 滴塗抹全臉與頸部。", timer: 0 },
-                    { id: "m3_3", num: 3, name: "Timeless Q10 精華", summary: "抗氧化雙星", detail: "幫助肌膚對抗日間環境自由基破壞。", timer: 0 },
-                    { id: "m3_4", num: 4, name: "清爽型防曬 Sunscreen", summary: "全廣譜防曬", detail: "均勻塗抹，室外活動記得補擦。", timer: 0 }
-                ],
-                pm: [
-                    { id: "p3_1", num: 1, name: "純補水打底", summary: "溫和打底", detail: "洗臉後第一步補充肌膚水份。", timer: 0 },
-                    { id: "p3_2", num: 2, name: "Asterwood 三重胜肽精華", summary: "膠原蛋白促進", detail: "胜肽溫和好吸收，為 A 醇鋪路。", timer: 0 },
-                    { id: "p3_3", num: 3, name: "Cosrx 0.3% A醇", summary: "核心抗老", detail: "全臉薄擦 0.3% A 醇。若兩頰微紅可先擦乳液再擦 A 醇（三明治擦法）。", timer: 0 },
-                    { id: "p3_4", num: 4, name: "Neutrogena A醇眼霜", summary: "眼周細紋保養", detail: "指腹輕拍眼周吸收。", timer: 0 },
-                    { id: "p3_5", num: 5, name: "CeraVe PM 乳液", summary: "屏障鎖水封膜", detail: "清爽無油，在夜間冷氣房中維護水油平衡。", timer: 0 }
-                ]
-            },
-            4: { // Thursday 週四
-                name: "週四",
-                badge: "【疏通控油夜】",
-                badgeColor: "sage",
-                desc: "週中第二次水楊酸疏通，清理新加坡高濕度引發的積油與粉刺。",
-                am: [
-                    { id: "m4_1", num: 1, name: "純補水打底", summary: "微濕臉擦上", detail: "玻尿酸/B5精華吸收鎖水。", timer: 0 },
-                    { id: "m4_2", num: 2, name: "Timeless 20% 維他命C", summary: "全臉抗氧化", detail: "對抗白天日光損傷。", timer: 0 },
-                    { id: "m4_3", num: 3, name: "Advanced Clinicals 5% 煙醯胺", summary: "日間控油收斂", detail: "協助白天 T 字部位減少油光。", timer: 0 },
-                    { id: "m4_4", num: 4, name: "清爽型防曬 Sunscreen", summary: "SPF50 防曬", detail: "最後一步務必防曬。", timer: 0 }
-                ],
-                pm: [
-                    { id: "p4_1", num: 1, name: "Paula’s Choice 2% 水楊酸", summary: "僅擦 T 字與下巴，靜置 5 分鐘", detail: "局部使用於易出油粉刺處！靜置 5 分鐘等待作用。今晚停用 Cosrx 0.3% A 醇。", timer: 300 },
-                    { id: "p4_2", num: 2, name: "純補水打底", summary: "補充深層水分", detail: "水楊酸吸收後補充水分。", timer: 0 },
-                    { id: "p4_3", num: 3, name: "Advanced Clinicals 5% 煙醯胺", summary: "控油修護", detail: "強化毛孔收斂與屏障健康。", timer: 0 },
-                    { id: "p4_4", num: 4, name: "Neutrogena A醇眼霜", summary: "眼周撫紋", detail: "點擦眼周，避開水楊酸敷用區域。", timer: 0 },
-                    { id: "p4_5", num: 5, name: "CeraVe PM 乳液", summary: "修護鎖水", detail: "全臉保濕封膜。", timer: 0 }
-                ]
-            },
-            5: { // Friday 週五
-                name: "週五",
-                badge: "【A醇抗老夜】",
-                badgeColor: "sage",
-                desc: "週末前夕恢復 A 醇抗老，刺激膠原蛋白修護。",
-                am: [
-                    { id: "m5_1", num: 1, name: "純補水打底", summary: "微濕臉打底", detail: "補水精華打底。", timer: 0 },
-                    { id: "m5_2", num: 2, name: "Timeless 20% 維他命C", summary: "強效抗氧化", detail: "抵抗白天自由基。", timer: 0 },
-                    { id: "m5_3", num: 3, name: "Timeless Q10 精華", summary: "輔酶 Q10 協同", detail: "提升日間皮膚光澤度。", timer: 0 },
-                    { id: "m5_4", num: 4, name: "清爽型防曬 Sunscreen", summary: "SPF50 防曬", detail: "完整防曬保護。", timer: 0 }
-                ],
-                pm: [
-                    { id: "p5_1", num: 1, name: "純補水打底", summary: "充水打底", detail: "為角質層注入純粹水份。", timer: 0 },
-                    { id: "p5_2", num: 2, name: "Asterwood 三重胜肽精華", summary: "胜肽緊緻", detail: "Matrixyl 3000 與 Argireline 作用。", timer: 0 },
-                    { id: "p5_3", num: 3, name: "Cosrx 0.3% A醇", summary: "全臉 A 醇抗老", detail: "薄擦全臉，修護撫紋。", timer: 0 },
-                    { id: "p5_4", num: 4, name: "Neutrogena A醇眼霜", summary: "眼周細紋保養", detail: "輕拍眼周至吸收。", timer: 0 },
-                    { id: "p5_5", num: 5, name: "CeraVe PM 乳液", summary: "鎖水修護", detail: "夜間冷氣房保濕。", timer: 0 }
-                ]
-            },
-            6: { // Saturday 週六
-                name: "週六",
-                badge: "【A醇抗老夜】",
-                badgeColor: "sage",
-                desc: "本週第四次 A 醇保養，保持穩定高耐受的抗老頻率。",
-                am: [
-                    { id: "m6_1", num: 1, name: "純補水打底", summary: "充水打底", detail: "玻尿酸/B5 打底。", timer: 0 },
-                    { id: "m6_2", num: 2, name: "Timeless 20% 維他命C", summary: "全臉抗氧化", detail: "防護日間傷害。", timer: 0 },
-                    { id: "m6_3", num: 3, name: "Advanced Clinicals 5% 煙醯胺", summary: "控油防禦", detail: "維持出油平衡。", timer: 0 },
-                    { id: "m6_4", num: 4, name: "清爽型防曬 Sunscreen", summary: "全廣譜防曬", detail: "週末出門防曬首要。", timer: 0 }
-                ],
-                pm: [
-                    { id: "p6_1", num: 1, name: "純補水打底", summary: "補充水份", detail: "基礎補水打底。", timer: 0 },
-                    { id: "p6_2", num: 2, name: "Asterwood 三重胜肽精華", summary: "胜肽彈潤", detail: "撫紋與膠原蛋白維護。", timer: 0 },
-                    { id: "p6_3", num: 3, name: "Cosrx 0.3% A醇", summary: "核心 A 醇抗老", detail: "均勻塗抹全臉。", timer: 0 },
-                    { id: "p6_4", num: 4, name: "Neutrogena A醇眼霜", summary: "眼周專屬保養", detail: "眼周拍撫吸收。", timer: 0 },
-                    { id: "p6_5", num: 5, name: "CeraVe PM 乳液", summary: "全臉封膜保濕", detail: "神經醯胺修護防線。", timer: 0 }
-                ]
-            },
-            0: { // Sunday 週日
-                name: "週日",
-                badge: "【純粹補水修護日】",
-                badgeColor: "terracotta",
-                desc: "完全停用酸類與所有 A 醇！讓皮膚在冷氣房徹底休息修護屏障。",
-                am: [
-                    { id: "m0_1", num: 1, name: "純補水打底", summary: "深層充水打底", detail: "玻尿酸/B5保濕精華，補充水份。", timer: 0 },
-                    { id: "m0_2", num: 2, name: "Timeless Q10 精華", summary: "溫和抗氧化", detail: "【今天停用 20% 維C】使用 Q10 進行溫和日間抗氧化。", timer: 0 },
-                    { id: "m0_3", num: 3, name: "Asterwood 三重胜肽精華", summary: "胜肽溫和修護", detail: "胜肽成分極度溫和，協助肌膚屏障建構。", timer: 0 },
-                    { id: "m0_4", num: 4, name: "清爽型防曬 Sunscreen", summary: "基礎防曬", detail: "出門防曬仍需落實。", timer: 0 }
-                ],
-                pm: [
-                    { id: "p0_1", num: 1, name: "純補水打底", summary: "多層次充水", detail: "洗臉後可塗抹 1-2 層純補水精華，讓角質層完全喝飽水。", timer: 0 },
-                    { id: "p0_2", num: 2, name: "Advanced Clinicals 5% 煙醯胺", summary: "屏障修護", detail: "煙醯胺協助強化角質屏障。", timer: 0 },
-                    { id: "p0_3", num: 3, name: "Asterwood 三重胜肽精華", summary: "胜肽養膚", detail: "【停用 Cosrx 0.3% A醇與眼霜】純粹利用胜肽養護肌膚。", timer: 0 },
-                    { id: "p0_4", num: 4, name: "CeraVe PM 乳液", summary: "厚敷修護鎖水", detail: "今晚可適度厚敷乳液，為即將到來的新一週儲備肌膚防禦力。", timer: 0 }
-                ]
-            }
-        };
+    <!-- Skincare Steps Checklist Container -->
+    <div id="steps-container" class="space-y-3">
+      <!-- Dynamic Step Cards Rendered Here -->
+    </div>
 
-        // State Tracking variables
-        let selectedDay = new Date().getDay(); // 0 (Sun) to 6 (Sat)
-        let timeOfDay = new Date().getHours() >= 17 ? 'pm' : 'am'; // Auto switch to PM after 5:00 PM
-        let selectedMask = 'none'; // 'none', 'hydrating', 'clay', 'active'
-        let activeTimers = {}; // stores active interval handles for cards
+    <!-- Bottom Note Card: Singapore Skincare Golden Rules -->
+    <div class="bg-card rounded-2xl p-4 sm:p-5 border border-cardborder shadow-sm space-y-2.5">
+      <div class="flex items-center gap-2 text-sage-dark font-medium text-sm">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span>新加坡保養黃金法則</span>
+      </div>
+      <p class="text-xs sm:text-sm text-cocoa-light leading-relaxed">
+        在高溫高濕環境與冷氣房內交替，請保持<strong class="font-bold text-cocoa">「早C抗氧化、晚A重修護、T字分區刷酸」</strong>的節奏。補水精華要在微濕臉時擦，擦完面膜建議以清水潑洗多餘膠體以防止搓泥。
+      </p>
+    </div>
 
-        // Initialize Application
-        document.addEventListener('DOMContentLoaded', () => {
-            renderDateHeader();
-            renderDayButtons();
-            syncUI();
+  </main>
+
+  <!-- Sticky Bottom Sheet Drawer Trigger -->
+  <div class="fixed bottom-6 left-0 right-0 z-20 flex justify-center px-4">
+    <button onclick="toggleMaskDrawer(true)" class="bg-sage hover:bg-sage-dark active:scale-95 text-white shadow-lg hover:shadow-xl px-6 py-3 rounded-full text-sm font-medium flex items-center gap-2 transition-all duration-200 cursor-pointer">
+      <span class="text-base">🌿</span>
+      <span>面膜小幫手</span>
+    </button>
+  </div>
+
+  <!-- Sheet Mask Helper Bottom Sheet Modal Overlay -->
+  <div id="mask-drawer-backdrop" onclick="toggleMaskDrawer(false)" class="fixed inset-0 bg-cocoa/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0"></div>
+
+  <!-- Bottom Sheet Drawer Content -->
+  <div id="mask-drawer" class="fixed bottom-0 left-0 right-0 z-50 bg-oat rounded-t-3xl border-t border-cardborder shadow-2xl max-w-lg mx-auto transform translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[85vh]">
+    
+    <!-- Drawer Drag Bar -->
+    <div class="w-12 h-1.5 bg-cardborder rounded-full mx-auto my-3 shrink-0"></div>
+
+    <div class="px-5 pb-6 overflow-y-auto space-y-4">
+      <div class="flex items-center justify-between pb-2 border-b border-cardborder">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🌿</span>
+          <h3 class="font-bold text-lg text-cocoa">面膜搭配助手指南</h3>
+        </div>
+        <button onclick="toggleMaskDrawer(false)" class="p-1 rounded-full hover:bg-card text-cocoa-light transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <p class="text-xs text-cocoa-light leading-relaxed">
+        敷面膜時，請根據當天使用的保養成分適度微調流程，預防搓泥或過度刺激：
+      </p>
+
+      <!-- Option 1 -->
+      <div class="bg-card p-4 rounded-xl border border-cardborder space-y-1.5 shadow-sm">
+        <div class="flex items-center gap-2 font-bold text-sm text-cocoa">
+          <span class="w-2 h-2 rounded-full bg-sage"></span>
+          <span>1. 純補水／舒緩修護面膜</span>
+        </div>
+        <p class="text-xs text-cocoa-light leading-relaxed">
+          <strong>適合時機：</strong>天天可用，或刷酸/A醇後肌膚微乾燥時。<br/>
+          <strong>調整建議：</strong>洗臉後先擦補水精華打底 ➔ 敷面膜 10-15 分鐘 ➔ 清水潑洗餘膠 ➔ 擦上抗老精華或鎖水乳液。
+        </p>
+      </div>
+
+      <!-- Option 2 -->
+      <div class="bg-card p-4 rounded-xl border border-cardborder space-y-1.5 shadow-sm">
+        <div class="flex items-center gap-2 font-bold text-sm text-cocoa">
+          <span class="w-2 h-2 rounded-full bg-amber-600"></span>
+          <span>2. 清潔泥膜／深層淨化面膜</span>
+        </div>
+        <p class="text-xs text-cocoa-light leading-relaxed">
+          <strong>適合時機：</strong>每週 1-2 次，建議於「刷酸日」或「補水修護日」使用。<br/>
+          <strong>注意事項：</strong>泥膜沖洗後肌膚水分易流失，請務必搭配純補水精華與高修護乳霜，並<strong>避開 A 醇同夜高濃度重疊</strong>。
+        </p>
+      </div>
+
+      <!-- Option 3 -->
+      <div class="bg-card p-4 rounded-xl border border-cardborder space-y-1.5 shadow-sm">
+        <div class="flex items-center gap-2 font-bold text-sm text-cocoa">
+          <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+          <span>3. 美白／抗老／功能型面膜</span>
+        </div>
+        <p class="text-xs text-cocoa-light leading-relaxed">
+          <strong>適合時機：</strong>肌膚穩定、無發紅脫皮時。<br/>
+          <strong>注意事項：</strong>若含高濃度維C、水楊酸或果酸，<strong>請勿與 A 醇晚間疊加</strong>，避免新加坡高溫冷氣交替下引發肌膚屏障受損。
+        </p>
+      </div>
+
+      <div class="pt-2">
+        <button onclick="toggleMaskDrawer(false)" class="w-full bg-sage hover:bg-sage-dark text-white font-medium py-3 rounded-xl transition-colors text-sm">
+          我知道了
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-cocoa text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none z-50 flex items-center gap-2">
+    <span>✨</span>
+    <span id="toast-message">進度已成功重置</span>
+  </div>
+
+  <!-- JavaScript App Logic -->
+  <script>
+    // Routine Data Structure for 7 Days
+    const routineData = {
+      0: { // Sunday (週日)
+        dayName: '週日',
+        focusTitle: '【溫和煥膚準備日】',
+        focusDesc: '準備迎向新一週！晚間進行極微量角質調理與高保濕鎮定。',
+        morning: [
+          { title: '純補水打底', summary: '深層充水打底', detail: '玻尿酸/B5保濕精華，補充水份。' },
+          { title: 'Timeless Q10 精華', summary: '溫和日間抗氧化', detail: '選用 Q10 促進肌膚新陳代謝與抵抗自由基。' },
+          { title: 'Asterwood 三重勝肽精華', summary: '勝肽溫和修護', detail: '協助彈力纖維修護，全臉均勻塗抹。' },
+          { title: '清爽型防曬 Sunscreen', summary: '基礎防曬', detail: '室內冷氣房或戶外皆需防範 UV 紫外線。' }
+        ],
+        evening: [
+          { title: '溫和清潔', summary: '洗淨一日髒污', detail: '使用無負擔氨基酸潔顏乳。' },
+          { title: 'T字極微量軟化角質', summary: '溫和淨化毛孔', detail: '僅於鼻翼與額頭輕擦低濃度溫和酸類。' },
+          { title: '厚擦玻尿酸', summary: '密集水份補給', detail: '給予肌膚充沛水分預防乾燥。' },
+          { title: '舒緩晚安凍膜', summary: '夜間鎖水屏障', detail: '薄擦一層凍膜，鎖住水分安心入睡。' }
+        ]
+      },
+      1: { // Monday (週一)
+        dayName: '週一',
+        focusTitle: '【早C晚A · 穩健打底日】',
+        focusDesc: '週一啟動經典早C晚A循環，早間抗氧化，晚間啟動A醇抗老修護。',
+        morning: [
+          { title: '純補水打底', summary: '深層充水打底', detail: '於微濕臉部塗抹玻尿酸精華。' },
+          { title: 'Timeless 20% 維C精華', summary: '高效抗氧化', detail: '均勻塗抹全臉與頸部，明亮膚色。' },
+          { title: '清爽型防曬 Sunscreen', summary: '完整防禦', detail: '維C搭配防曬能倍增抗氧化防禦效果。' }
+        ],
+        evening: [
+          { title: '溫和潔膚', summary: '徹底卸除防曬', detail: '選用溫和洗面乳，不過度洗去油脂。' },
+          { title: '玻尿酸前導水', summary: '基礎補水', detail: '為後續A醇提供良好緩衝水潤基底。' },
+          { title: '溫和 A醇精華', summary: '夜間抗老修護', detail: '避開眼周與嘴唇，取綠豆大小均勻塗抹。' },
+          { title: '屏障修護乳液', summary: '鎖水修護', detail: '強化皮脂膜，預防冷氣房吹整脫皮。' }
+        ]
+      },
+      2: { // Tuesday (週二)
+        dayName: '週二',
+        focusTitle: '【T字分區刷酸日】',
+        focusDesc: '針對新加坡濕熱氣候的T字出油毛孔，進行精準分區酸類煥膚。',
+        morning: [
+          { title: '純補水打底', summary: '深層充水打底', detail: '玻尿酸/B5保濕精華，補充水分。' },
+          { title: 'Timeless Q10 精華', summary: '溫和抗氧化', detail: '暫緩濃縮維C，使用 Q10 進行日間溫和護理。' },
+          { title: 'Asterwood 三重勝肽精華', summary: '修護建構', detail: '勝肽成分極度溫和，協助肌膚屏障建構。' },
+          { title: '清爽型防曬 Sunscreen', summary: '基礎防曬', detail: '落實防曬保護，防止紫外線傷害。' }
+        ],
+        evening: [
+          { title: '潔顏清潔', summary: '深層溫和洗淨', detail: '溫和清潔皮膚表面油脂與污垢。' },
+          { title: 'T字部位水楊酸/杏仁酸', summary: '分區控油刷酸', detail: '僅在額頭、鼻翼、下巴擦拭水楊酸，避開兩頰。' },
+          { title: '兩頰純補水修護精華', summary: '分區純粹保濕', detail: '兩頰乾燥區加強玻尿酸與勝肽保濕。' },
+          { title: '清爽鎖水膠', summary: '保濕封底', detail: '塗抹質地清爽的鎖水凝膠或乳液。' }
+        ]
+      },
+      3: { // Wednesday (週三)
+        dayName: '週三',
+        focusTitle: '【A醇強化抗老夜】',
+        focusDesc: '小週末加強 A 醇撫紋，早間維 C 與勝肽強化緊緻防禦。',
+        morning: [
+          { title: '純補水打底', summary: '深層充水打底', detail: '微濕臉塗抹保濕打底精華。' },
+          { title: 'Timeless 20% 維C精華', summary: '極致抗氧化', detail: '日間掃除自由基，提亮暗沉。' },
+          { title: '勝肽緊緻精華', summary: '彈力賦活', detail: '協同維C提升肌膚緊緻度。' },
+          { title: '清爽型防曬 Sunscreen', summary: '高階防護', detail: '戶外出門防曬務必擦足量。' }
+        ],
+        evening: [
+          { title: '溫和清潔', summary: '卸除髒污', detail: '用溫水與親膚洗面乳清洗。' },
+          { title: '補水打底', summary: '紓解乾燥', detail: '擦上單純玻尿酸保濕液。' },
+          { title: 'A醇修護精華', summary: '深度抗老', detail: '避開眼周，全臉薄擦 A 醇精華。' },
+          { title: 'B5抗老修護霜', summary: '滋養封底', detail: '撫平冷氣房引起的乾紋，厚實修護。' }
+        ]
+      },
+      4: { // Thursday (週四)
+        dayName: '週四',
+        focusTitle: '【深層清潔與修複日】',
+        focusDesc: '暫停 A 醇與酸類，使用清潔泥膜深層淨化後進行密集補水。',
+        morning: [
+          { title: '純補水打底', summary: '深層充水打底', detail: '玻尿酸/B5保濕精華，補充水份。' },
+          { title: 'Timeless Q10 精華', summary: '溫和抗氧化', detail: '使用 Q10 進行溫和日間抗氧化。' },
+          { title: '清爽型防曬 Sunscreen', summary: '基礎防曬', detail: '出門防曬仍需落實。' }
+        ],
+        evening: [
+          { title: '泥膜淨化 T 字', summary: '深層清潔毛孔', detail: '敷泥膜 8-10 分鐘，吸收多餘皮脂。' },
+          { title: '清水沖洗', summary: '清潔乾淨', detail: '溫水徹底沖洗泥膜餘殘。' },
+          { title: '舒緩修護面膜', summary: '密集充水 (10-15分)', detail: '敷純補水/鎮定型面膜補充水分。' },
+          { title: '清水潑洗餘膠 & 鎖水乳液', summary: '防止搓泥', detail: '潑洗多餘膠體後塗抹修護乳液。' }
+        ]
+      },
+      5: { // Friday (週五)
+        dayName: '週五',
+        focusTitle: '【高階早C晚A彈潤日】',
+        focusDesc: '迎接週末前的黃金保養組合，恢復彈潤光澤。',
+        morning: [
+          { title: '純補水打底', summary: '深層充水打底', detail: '微濕臉部給予充分水份。' },
+          { title: 'Timeless 20% 維C精華', summary: '晨間亮白', detail: '高效抗氧化，打造明亮光澤感。' },
+          { title: '三重勝肽精華', summary: '彈力保濕', detail: '撫平細紋，強化皮膚基底。' },
+          { title: '清爽型防曬 Sunscreen', summary: '基礎防曬', detail: '徹底防禦紫外線防曬。' }
+        ],
+        evening: [
+          { title: '卸妝潔顏', summary: '溫和清潔', detail: '徹底洗去彩妝與日間防曬。' },
+          { title: '補水前導', summary: '基礎保濕', detail: '打底並舒緩肌膚。' },
+          { title: 'A醇煥膚精華', summary: '夜間煥膚', detail: '適量塗抹 A 醇促進角質正常代謝。' },
+          { title: '胜肽抗老晚霜', summary: '鎖水修護', detail: '鎖住前序營養，睡眠間密集滋養。' }
+        ]
+      },
+      6: { // Saturday (週六) - Match Image Exactly!
+        dayName: '週六',
+        focusTitle: '【純粹補水修護日】',
+        focusDesc: '完全停用酸類與所有 A 醇！讓皮膚在冷氣房徹底休息修護屏障。',
+        morning: [
+          { title: '純補水打底', summary: '深層充水打底', detail: '玻尿酸/B5保濕精華，補充水份。' },
+          { title: 'Timeless Q10 精華', summary: '溫和抗氧化', detail: '【今天停用 20% 維C】使用 Q10 進行溫和日間抗氧化。' },
+          { title: 'Asterwood 三重勝肽精華', summary: '勝肽溫和修護', detail: '勝肽成分極度溫和，協助肌膚屏障建構。' },
+          { title: '清爽型防曬 Sunscreen', summary: '基礎防曬', detail: '出門防曬仍需落實。' }
+        ],
+        evening: [
+          { title: '溫和卸妝洗臉', summary: '不破壞皮脂膜', detail: '選用無香精溫和洗面乳，維持溫和清潔。' },
+          { title: '高保濕修護精華', summary: '密集充水', detail: '撫平冷氣房帶來的乾燥細紋。' },
+          { title: '藍銅勝肽/B5修護霜', summary: '鎖水屏障', detail: '厚擦修護霜，為下週酸類與 A 醇打好基底。' }
+        ]
+      }
+    };
+
+    // Global State
+    let currentDay = 6; // Default Saturday matching screenshot
+    let currentTime = 'morning'; // 'morning' or 'evening'
+    let expandedSteps = {}; // Tracks open accordion step cards
+    let checkedSteps = {}; // Tracks checkmarks saved in localStorage
+
+    // DOM Elements
+    const focusTitleEl = document.getElementById('focus-title');
+    const focusDescEl = document.getElementById('focus-desc');
+    const stepsContainerEl = document.getElementById('steps-container');
+    const tabMorningBtn = document.getElementById('tab-morning');
+    const tabEveningBtn = document.getElementById('tab-evening');
+    const tabIndicator = document.getElementById('tab-indicator');
+    const toastEl = document.getElementById('toast');
+    const toastMsgEl = document.getElementById('toast-message');
+
+    // Initialize App
+    window.addEventListener('DOMContentLoaded', () => {
+      // Load saved check state
+      try {
+        const saved = localStorage.getItem('sg_skincare_checked');
+        if (saved) checkedSteps = JSON.parse(saved);
+      } catch (e) { console.error(e); }
+
+      // Auto detect current day of week (0-6)
+      const dateNow = new Date();
+      currentDay = dateNow.getDay();
+      
+      // Update header date text
+      const dayNames = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
+      const month = dateNow.getMonth() + 1;
+      const date = dateNow.getDate();
+      document.getElementById('current-date-display').innerText = `${month} 月 ${date} 日 (${dayNames[currentDay]})`;
+
+      renderAll();
+    });
+
+    // Switch Day (0-6)
+    function switchDay(dayNum) {
+      currentDay = dayNum;
+      renderAll();
+    }
+
+    // Switch Morning / Evening Time
+    function switchTime(time) {
+      currentTime = time;
+      
+      if (time === 'morning') {
+        tabIndicator.style.transform = 'translateX(0%)';
+        tabMorningBtn.classList.replace('text-cocoa-light', 'text-cocoa');
+        tabEveningBtn.classList.replace('text-cocoa', 'text-cocoa-light');
+      } else {
+        tabIndicator.style.transform = 'translateX(100%)';
+        tabEveningBtn.classList.replace('text-cocoa-light', 'text-cocoa');
+        tabMorningBtn.classList.replace('text-cocoa', 'text-cocoa-light');
+      }
+
+      renderSteps();
+    }
+
+    // Main Render Function
+    function renderAll() {
+      // 1. Update 7-Day Navbar Selector
+      document.querySelectorAll('.day-btn').forEach((btn, idx) => {
+        const dayIdx = (idx === 6) ? 0 : idx + 1; // 1..6, 0
+        const dot = btn.querySelector('.dot');
+        
+        if (dayIdx === currentDay) {
+          btn.className = "day-btn flex-1 min-w-[42px] py-2 rounded-xl text-xs sm:text-sm font-medium bg-sage text-white shadow-sm transition-all flex flex-col items-center gap-1";
+          dot.className = "dot w-1 h-1 rounded-full bg-white";
+        } else {
+          btn.className = "day-btn flex-1 min-w-[42px] py-2 rounded-xl text-xs sm:text-sm font-medium text-cocoa-light hover:bg-badge transition-all flex flex-col items-center gap-1";
+          dot.className = "dot w-1 h-1 rounded-full bg-transparent";
+        }
+      });
+
+      // 2. Update Focus Card
+      const data = routineData[currentDay];
+      focusTitleEl.innerText = data.focusTitle;
+      focusDescEl.innerText = data.focusDesc;
+
+      // 3. Render Steps
+      renderSteps();
+    }
+
+    // Render Steps List
+    function renderSteps() {
+      const data = routineData[currentDay];
+      const list = (currentTime === 'morning') ? data.morning : data.evening;
+
+      stepsContainerEl.innerHTML = list.map((step, idx) => {
+        const stepNum = idx + 1;
+        const stepKey = `${currentDay}-${currentTime}-${stepNum}`;
+        const isChecked = !!checkedSteps[stepKey];
+        const isExpanded = !!expandedSteps[stepKey];
+
+        return `
+          <div class="bg-card rounded-2xl border border-cardborder shadow-sm overflow-hidden transition-all duration-200">
+            <!-- Main Step Row -->
+            <div class="p-4 sm:p-4.5 flex items-center justify-between gap-3 cursor-pointer select-none" onclick="toggleStepExpand('${stepKey}')">
+              
+              <div class="flex items-center gap-3 min-w-0">
+                <!-- Checkbox -->
+                <button onclick="toggleCheck(event, '${stepKey}')" class="w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${isChecked ? 'bg-sage border-sage text-white' : 'border-cardborder hover:border-sage'}" aria-label="Mark completed">
+                  ${isChecked ? `
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  ` : ''}
+                </button>
+
+                <!-- Step Number Pill -->
+                <span class="w-6 h-6 rounded-md bg-badge text-cocoa-light text-xs font-sans font-medium flex items-center justify-center shrink-0">
+                  ${stepNum}
+                </span>
+
+                <!-- Step Titles -->
+                <div class="truncate">
+                  <h4 class="font-bold text-sm sm:text-base text-cocoa ${isChecked ? 'line-through text-cocoa-light/60' : ''}">
+                    ${step.title}
+                  </h4>
+                  <p class="text-xs text-cocoa-light truncate font-sans">
+                    ${step.summary}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Chevron Accordion Icon -->
+              <button class="text-cocoa-light/70 hover:text-cocoa shrink-0 p-1 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Expandable Detail Panel -->
+            ${isExpanded ? `
+              <div class="px-4 pb-4 pt-1 bg-[#FAF8F5] border-t border-cardborder/60 text-xs text-cocoa-light leading-relaxed font-sans">
+                ${step.detail}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Toggle Step Checkmark
+    function toggleCheck(event, stepKey) {
+      event.stopPropagation();
+      checkedSteps[stepKey] = !checkedSteps[stepKey];
+      try {
+        localStorage.setItem('sg_skincare_checked', JSON.stringify(checkedSteps));
+      } catch(e){}
+      renderSteps();
+    }
+
+    // Toggle Step Expand/Collapse
+    function toggleStepExpand(stepKey) {
+      expandedSteps[stepKey] = !expandedSteps[stepKey];
+      renderSteps();
+    }
+
+    // Reset Today's Progress
+    function resetTodayProgress() {
+      const data = routineData[currentDay];
+      ['morning', 'evening'].forEach(t => {
+        const list = data[t];
+        list.forEach((_, idx) => {
+          delete checkedSteps[`${currentDay}-${t}-${idx + 1}`];
         });
+      });
 
-        function renderDateHeader() {
-            const today = new Date();
-            const month = today.getMonth() + 1;
-            const date = today.getDate();
-            const daysZh = ["週日", "週一", "週二", "週三", "週四", "週五", "週六"];
-            document.getElementById('current-date-text').textContent = `${month} 月 ${date} 日 (${daysZh[today.getDay()]})`;
-        }
+      try {
+        localStorage.setItem('sg_skincare_checked', JSON.stringify(checkedSteps));
+      } catch(e){}
 
-        function renderDayButtons() {
-            const container = document.getElementById('day-buttons-container');
-            container.innerHTML = '';
-            
-            // Order: Mon(1), Tue(2), Wed(3), Thu(4), Fri(5), Sat(6), Sun(0)
-            const daysOrder = [1, 2, 3, 4, 5, 6, 0];
+      showToast('今日保養進度已重置 ✨');
+      renderSteps();
+    }
 
-            daysOrder.forEach(dayNum => {
-                const dayData = ROUTINE_DATA[dayNum];
-                const isSelected = dayNum === selectedDay;
+    // Show Toast
+    function showToast(msg) {
+      toastMsgEl.innerText = msg;
+      toastEl.classList.remove('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toastEl.classList.add('opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
 
-                const btn = document.createElement('button');
-                btn.onclick = () => selectDay(dayNum);
-                btn.className = `flex-1 py-2 px-1 rounded-xl text-xs font-serif transition-all duration-200 flex flex-col items-center justify-center space-y-0.5 ${
-                    isSelected 
-                    ? 'bg-sage text-white font-bold shadow-md shadow-sage/20 scale-105' 
-                    : 'bg-oat-card text-cocoa-muted hover:bg-oat-hover border border-oat-border'
-                }`;
-                
-                btn.innerHTML = `
-                    <span>${dayData.name}</span>
-                    <span class="w-1 h-1 rounded-full ${isSelected ? 'bg-white' : 'bg-transparent'}"></span>
-                `;
-                container.appendChild(btn);
-            });
-        }
+    // Toggle Sheet Mask Drawer Modal
+    function toggleMaskDrawer(open) {
+      const backdrop = document.getElementById('mask-drawer-backdrop');
+      const drawer = document.getElementById('mask-drawer');
 
-        function selectDay(dayNum) {
-            selectedDay = dayNum;
-            renderDayButtons();
-            syncUI();
-        }
-
-        function switchTimeOfDay(tod) {
-            timeOfDay = tod;
-            syncUI();
-        }
-
-        function syncUI() {
-            // 1. Toggle Button UI
-            const btnAM = document.getElementById('toggle-am');
-            const btnPM = document.getElementById('toggle-pm');
-
-            if (timeOfDay === 'am') {
-                btnAM.className = "flex-1 py-2.5 rounded-xl text-sm font-bold text-sage-dark bg-oat-card shadow-sm border border-oat-border/80 transition-all duration-300 flex items-center justify-center space-x-1.5 z-10 font-serif";
-                btnPM.className = "flex-1 py-2.5 rounded-xl text-sm font-medium text-cocoa-muted hover:text-cocoa transition-all duration-300 flex items-center justify-center space-x-1.5 z-10 font-serif";
-            } else {
-                btnPM.className = "flex-1 py-2.5 rounded-xl text-sm font-bold text-sage-dark bg-oat-card shadow-sm border border-oat-border/80 transition-all duration-300 flex items-center justify-center space-x-1.5 z-10 font-serif";
-                btnAM.className = "flex-1 py-2.5 rounded-xl text-sm font-medium text-cocoa-muted hover:text-cocoa transition-all duration-300 flex items-center justify-center space-x-1.5 z-10 font-serif";
-            }
-
-            // 2. Night Badge & Info
-            const dayData = ROUTINE_DATA[selectedDay];
-            const badgeEl = document.getElementById('theme-badge');
-            const descEl = document.getElementById('theme-desc');
-
-            badgeEl.textContent = dayData.badge;
-            descEl.textContent = dayData.desc;
-
-            // 3. Render Steps Cards (with Mask Logic integrated if PM)
-            renderStepsCards();
-
-            // 4. Update Mask Helper Banner & Badges
-            updateMaskBannerUI();
-        }
-
-        function getCalculatedSteps() {
-            const dayData = ROUTINE_DATA[selectedDay];
-            let steps = JSON.parse(JSON.stringify(dayData[timeOfDay]));
-
-            // Only modify evening steps if a mask option is selected
-            if (timeOfDay === 'pm' && selectedMask !== 'none') {
-                if (selectedMask === 'hydrating') {
-                    // 💧 Pure Hydrating Sheet Mask
-                    // Insert mask step after hydrating base (or first step)
-                    const maskStep = {
-                        id: `mask_hydr_${selectedDay}`,
-                        num: 0,
-                        name: "💧 敷純補水 / 舒緩修護面膜",
-                        summary: "敷 10-15 分鐘，取下後清水潑洗",
-                        detail: "敷 10-15 分鐘吸收。新加坡冷氣房切勿敷到紙膜變乾！取下後建議用清水輕潑洗去表面黏稠膠體，避免影響後續 A 醇與乳液吸收。",
-                        timer: 900
-                    };
-
-                    // Re-index steps cleanly
-                    steps.splice(1, 0, maskStep);
-                    steps.forEach((s, idx) => s.num = idx + 1);
-
-                } else if (selectedMask === 'clay') {
-                    // 🌋 Deep Cleansing Clay Mask
-                    // Pause BHA and A-Retinol tonight
-                    steps = [
-                        { id: `mask_clay_${selectedDay}`, num: 1, name: "🌋 敷清潔泥膜 (僅T字/下巴)", summary: "敷 8-10 分鐘，八分乾洗淨", detail: "【已自動暫停水楊酸與 A 醇】泥膜具深層潔淨與角質吸附功能。局部敷於 T 字部位與下巴，八分乾時以溫水洗淨。", timer: 600 },
-                        { id: `mask_clay_hydr_${selectedDay}`, num: 2, name: "純補水打底", summary: "及時深層補水", detail: "泥膜洗淨後皮膚角質層較乾，請立刻補充玻尿酸或 B5 精華。", timer: 0 },
-                        { id: `mask_clay_nia_${selectedDay}`, num: 3, name: "Advanced Clinicals 5% 煙醯胺", summary: "收斂毛孔，修護屏障", detail: "幫助收斂清潔後的毛孔，穩定肌膚。", timer: 0 },
-                        { id: `mask_clay_cerave_${selectedDay}`, num: 4, name: "CeraVe PM 乳液", summary: "全臉鎖水修護", detail: "厚敷全臉，提供完整保護。", timer: 0 }
-                    ];
-
-                } else if (selectedMask === 'active') {
-                    // ✨ Active Sheet Mask (Brightening / Anti-aging)
-                    // Pause Retinol and Acids tonight
-                    steps = [
-                        { id: `mask_act_base_${selectedDay}`, num: 1, name: "純補水打底", summary: "輕盈擦拭打底", detail: "幫助角質層潤澤，提升後續高濃度精華面膜吸收率。", timer: 0 },
-                        { id: `mask_act_sheet_${selectedDay}`, num: 2, name: "✨ 敷機能型片狀面膜", summary: "敷 15 分鐘，洗淨表面精華", detail: "【已自動暫停水楊酸與 Cosrx 0.3% A醇】此類面膜精華濃度已高，敷 15 分鐘後務必用清水洗去表面餘膠，以免致粉刺或搓泥。", timer: 900 },
-                        { id: `mask_act_cerave_${selectedDay}`, num: 3, name: "CeraVe PM 乳液", summary: "單純鎖水封膜", detail: "最後擦上 CeraVe PM 乳液鎖住面膜給予的營養成分即可。", timer: 0 }
-                    ];
-                }
-            }
-
-            return steps;
-        }
-
-        function renderStepsCards() {
-            const container = document.getElementById('steps-container');
-            container.innerHTML = '';
-
-            const steps = getCalculatedSteps();
-            const todayKey = getTodayStorageKey();
-            const savedChecks = JSON.parse(localStorage.getItem(todayKey) || '{}');
-
-            steps.forEach((step, idx) => {
-                const isChecked = !!savedChecks[step.id];
-
-                const card = document.createElement('div');
-                card.className = `bg-oat-card border border-oat-border rounded-2xl overflow-hidden transition-all duration-200 shadow-sm ${isChecked ? 'opacity-75 bg-oat-base/60' : ''}`;
-                
-                card.innerHTML = `
-                    <!-- Card Main Clickable Row -->
-                    <div class="p-4 flex items-center justify-between cursor-pointer select-none space-x-3" onclick="toggleAccordion('${step.id}')">
-                        
-                        <!-- Custom Checkbox -->
-                        <button onclick="event.stopPropagation(); toggleCheck('${step.id}')" 
-                                class="custom-checkbox flex-shrink-0 w-6 h-6 rounded-full border-2 border-sage/60 flex items-center justify-center transition-all ${isChecked ? 'checked' : 'bg-transparent'}">
-                            <svg class="w-3.5 h-3.5 text-white opacity-0 transform scale-75 transition-all duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
-                            </svg>
-                        </button>
-
-                        <!-- Title and Quick Summary -->
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-2">
-                                <span class="font-serif text-xs font-bold text-sage-dark bg-sage-light px-2 py-0.5 rounded-md">${step.num}</span>
-                                <h4 class="font-serif font-bold text-sm text-cocoa truncate ${isChecked ? 'line-through text-cocoa-muted' : ''}">${step.name}</h4>
-                            </div>
-                            <p class="text-xs text-cocoa-muted truncate mt-1 ${isChecked ? 'line-through opacity-75' : ''}">${step.summary}</p>
-                        </div>
-
-                        <!-- Accordion Arrow Icon -->
-                        <div class="flex-shrink-0 text-cocoa-muted transition-transform duration-300" id="arrow-${step.id}">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <!-- Accordion Content Inner Drawer -->
-                    <div id="drawer-${step.id}" class="accordion-content">
-                        <div class="accordion-inner px-4 pb-4 pt-1 border-t border-oat-border/50 text-xs text-cocoa leading-relaxed space-y-3 bg-oat-base/40">
-                            <p class="text-cocoa-muted">${step.detail}</p>
-                            
-                            ${step.timer > 0 ? `
-                                <div class="pt-1 flex items-center justify-between bg-oat-card p-2.5 rounded-xl border border-oat-border">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-sm">⏱</span>
-                                        <span class="font-serif font-medium text-cocoa" id="timer-label-${step.id}">建議靜置/敷用 ${Math.floor(step.timer / 60)} 分鐘</span>
-                                    </div>
-                                    <button onclick="event.stopPropagation(); startTimer('${step.id}', ${step.timer})" 
-                                            id="timer-btn-${step.id}"
-                                            class="bg-sage hover:bg-sage-dark text-white px-3 py-1.5 rounded-lg text-xs font-serif transition-colors">
-                                        啟動計時
-                                    </button>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-
-                container.appendChild(card);
-            });
-        }
-
-        // Accordion Collapse / Expand Toggle
-        function toggleAccordion(id) {
-            const drawer = document.getElementById(`drawer-${id}`);
-            const arrow = document.getElementById(`arrow-${id}`);
-
-            if (drawer.classList.contains('expanded')) {
-                drawer.classList.remove('expanded');
-                arrow.style.transform = 'rotate(0deg)';
-            } else {
-                drawer.classList.add('expanded');
-                arrow.style.transform = 'rotate(180deg)';
-            }
-        }
-
-        // Checkbox State Storage in LocalStorage
-        function getTodayStorageKey() {
-            const today = new Date();
-            const dateStr = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-            return `skincare_check_${dateStr}_day${selectedDay}_${timeOfDay}`;
-        }
-
-        function toggleCheck(id) {
-            const todayKey = getTodayStorageKey();
-            const savedChecks = JSON.parse(localStorage.getItem(todayKey) || '{}');
-            
-            savedChecks[id] = !savedChecks[id];
-            localStorage.setItem(todayKey, JSON.stringify(savedChecks));
-
-            renderStepsCards();
-        }
-
-        function resetTodayChecklist() {
-            const todayKey = getTodayStorageKey();
-            localStorage.removeItem(todayKey);
-            renderStepsCards();
-        }
-
-        // Integrated Mini Timer Feature inside Cards
-        function startTimer(id, secondsTotal) {
-            const btn = document.getElementById(`timer-btn-${id}`);
-            const label = document.getElementById(`timer-label-${id}`);
-
-            if (activeTimers[id]) {
-                clearInterval(activeTimers[id]);
-                delete activeTimers[id];
-                btn.textContent = '重新計時';
-                btn.className = 'bg-sage hover:bg-sage-dark text-white px-3 py-1.5 rounded-lg text-xs font-serif transition-colors';
-                label.textContent = `建議靜置/敷用 ${Math.floor(secondsTotal / 60)} 分鐘`;
-                return;
-            }
-
-            let remaining = secondsTotal;
-            btn.textContent = '暫停';
-            btn.className = 'bg-terracotta hover:bg-terracotta/90 text-white px-3 py-1.5 rounded-lg text-xs font-serif transition-colors';
-
-            activeTimers[id] = setInterval(() => {
-                remaining--;
-                const mins = Math.floor(remaining / 60);
-                const secs = remaining % 60;
-                label.textContent = `剩餘時間：${mins}:${secs < 10 ? '0' : ''}${secs}`;
-
-                if (remaining <= 0) {
-                    clearInterval(activeTimers[id]);
-                    delete activeTimers[id];
-                    label.textContent = '✨ 時間到！請進行下一步驟';
-                    btn.textContent = '完成';
-                    btn.className = 'bg-sage-dark text-white px-3 py-1.5 rounded-lg text-xs font-serif';
-                    
-                    // Simple Haptic vibration feedback if supported
-                    if (navigator.vibrate) {
-                        navigator.vibrate([200, 100, 200]);
-                    }
-                }
-            }, 1000);
-        }
-
-        // Mask Drawer UI Drawer Controller
-        function openMaskDrawer() {
-            const drawer = document.getElementById('mask-drawer');
-            const backdrop = document.getElementById('mask-drawer-backdrop');
-            const panel = document.getElementById('mask-drawer-panel');
-
-            drawer.classList.remove('pointer-events-none');
-            backdrop.classList.remove('opacity-0', 'pointer-events-none');
-            panel.classList.remove('translate-y-full');
-        }
-
-        function closeMaskDrawer() {
-            const drawer = document.getElementById('mask-drawer');
-            const backdrop = document.getElementById('mask-drawer-backdrop');
-            const panel = document.getElementById('mask-drawer-panel');
-
-            backdrop.classList.add('opacity-0', 'pointer-events-none');
-            panel.classList.add('translate-y-full');
-
-            setTimeout(() => {
-                drawer.classList.add('pointer-events-none');
-            }, 350);
-        }
-
-        function selectMaskOption(optionKey) {
-            selectedMask = optionKey;
-            closeMaskDrawer();
-
-            // Automatically switch to PM view when mask is selected
-            timeOfDay = 'pm';
-            syncUI();
-        }
-
-        function clearMaskSelection() {
-            selectedMask = 'none';
-            syncUI();
-        }
-
-        function updateMaskBannerUI() {
-            const banner = document.getElementById('mask-active-banner');
-            const bannerTitle = document.getElementById('mask-banner-title');
-            const bannerDesc = document.getElementById('mask-banner-desc');
-            const currentBadge = document.getElementById('current-mask-badge');
-
-            if (timeOfDay === 'pm' && selectedMask !== 'none') {
-                banner.classList.remove('hidden');
-                currentBadge.classList.remove('hidden');
-
-                if (selectedMask === 'hydrating') {
-                    bannerTitle.textContent = "已插入：💧 純補水/舒緩面膜";
-                    bannerDesc.textContent = "原定精華正常保留，敷 10-15 分鐘後建議清水洗去表面膠體再擦 A 醇。";
-                    currentBadge.textContent = "補水面膜";
-                } else if (selectedMask === 'clay') {
-                    bannerTitle.textContent = "已調整：🌋 清潔泥膜特別夜";
-                    bannerDesc.textContent = "已為你自動隱藏當晚水楊酸與 A 醇，避免過度破壞角質屏障。";
-                    currentBadge.textContent = "清潔泥膜";
-                } else if (selectedMask === 'active') {
-                    bannerTitle.textContent = "已調整：✨ 機能型片狀面膜夜";
-                    bannerDesc.textContent = "已暫停 A 醇與酸類，敷後請以清水洗去殘膠，並以 CeraVe PM 乳液鎖水。";
-                    currentBadge.textContent = "機能面膜";
-                }
-            } else {
-                banner.classList.add('hidden');
-                currentBadge.classList.add('hidden');
-            }
-        }
-    </script>
+      if (open) {
+        backdrop.classList.remove('hidden');
+        setTimeout(() => {
+          backdrop.classList.remove('opacity-0');
+          drawer.classList.remove('translate-y-full');
+        }, 10);
+      } else {
+        backdrop.classList.add('opacity-0');
+        drawer.classList.add('translate-y-full');
+        setTimeout(() => {
+          backdrop.classList.add('hidden');
+        }, 300);
+      }
+    }
+  </script>
 </body>
 </html>
